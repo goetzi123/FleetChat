@@ -20,17 +20,17 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 - **Notification System**: SMS and messenger-based communication
 
 ### Communication Layer
-- **Multi-messenger Support**: WhatsApp, Telegram, Viber integration
+- **WhatsApp Integration**: Dedicated WhatsApp Business API integration
 - **Chat-based Workflows**: Structured interaction flows for transport operations
-- **Document Upload**: File handling through messenger attachments
-- **Status Updates**: One-click status options for drivers
+- **Document Upload**: File handling through WhatsApp attachments
+- **Status Updates**: One-click status options for drivers via WhatsApp
 
 ## Key Components
 
 ### 1. Driver Onboarding System
 - SMS/QR code invitation system
 - Privacy terms acceptance workflow
-- Messenger platform selection
+- WhatsApp Business API connection
 - 30-second onboarding process
 
 ### 2. Workflow Automation Engine
@@ -65,18 +65,16 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 
 ## Data Flow
 
-1. **Driver Onboarding**: SMS/QR → Messenger Selection → Privacy Acceptance → Workflow Assignment
-2. **Status Updates**: Automated Prompts → Driver Response → System Processing → Dispatcher Notification
-3. **Document Flow**: Driver Upload → System Processing → Dispatcher Review → Approval/Rejection
+1. **Driver Onboarding**: SMS/QR → WhatsApp Connection → Privacy Acceptance → Workflow Assignment
+2. **Status Updates**: Automated WhatsApp Prompts → Driver Response → System Processing → Dispatcher Notification
+3. **Document Flow**: WhatsApp Upload → System Processing → Dispatcher Review → Approval/Rejection
 4. **Location Data**: GPS Collection → Validation → Geofence Processing → ETA Calculation
-5. **Communication**: Driver Message → System Processing → Dispatcher Interface → Response Routing → Driver
+5. **Communication**: WhatsApp Message → System Processing → Dispatcher Interface → WhatsApp Response
 
 ## External Dependencies
 
 ### Messenger Platform APIs
 - WhatsApp Business API
-- Telegram Bot API
-- Viber Business API
 
 ### TMS Integration Partners
 - **Samsara** (Primary Fleet Management Platform)
@@ -88,7 +86,7 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 
 ### Core Services
 - SMS Gateway for initial contact
-- Messaging services for platform integration
+- WhatsApp Business API messaging service
 - Geolocation services for tracking
 - QR code generation libraries
 - File storage for document management
@@ -107,9 +105,9 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 - Shared infrastructure with tenant-specific configurations
 
 ### Scalability Considerations
-- Messenger API rate limiting handling
+- WhatsApp Business API rate limiting handling
 - Document storage optimization
-- Real-time messaging service scaling
+- Real-time WhatsApp messaging service scaling
 - Geolocation data processing efficiency
 
 ### Integration Deployment

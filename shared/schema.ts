@@ -50,6 +50,7 @@ export interface User {
   role: string;
   isAnonymous?: boolean;
   pseudoId?: string; // For driver anonymity
+  whatsappNumber?: string; // WhatsApp Business API phone number
   createdAt: Date;
   updatedAt: Date;
 }
@@ -182,7 +183,8 @@ export const createUserSchema = z.object({
   phone: z.string().optional(),
   role: z.enum([UserRole.DRIVER, UserRole.DISPATCHER, UserRole.YARD_OPERATOR, UserRole.MANAGER]),
   isAnonymous: z.boolean().default(false),
-  pseudoId: z.string().optional()
+  pseudoId: z.string().optional(),
+  whatsappNumber: z.string().optional()
 });
 
 export const createTransportSchema = z.object({

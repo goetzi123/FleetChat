@@ -96,7 +96,8 @@ function CreateUserForm({ onClose }: { onClose: () => void }) {
     email: '',
     phone: '',
     role: 'driver',
-    isAnonymous: false
+    isAnonymous: false,
+    whatsappNumber: ''
   });
 
   const queryClient = useQueryClient();
@@ -156,6 +157,17 @@ function CreateUserForm({ onClose }: { onClose: () => void }) {
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               className="w-full px-3 py-2 border border-border rounded-md bg-background"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium mb-2">WhatsApp Number</label>
+            <input
+              type="tel"
+              value={formData.whatsappNumber}
+              onChange={(e) => setFormData({ ...formData, whatsappNumber: e.target.value })}
+              className="w-full px-3 py-2 border border-border rounded-md bg-background"
+              placeholder="+1234567890"
             />
           </div>
           
