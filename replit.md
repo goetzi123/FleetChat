@@ -190,6 +190,19 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 - **Route Management**: Create and manage Samsara routes from FleetChat
 - **Real-time Status**: Connection status and sync monitoring
 
+### WhatsApp Response Processing System (`server/integrations/whatsapp-response-handler.ts`)
+- **Bidirectional Communication**: Complete system for processing driver responses to templated messages
+- **Smart Response Classification**: Automatic detection of button clicks, quick replies, text messages, location shares, and document uploads
+- **Context-Aware Processing**: Links incoming messages to active transports and driver profiles
+- **Automated Actions**: Updates transport status, creates location tracking, processes document uploads
+- **Intelligent Text Processing**: Natural language understanding for free-text driver responses
+
+### WhatsApp Webhook Integration (`/api/whatsapp/webhook`)
+- **Real-time Message Processing**: Webhook endpoint for WhatsApp Business API integration
+- **Message Content Extraction**: Handles all WhatsApp message types (text, buttons, location, documents, images)
+- **Response Generation**: Automatic contextual responses based on driver actions
+- **Security**: Webhook verification and signature validation for production deployment
+
 ## Changelog
 ```
 Changelog:
@@ -198,6 +211,7 @@ Changelog:
 - June 26, 2025. Comprehensive Samsara integration architecture design with real-time event processing, fleet management, and bidirectional data synchronization
 - June 26, 2025. Removed multi-language support requirement - simplified communication service to focus on unified messaging across messenger platforms
 - June 26, 2025. Limited messenger client integration to WhatsApp only - removed Telegram and Viber support from platform architecture
+- June 26, 2025. Implemented comprehensive WhatsApp response handling system with bidirectional communication, smart message processing, and automated workflow updates
 ```
 
 ## User Preferences

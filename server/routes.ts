@@ -20,6 +20,7 @@ import {
   samsaraEventSchema,
   SamsaraEventTypes
 } from "./integrations/samsara";
+import { whatsappResponseHandler } from "./integrations/whatsapp-response-handler";
 
 const router = express.Router();
 
@@ -689,5 +690,106 @@ router.post("/api/samsara/sync/:transportId", async (req, res) => {
     res.status(500).json({ error: "Failed to sync with Samsara" });
   }
 });
+
+// WhatsApp Webhook for incoming messages from drivers
+router.post("/api/whatsapp/webhook", async (req, res) => {
+  try {
+    // Validate WhatsApp webhook signature (in production)
+    // const signature = req.headers['x-whatsapp-signature'];
+    // validateWebhookSignature(req.body, signature);
+
+    const webhookData = req.body;
+    
+    // Process WhatsApp webhook data
+    if (webhookData.entry && webhookData.entry[0]?.changes) {
+      for (const change of webhookData.entry[0].changes) {
+        if (change.value?.messages) {
+          for (const message of change.value.messages) {
+            const incomingMessage = {
+              from: message.from,
+              to: change.value.metadata.phone_number_id,
+              messageId: message.id,
+              timestamp: new Date(parseInt(message.timestamp) * 1000),
+              type: message.type,
+              content: extractMessageContent(message),
+              contextMessageId: message.context?.id
+            };
+
+            // Process the incoming message
+            const response = await whatsappResponseHandler.processIncomingMessage(incomingMessage);
+            
+            // Send response back to driver (in production, this would use WhatsApp Business API)
+            if (response) {
+              console.log(`WhatsApp response to ${incomingMessage.from}:`, response);
+              // await sendWhatsAppMessage(incomingMessage.from, response);
+            }
+          }
+        }
+      }
+    }
+
+    res.status(200).json({ status: "processed" });
+  } catch (error) {
+    console.error("WhatsApp webhook error:", error);
+    res.status(500).json({ error: "Webhook processing failed" });
+  }
+});
+
+// WhatsApp webhook verification (required by WhatsApp)
+router.get("/api/whatsapp/webhook", (req, res) => {
+  const mode = req.query["hub.mode"];
+  const token = req.query["hub.verify_token"];
+  const challenge = req.query["hub.challenge"];
+
+  // Verify webhook with WhatsApp
+  if (mode === "subscribe" && token === process.env.WHATSAPP_VERIFY_TOKEN) {
+    res.status(200).send(challenge);
+  } else {
+    res.status(403).send("Verification failed");
+  }
+});
+
+// Helper function to extract message content from WhatsApp webhook
+function extractMessageContent(message: any) {
+  switch (message.type) {
+    case 'text':
+      return { text: message.text.body };
+    case 'button':
+      return { buttonId: message.button.payload };
+    case 'interactive':
+      if (message.interactive.type === 'button_reply') {
+        return { buttonId: message.interactive.button_reply.id };
+      } else if (message.interactive.type === 'list_reply') {
+        return { quickReplyId: message.interactive.list_reply.id };
+      }
+      break;
+    case 'location':
+      return {
+        location: {
+          lat: message.location.latitude,
+          lng: message.location.longitude,
+          address: message.location.address
+        }
+      };
+    case 'document':
+      return {
+        document: {
+          filename: message.document.filename,
+          mimeType: message.document.mime_type,
+          fileUrl: message.document.id // In production, this would be resolved to actual URL
+        }
+      };
+    case 'image':
+      return {
+        document: {
+          filename: `image_${message.id}.jpg`,
+          mimeType: 'image/jpeg',
+          fileUrl: message.image.id
+        }
+      };
+    default:
+      return {};
+  }
+}
 
 export default router;
