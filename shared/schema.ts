@@ -48,7 +48,6 @@ export interface User {
   name: string;
   phone?: string;
   role: string;
-  language?: string;
   isAnonymous?: boolean;
   pseudoId?: string; // For driver anonymity
   createdAt: Date;
@@ -182,7 +181,6 @@ export const createUserSchema = z.object({
   name: z.string().min(1),
   phone: z.string().optional(),
   role: z.enum([UserRole.DRIVER, UserRole.DISPATCHER, UserRole.YARD_OPERATOR, UserRole.MANAGER]),
-  language: z.string().default("en"),
   isAnonymous: z.boolean().default(false),
   pseudoId: z.string().optional()
 });

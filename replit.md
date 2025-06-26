@@ -2,7 +2,7 @@
 
 ## Overview
 
-ZeKju is a GDPR-compliant transport communication platform that enables workflow automation through popular messenger apps (WhatsApp, Telegram, Viber) without requiring dedicated mobile applications. The platform serves the logistics industry by connecting truck drivers, dispatchers, yard operators, and shippers through automated chat-based workflows with real-time translation capabilities across 24 European languages.
+ZeKju is a GDPR-compliant transport communication platform that enables workflow automation through popular messenger apps (WhatsApp, Telegram, Viber) without requiring dedicated mobile applications. The platform serves the logistics industry by connecting truck drivers, dispatchers, yard operators, and shippers through automated chat-based workflows.
 
 ## System Architecture
 
@@ -14,7 +14,7 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 
 ### Backend Architecture
 - **Workflow Engine**: Automated status collection and document processing
-- **Translation Service**: Real-time translation across 24 European languages
+- **Communication Service**: Unified messaging across messenger platforms
 - **Geolocation Services**: GPS tracking with geofencing and ETA calculations
 - **Integration Layer**: Native connectors for TMS platforms
 - **Notification System**: SMS and messenger-based communication
@@ -31,7 +31,6 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 - SMS/QR code invitation system
 - Privacy terms acceptance workflow
 - Messenger platform selection
-- Language preference configuration
 - 30-second onboarding process
 
 ### 2. Workflow Automation Engine
@@ -58,11 +57,11 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 - Movement alerts and ETA calculations
 - Anonymous tracking validation
 
-### 5. Translation Service
-- Real-time chat translation
-- Support for 24 European languages
-- Automated language detection
+### 5. Communication Management
+- Unified messaging across platforms
+- Automated status notifications
 - Context-aware transport terminology
+- Message routing and delivery tracking
 
 ## Data Flow
 
@@ -70,7 +69,7 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 2. **Status Updates**: Automated Prompts → Driver Response → System Processing → Dispatcher Notification
 3. **Document Flow**: Driver Upload → System Processing → Dispatcher Review → Approval/Rejection
 4. **Location Data**: GPS Collection → Validation → Geofence Processing → ETA Calculation
-5. **Communication**: Driver Message → Translation → Dispatcher Interface → Response Translation → Driver
+5. **Communication**: Driver Message → System Processing → Dispatcher Interface → Response Routing → Driver
 
 ## External Dependencies
 
@@ -89,7 +88,7 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 
 ### Core Services
 - SMS Gateway for initial contact
-- Translation services for multi-language support
+- Messaging services for platform integration
 - Geolocation services for tracking
 - QR code generation libraries
 - File storage for document management
@@ -110,7 +109,7 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 ### Scalability Considerations
 - Messenger API rate limiting handling
 - Document storage optimization
-- Real-time translation service scaling
+- Real-time messaging service scaling
 - Geolocation data processing efficiency
 
 ### Integration Deployment

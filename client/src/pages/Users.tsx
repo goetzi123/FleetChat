@@ -99,7 +99,6 @@ function CreateUserForm({ onClose }: { onClose: () => void }) {
     email: '',
     phone: '',
     role: 'driver',
-    language: 'en',
     isAnonymous: false
   });
 
@@ -177,21 +176,7 @@ function CreateUserForm({ onClose }: { onClose: () => void }) {
             </select>
           </div>
           
-          <div>
-            <label className="block text-sm font-medium mb-2">Language</label>
-            <select
-              value={formData.language}
-              onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-              className="w-full px-3 py-2 border border-border rounded-md bg-background"
-            >
-              <option value="en">English</option>
-              <option value="de">German</option>
-              <option value="fr">French</option>
-              <option value="es">Spanish</option>
-              <option value="pl">Polish</option>
-              <option value="it">Italian</option>
-            </select>
-          </div>
+
           
           {formData.role === 'driver' && (
             <div className="flex items-center space-x-2">
