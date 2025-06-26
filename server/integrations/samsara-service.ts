@@ -357,10 +357,11 @@ export class SamsaraIntegrationService {
   }
 
   // WhatsApp notification method for driver communication
-  private async sendWhatsAppNotification(driverId: string, notification: {
+  private async sendWhatsAppNotification(driverId: string, template: {
     type: string;
     message: string;
-    transportId: string;
+    buttons?: string[];
+    quickReplies?: string[];
   }) {
     try {
       const driver = await storage.getUserById(driverId);
@@ -372,9 +373,10 @@ export class SamsaraIntegrationService {
       // Log WhatsApp notification for now - in production this would integrate with WhatsApp Business API
       console.log(`WhatsApp notification to ${driver.whatsappNumber}:`, {
         driver: driver.name || driver.pseudoId,
-        type: notification.type,
-        message: notification.message,
-        transportId: notification.transportId
+        type: template.type,
+        message: template.message,
+        buttons: template.buttons || [],
+        quickReplies: template.quickReplies || []
       });
 
       // In production, this would call WhatsApp Business API:
