@@ -1,14 +1,16 @@
 import { Router, Route, Link, useLocation } from "wouter";
-import { Truck, Users as UsersIcon, FileText, MapPin, BarChart3, Settings } from "lucide-react";
+import { Truck, Users as UsersIcon, FileText, MapPin, BarChart3, Settings, MessageCircle } from "lucide-react";
 import Dashboard from "./pages/Dashboard";
 import Transports from "./pages/Transports";
 import Documents from "./pages/Documents";
 import Tracking from "./pages/Tracking";
 import Users from "./pages/Users";
 import SamsaraIntegration from "./pages/SamsaraIntegration";
+import WhatsAppDemo from "./pages/WhatsAppDemo";
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: BarChart3 },
+  { name: 'WhatsApp Demo', href: '/whatsapp-demo', icon: MessageCircle },
   { name: 'Transports', href: '/transports', icon: Truck },
   { name: 'Users', href: '/users', icon: UsersIcon },
   { name: 'Documents', href: '/documents', icon: FileText },
@@ -56,6 +58,7 @@ function App() {
           <Route path="/documents" component={Documents} />
           <Route path="/tracking" component={Tracking} />
           <Route path="/samsara" component={SamsaraIntegration} />
+          <Route path="/whatsapp-demo" component={WhatsAppDemo} />
           <Route>
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
