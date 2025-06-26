@@ -13,6 +13,13 @@ import {
   WorkflowType,
   DocumentType
 } from "../shared/schema";
+import { 
+  SamsaraAPIClient, 
+  mapSamsaraEventToFleetChat, 
+  mapFleetChatToSamsaraRoute,
+  samsaraEventSchema,
+  SamsaraEventTypes
+} from "./integrations/samsara";
 
 const router = express.Router();
 
@@ -77,7 +84,7 @@ router.post("/api/transports", async (req, res) => {
     if (transportData.externalId) {
       await storage.createTmsIntegration({
         transportId: transport.id,
-        platform: "uber_freight", // Default platform
+        platform: "samsara", // Default platform
         operation: "create",
         payload: JSON.stringify(req.body),
         success: true
@@ -416,6 +423,270 @@ router.get("/api/dashboard/stats", async (req, res) => {
     res.json(stats);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch dashboard stats" });
+  }
+});
+
+// Samsara Integration Routes
+
+// Samsara Webhook endpoint - receives events from Samsara platform
+router.post("/api/samsara/webhook", async (req, res) => {
+  try {
+    console.log("Received Samsara webhook:", req.body);
+    
+    // Validate Samsara event payload
+    const samsaraEvent = samsaraEventSchema.parse(req.body);
+    
+    // Map Samsara event to FleetChat action
+    const fleetChatEvent = mapSamsaraEventToFleetChat(samsaraEvent);
+    
+    // Process the event based on type
+    switch (fleetChatEvent.type) {
+      case 'location_update':
+        if (fleetChatEvent.transportId) {
+          await storage.createLocationTracking({
+            transportId: fleetChatEvent.transportId,
+            driverId: fleetChatEvent.driverId,
+            lat: fleetChatEvent.location.lat,
+            lng: fleetChatEvent.location.lng,
+            accuracy: fleetChatEvent.location.accuracy,
+            speed: fleetChatEvent.location.speed,
+            heading: fleetChatEvent.location.heading
+          });
+        }
+        break;
+        
+      case 'transport_started':
+        if (fleetChatEvent.transportId) {
+          await storage.updateTransport(fleetChatEvent.transportId, {
+            status: fleetChatEvent.status
+          });
+          
+          await storage.createStatusUpdate({
+            transportId: fleetChatEvent.transportId,
+            status: fleetChatEvent.status,
+            notes: "Transport started from Samsara"
+          });
+        }
+        break;
+        
+      case 'transport_completed':
+        if (fleetChatEvent.transportId) {
+          await storage.updateTransport(fleetChatEvent.transportId, {
+            status: fleetChatEvent.status,
+            isActive: false
+          });
+          
+          await storage.createStatusUpdate({
+            transportId: fleetChatEvent.transportId,
+            status: fleetChatEvent.status,
+            notes: "Transport completed from Samsara"
+          });
+        }
+        break;
+        
+      case 'geofence_enter':
+        if (fleetChatEvent.transportId) {
+          await storage.createLocationTracking({
+            transportId: fleetChatEvent.transportId,
+            driverId: fleetChatEvent.driverId || "unknown",
+            lat: fleetChatEvent.location.lat,
+            lng: fleetChatEvent.location.lng,
+            isGeofenced: true,
+            geofenceType: fleetChatEvent.geofenceType
+          });
+        }
+        break;
+        
+      case 'document_uploaded':
+        // Handle document upload notification from Samsara
+        console.log("Document uploaded via Samsara:", fleetChatEvent);
+        break;
+    }
+    
+    // Log the webhook event
+    await storage.createTmsIntegration({
+      transportId: fleetChatEvent.transportId || "unknown",
+      platform: "samsara",
+      operation: "webhook_received",
+      payload: JSON.stringify(req.body),
+      response: JSON.stringify(fleetChatEvent),
+      success: true
+    });
+    
+    res.status(200).json({ status: "processed", eventType: fleetChatEvent.type });
+  } catch (error) {
+    console.error("Samsara webhook error:", error);
+    
+    // Log failed webhook
+    await storage.createTmsIntegration({
+      transportId: "unknown",
+      platform: "samsara",
+      operation: "webhook_received",
+      payload: JSON.stringify(req.body),
+      success: false,
+      errorMessage: error instanceof Error ? error.message : "Unknown error"
+    });
+    
+    res.status(400).json({ error: error instanceof Error ? error.message : "Invalid webhook payload" });
+  }
+});
+
+// Create route in Samsara when transport is created
+router.post("/api/samsara/routes", async (req, res) => {
+  try {
+    const { transportId, vehicleId, driverId } = req.body;
+    
+    const transport = await storage.getTransportById(transportId);
+    if (!transport) {
+      return res.status(404).json({ error: "Transport not found" });
+    }
+    
+    // Map FleetChat transport to Samsara route format
+    const samsaraRouteData = mapFleetChatToSamsaraRoute({
+      ...transport,
+      samsaraVehicleId: vehicleId,
+      samsaraDriverId: driverId
+    });
+    
+    // Update transport with Samsara IDs
+    await storage.updateTransport(transportId, {
+      samsaraVehicleId: vehicleId,
+      samsaraDriverId: driverId
+    });
+    
+    // Log integration attempt
+    await storage.createTmsIntegration({
+      transportId,
+      platform: "samsara",
+      operation: "create_route",
+      payload: JSON.stringify(samsaraRouteData),
+      success: true
+    });
+    
+    res.json({ 
+      message: "Route mapped to Samsara",
+      routeData: samsaraRouteData,
+      transportId
+    });
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : "Failed to create Samsara route" });
+  }
+});
+
+// Get Samsara vehicles
+router.get("/api/samsara/vehicles", async (req, res) => {
+  try {
+    // This would integrate with actual Samsara API
+    // For now, return mock structure showing integration design
+    const vehicles = [
+      {
+        id: "samsara_vehicle_001",
+        name: "Truck 001",
+        licensePlate: "ABC-123",
+        make: "Volvo",
+        model: "VNL",
+        location: {
+          latitude: 52.5200,
+          longitude: 13.4050,
+          address: "Berlin, Germany"
+        }
+      },
+      {
+        id: "samsara_vehicle_002", 
+        name: "Truck 002",
+        licensePlate: "DEF-456",
+        make: "Mercedes",
+        model: "Actros",
+        location: {
+          latitude: 48.1351,
+          longitude: 11.5820,
+          address: "Munich, Germany"
+        }
+      }
+    ];
+    
+    res.json(vehicles);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch Samsara vehicles" });
+  }
+});
+
+// Get Samsara drivers
+router.get("/api/samsara/drivers", async (req, res) => {
+  try {
+    // This would integrate with actual Samsara API
+    const drivers = [
+      {
+        id: "samsara_driver_001",
+        name: "Hans Mueller",
+        dutyStatus: "on_duty",
+        currentVehicleId: "samsara_vehicle_001"
+      },
+      {
+        id: "samsara_driver_002",
+        name: "Stefan Weber", 
+        dutyStatus: "driving",
+        currentVehicleId: "samsara_vehicle_002"
+      }
+    ];
+    
+    res.json(drivers);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch Samsara drivers" });
+  }
+});
+
+// Get Samsara events for a transport
+router.get("/api/samsara/events/:transportId", async (req, res) => {
+  try {
+    const { transportId } = req.params;
+    const { startTime, endTime } = req.query;
+    
+    // Get TMS integrations for this transport from Samsara
+    const integrations = await storage.getTmsIntegrationsByTransportId(transportId);
+    const samsaraIntegrations = integrations.filter(i => i.platform === "samsara");
+    
+    res.json({
+      transportId,
+      events: samsaraIntegrations,
+      timeRange: { startTime, endTime }
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch Samsara events" });
+  }
+});
+
+// Sync transport status with Samsara
+router.post("/api/samsara/sync/:transportId", async (req, res) => {
+  try {
+    const { transportId } = req.params;
+    
+    const transport = await storage.getTransportById(transportId);
+    if (!transport) {
+      return res.status(404).json({ error: "Transport not found" });
+    }
+    
+    // This would sync with actual Samsara API
+    const syncResult = {
+      transportId,
+      samsaraRouteId: transport.samsaraRouteId,
+      status: "synced",
+      lastSync: new Date().toISOString()
+    };
+    
+    // Log sync operation
+    await storage.createTmsIntegration({
+      transportId,
+      platform: "samsara",
+      operation: "sync",
+      payload: JSON.stringify({ action: "manual_sync" }),
+      response: JSON.stringify(syncResult),
+      success: true
+    });
+    
+    res.json(syncResult);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to sync with Samsara" });
   }
 });
 

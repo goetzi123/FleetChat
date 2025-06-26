@@ -85,6 +85,11 @@ export interface Transport {
   loadWeight?: number;
   loadValue?: number;
   
+  // Samsara Integration
+  samsaraRouteId?: string;
+  samsaraVehicleId?: string;
+  samsaraDriverId?: string;
+  
   // Metadata
   instructions?: string;
   priority?: number;
@@ -153,8 +158,8 @@ export interface YardOperation {
 export interface TmsIntegration {
   id: string;
   transportId: string;
-  platform: string; // uber_freight, etc
-  operation: string; // create, update, status_update
+  platform: string; // samsara, transporeon, agheera, project44, wanko, d_soft
+  operation: string; // create, update, status_update, webhook_received
   payload?: string; // JSON string
   response?: string; // JSON string
   success?: boolean;
