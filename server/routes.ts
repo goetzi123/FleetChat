@@ -159,8 +159,7 @@ router.post("/api/transports/:id/status", async (req, res) => {
     
     // Update transport status
     await storage.updateTransport(transportId, { 
-      status: statusData.status,
-      updatedAt: new Date()
+      status: statusData.status
     });
     
     // Log TMS integration for status updates
@@ -209,8 +208,7 @@ router.post("/api/transports/:id/location", async (req, res) => {
     });
     
     // Calculate geofencing (simplified logic)
-    let isGeofenced = false;
-    let geofenceType = undefined;
+    let geofenceData: { isGeofenced?: boolean; geofenceType?: string } = {};
     
     if (transport.pickupLat && transport.pickupLng) {
       const pickupDistance = Math.sqrt(
@@ -218,8 +216,8 @@ router.post("/api/transports/:id/location", async (req, res) => {
         Math.pow(locationData.lng - transport.pickupLng, 2)
       );
       if (pickupDistance < 0.01) { // ~1km radius
-        isGeofenced = true;
-        geofenceType = "pickup";
+        geofenceData.isGeofenced = true;
+        geofenceData.geofenceType = "pickup";
       }
     }
     
@@ -229,20 +227,21 @@ router.post("/api/transports/:id/location", async (req, res) => {
         Math.pow(locationData.lng - transport.deliveryLng, 2)
       );
       if (deliveryDistance < 0.01) { // ~1km radius
-        isGeofenced = true;
-        geofenceType = "delivery";
+        geofenceData.isGeofenced = true;
+        geofenceData.geofenceType = "delivery";
       }
     }
     
-    // Update location with geofence info
-    if (isGeofenced) {
-      await storage.createLocationTracking({
+    // Update location with geofence info if detected
+    if (geofenceData.isGeofenced) {
+      const updatedLocation = await storage.createLocationTracking({
         transportId,
         driverId: transport.driverId!,
         ...locationData,
-        isGeofenced,
-        geofenceType
+        isGeofenced: geofenceData.isGeofenced,
+        geofenceType: geofenceData.geofenceType
       });
+      return res.json(updatedLocation);
     }
     
     res.json(location);
