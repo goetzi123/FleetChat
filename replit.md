@@ -197,6 +197,7 @@ Changelog:
 - June 26, 2025. Complete FleetChat platform implementation with transport communication workflows, GDPR-compliant user management, document handling, and GPS tracking features
 - June 26, 2025. Comprehensive Samsara integration architecture design with real-time event processing, fleet management, and bidirectional data synchronization
 - June 26, 2025. Removed multi-language support requirement - simplified communication service to focus on unified messaging across messenger platforms
+- June 26, 2025. Limited messenger client integration to WhatsApp only - removed Telegram and Viber support from platform architecture
 ```
 
 ## User Preferences

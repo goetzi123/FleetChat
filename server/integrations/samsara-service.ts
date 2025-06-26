@@ -1,4 +1,5 @@
 import { SamsaraAPIClient, SamsaraIntegrationConfig, mapSamsaraEventToFleetChat, mapFleetChatToSamsaraRoute, SamsaraEventTypes } from "./samsara";
+import { WhatsAppTemplateService } from "./whatsapp-templates";
 import { storage } from "../storage";
 
 export class SamsaraIntegrationService {
@@ -88,6 +89,23 @@ export class SamsaraIntegrationService {
       heading: event.location.heading
     });
 
+    // Send WhatsApp notification for location updates
+    const transport = await storage.getTransportById(event.transportId);
+    if (transport) {
+      const template = WhatsAppTemplateService.getLocationUpdateTemplate(transport, {
+        id: '',
+        transportId: event.transportId,
+        driverId: event.driverId,
+        lat: event.location.lat,
+        lng: event.location.lng,
+        accuracy: event.location.accuracy,
+        speed: event.location.speed,
+        heading: event.location.heading,
+        timestamp: new Date()
+      });
+      await this.sendWhatsAppNotification(event.driverId, template);
+    }
+
     return { processed: true, type: 'location_update' };
   }
 
@@ -103,6 +121,15 @@ export class SamsaraIntegrationService {
       status: 'en_route',
       notes: "Transport started (Samsara)"
     });
+
+    // Send WhatsApp notification to driver
+    if (event.driverId) {
+      const transport = await storage.getTransportById(event.transportId);
+      if (transport) {
+        const template = WhatsAppTemplateService.getRouteStartedTemplate(transport);
+        await this.sendWhatsAppNotification(event.driverId, template);
+      }
+    }
 
     return { processed: true, type: 'transport_started' };
   }
@@ -326,6 +353,35 @@ export class SamsaraIntegrationService {
     if (this.syncInterval) {
       clearInterval(this.syncInterval);
       this.syncInterval = null;
+    }
+  }
+
+  // WhatsApp notification method for driver communication
+  private async sendWhatsAppNotification(driverId: string, notification: {
+    type: string;
+    message: string;
+    transportId: string;
+  }) {
+    try {
+      const driver = await storage.getUserById(driverId);
+      if (!driver || !driver.whatsappNumber) {
+        console.log(`Driver ${driverId} not found or no WhatsApp number configured`);
+        return;
+      }
+
+      // Log WhatsApp notification for now - in production this would integrate with WhatsApp Business API
+      console.log(`WhatsApp notification to ${driver.whatsappNumber}:`, {
+        driver: driver.name || driver.pseudoId,
+        type: notification.type,
+        message: notification.message,
+        transportId: notification.transportId
+      });
+
+      // In production, this would call WhatsApp Business API:
+      // await whatsappAPI.sendMessage(driver.whatsappNumber, notification.message);
+      
+    } catch (error) {
+      console.error('Failed to send WhatsApp notification:', error);
     }
   }
 
