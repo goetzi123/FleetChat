@@ -5,6 +5,7 @@ import Transports from "./pages/Transports";
 import Documents from "./pages/Documents";
 import Tracking from "./pages/Tracking";
 import Users from "./pages/Users";
+import SamsaraIntegration from "./pages/SamsaraIntegration";
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: BarChart3 },
@@ -12,6 +13,7 @@ const navigation = [
   { name: 'Users', href: '/users', icon: UsersIcon },
   { name: 'Documents', href: '/documents', icon: FileText },
   { name: 'Tracking', href: '/tracking', icon: MapPin },
+  { name: 'Samsara', href: '/samsara', icon: Settings },
 ];
 
 function Sidebar() {
@@ -53,6 +55,7 @@ function App() {
           <Route path="/users" component={Users} />
           <Route path="/documents" component={Documents} />
           <Route path="/tracking" component={Tracking} />
+          <Route path="/samsara" component={SamsaraIntegration} />
           <Route>
             <div className="flex items-center justify-center h-full">
               <div className="text-center">

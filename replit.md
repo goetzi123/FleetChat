@@ -80,6 +80,7 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 - Viber Business API
 
 ### TMS Integration Partners
+- **Samsara** (Primary Fleet Management Platform)
 - Transporeon
 - Agheera
 - project44
@@ -127,7 +128,7 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 - **Frontend Dashboard**: React-based UI with transport management, user management, document handling
 - **GDPR Compliance**: Anonymous driver handling with pseudonymization
 - **Geolocation Tracking**: GPS tracking with geofencing capabilities
-- **TMS Integration**: Uber Freight integration endpoints ready
+- **TMS Integration**: Comprehensive Samsara fleet management integration with real-time event processing
 
 ### Key Components Built
 1. **Transport Management**: Create, track, and manage FTL/LTL/Yard workflows
@@ -143,12 +144,61 @@ ZeKju is a GDPR-compliant transport communication platform that enables workflow
 - `/api/location-tracking` - GPS tracking and geofencing
 - `/api/yard-operations` - Yard workflow management
 - `/api/dashboard/stats` - Analytics and reporting
+- `/api/samsara/webhook` - Samsara event webhook processing
+- `/api/samsara/routes` - Create and manage Samsara routes
+- `/api/samsara/vehicles` - Fleet vehicle management
+- `/api/samsara/drivers` - Driver status and management
+- `/api/samsara/sync/:transportId` - Sync transport status with Samsara
+
+## Samsara Integration Architecture
+
+### Core Integration Components
+
+#### 1. Samsara API Client (`server/integrations/samsara.ts`)
+- **Fleet Management**: Vehicle and driver data synchronization
+- **Route Management**: Create, update, and track transport routes
+- **Event Processing**: Real-time webhook event handling
+- **Document Integration**: POD and delivery document management
+
+#### 2. Event Processing System
+- **Webhook Handler**: `/api/samsara/webhook` endpoint for real-time events
+- **Event Types Supported**:
+  - Vehicle location updates
+  - Trip start/completion events
+  - Geofence entry/exit notifications
+  - Driver duty status changes
+  - Document upload notifications
+  - Maintenance alerts and fault codes
+
+#### 3. Bidirectional Data Flow
+- **FleetChat → Samsara**: Transport creation triggers route creation in Samsara
+- **Samsara → FleetChat**: Real-time events update transport status and location data
+- **Periodic Sync**: Automated status synchronization every 5 minutes
+
+#### 4. Fleet Management Features
+- **Vehicle Tracking**: Real-time GPS location and status monitoring
+- **Driver Management**: Duty status tracking and vehicle assignment
+- **Route Optimization**: Integration with Samsara's routing capabilities
+- **Compliance Monitoring**: ELD data and HOS compliance tracking
+
+### Samsara Integration Service (`server/integrations/samsara-service.ts`)
+- **Configuration Management**: Environment-based API credentials
+- **Event Processing**: Automated event classification and processing
+- **Sync Management**: Periodic transport status synchronization
+- **Error Handling**: Comprehensive logging and error recovery
+
+### Frontend Integration (`client/src/pages/SamsaraIntegration.tsx`)
+- **Fleet Overview**: Vehicle and driver status dashboard
+- **Integration Monitoring**: Event logging and status tracking
+- **Route Management**: Create and manage Samsara routes from FleetChat
+- **Real-time Status**: Connection status and sync monitoring
 
 ## Changelog
 ```
 Changelog:
 - June 26, 2025. Initial setup
 - June 26, 2025. Complete FleetChat platform implementation with transport communication workflows, GDPR-compliant user management, document handling, and GPS tracking features
+- June 26, 2025. Comprehensive Samsara integration architecture design with real-time event processing, fleet management, and bidirectional data synchronization
 ```
 
 ## User Preferences
