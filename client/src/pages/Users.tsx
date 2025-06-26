@@ -58,10 +58,7 @@ function UserCard({ user }: { user: User }) {
           <span>{user.phone || 'Not provided'}</span>
         </div>
         
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">Language:</span>
-          <span className="uppercase">{user.language || 'EN'}</span>
-        </div>
+
         
         <div className="flex justify-between">
           <span className="text-muted-foreground">Created:</span>
