@@ -215,35 +215,163 @@ export class SamsaraAPIClient {
     return this.makeRequest(`/fleet/drivers/${driverId}/duty-status`);
   }
 
-  // Route Operations
+  // Route & Dispatch Operations (from /fleet/dispatch/routes)
   async createRoute(routeData: any) {
-    return this.makeRequest('/fleet/routes', {
+    return this.makeRequest('/fleet/dispatch/routes', {
       method: 'POST',
       body: JSON.stringify(routeData)
     });
   }
 
   async getRoute(routeId: string) {
-    return this.makeRequest(`/fleet/routes/${routeId}`);
+    return this.makeRequest(`/fleet/dispatch/routes/${routeId}`);
   }
 
   async updateRoute(routeId: string, updates: any) {
-    return this.makeRequest(`/fleet/routes/${routeId}`, {
+    return this.makeRequest(`/fleet/dispatch/routes/${routeId}`, {
       method: 'PATCH',
       body: JSON.stringify(updates)
     });
   }
 
   async startRoute(routeId: string) {
-    return this.makeRequest(`/fleet/routes/${routeId}/start`, {
+    return this.makeRequest(`/fleet/dispatch/routes/${routeId}/start`, {
       method: 'POST'
     });
   }
 
   async completeRoute(routeId: string) {
-    return this.makeRequest(`/fleet/routes/${routeId}/complete`, {
+    return this.makeRequest(`/fleet/dispatch/routes/${routeId}/complete`, {
       method: 'POST'
     });
+  }
+
+  // Trip Operations
+  async getTrips(vehicleId?: string, driverId?: string, startTime?: string, endTime?: string) {
+    const params = new URLSearchParams();
+    if (vehicleId) params.append('vehicleId', vehicleId);
+    if (driverId) params.append('driverId', driverId);
+    if (startTime) params.append('startTime', startTime);
+    if (endTime) params.append('endTime', endTime);
+    return this.makeRequest(`/fleet/trips?${params}`);
+  }
+
+  // Location & GPS Operations
+  async getVehicleLocations(vehicleIds?: string[], startTime?: string, endTime?: string) {
+    const params = new URLSearchParams();
+    if (vehicleIds) params.append('vehicleIds', vehicleIds.join(','));
+    if (startTime) params.append('startTime', startTime);
+    if (endTime) params.append('endTime', endTime);
+    return this.makeRequest(`/fleet/vehicles/locations?${params}`);
+  }
+
+  async getVehicleLocationHistory(vehicleId: string, startTime: string, endTime: string) {
+    const params = new URLSearchParams({ startTime, endTime });
+    return this.makeRequest(`/fleet/vehicles/${vehicleId}/locations?${params}`);
+  }
+
+  // Geofence Operations
+  async getGeofences() {
+    return this.makeRequest('/fleet/geofences');
+  }
+
+  async createGeofence(geofenceData: any) {
+    return this.makeRequest('/fleet/geofences', {
+      method: 'POST',
+      body: JSON.stringify(geofenceData)
+    });
+  }
+
+  async updateGeofence(geofenceId: string, updates: any) {
+    return this.makeRequest(`/fleet/geofences/${geofenceId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updates)
+    });
+  }
+
+  // Safety & Dash Cam Operations
+  async getVehicleSafetyScore(vehicleId: string, startTime?: string, endTime?: string) {
+    const params = new URLSearchParams();
+    if (startTime) params.append('startTime', startTime);
+    if (endTime) params.append('endTime', endTime);
+    return this.makeRequest(`/fleet/vehicles/${vehicleId}/safety?${params}`);
+  }
+
+  async getDrivingEvents(vehicleId?: string, driverId?: string, startTime?: string, endTime?: string) {
+    const params = new URLSearchParams();
+    if (vehicleId) params.append('vehicleId', vehicleId);
+    if (driverId) params.append('driverId', driverId);
+    if (startTime) params.append('startTime', startTime);
+    if (endTime) params.append('endTime', endTime);
+    return this.makeRequest(`/fleet/driving-events?${params}`);
+  }
+
+  async getCameraViews(vehicleId: string) {
+    return this.makeRequest(`/fleet/camera-views?vehicleId=${vehicleId}`);
+  }
+
+  // HOS (Hours of Service) & Compliance Operations
+  async getHosDailyLogs(driverId: string, startDate: string, endDate: string) {
+    const params = new URLSearchParams({ startDate, endDate });
+    return this.makeRequest(`/fleet/hos/daily-logs?driverId=${driverId}&${params}`);
+  }
+
+  async getHosViolations(driverId?: string, startTime?: string, endTime?: string) {
+    const params = new URLSearchParams();
+    if (driverId) params.append('driverId', driverId);
+    if (startTime) params.append('startTime', startTime);
+    if (endTime) params.append('endTime', endTime);
+    return this.makeRequest(`/fleet/hos/violations?${params}`);
+  }
+
+  async getDvirs(vehicleId?: string, driverId?: string, startTime?: string, endTime?: string) {
+    const params = new URLSearchParams();
+    if (vehicleId) params.append('vehicleId', vehicleId);
+    if (driverId) params.append('driverId', driverId);
+    if (startTime) params.append('startTime', startTime);
+    if (endTime) params.append('endTime', endTime);
+    return this.makeRequest(`/fleet/dvirs?${params}`);
+  }
+
+  // Maintenance Operations
+  async getMaintenanceSchedule(vehicleId: string) {
+    return this.makeRequest(`/fleet/maintenance?vehicleId=${vehicleId}`);
+  }
+
+  async getVehicleFaultCodes(vehicleId: string, startTime?: string, endTime?: string) {
+    const params = new URLSearchParams();
+    if (startTime) params.append('startTime', startTime);
+    if (endTime) params.append('endTime', endTime);
+    return this.makeRequest(`/fleet/vehicles/${vehicleId}/fault-codes?${params}`);
+  }
+
+  // Assets Operations (for trailers, containers, etc.)
+  async getAssets() {
+    return this.makeRequest('/fleet/assets');
+  }
+
+  async getAsset(assetId: string) {
+    return this.makeRequest(`/fleet/assets/${assetId}`);
+  }
+
+  async getAssetLocation(assetId: string) {
+    return this.makeRequest(`/fleet/assets/${assetId}/location`);
+  }
+
+  // Tags & Groups Management
+  async getTags() {
+    return this.makeRequest('/tags');
+  }
+
+  async createTag(tagData: any) {
+    return this.makeRequest('/tags', {
+      method: 'POST',
+      body: JSON.stringify(tagData)
+    });
+  }
+
+  async getGroups() {
+    return this.makeRequest('/groups');
   }
 
   // Event Operations
@@ -276,6 +404,19 @@ export class SamsaraAPIClient {
     if (vehicleId) params.append('vehicleId', vehicleId);
     if (driverId) params.append('driverId', driverId);
     return this.makeRequest(`/documents?${params}`);
+  }
+
+  // Industrial IoT Operations (for temperature, gateway sensors)
+  async getTemperatureData(assetId: string, startTime: string, endTime: string) {
+    const params = new URLSearchParams({ startTime, endTime });
+    return this.makeRequest(`/industrial/temperature?assetId=${assetId}&${params}`);
+  }
+
+  async getGatewayData(gatewayId: string, startTime?: string, endTime?: string) {
+    const params = new URLSearchParams();
+    if (startTime) params.append('startTime', startTime);
+    if (endTime) params.append('endTime', endTime);
+    return this.makeRequest(`/industrial/gateway/${gatewayId}?${params}`);
   }
 
   // Webhook Management
