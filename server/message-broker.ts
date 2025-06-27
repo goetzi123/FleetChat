@@ -106,12 +106,10 @@ async function translateSamsaraEventToWhatsApp(event: any) {
     
     return {
       to: driverWithPhone.phoneNumber,
-      type: 'template',
-      template: {
-        name: message.templateName,
-        language: { code: 'en' },
-        components: message.components
-      },
+      messageType: message.type,
+      header: message.header,
+      body: message.body,
+      buttons: message.buttons,
       context: {
         transportId: event.transportId,
         eventType: event.type
@@ -125,61 +123,112 @@ async function translateSamsaraEventToWhatsApp(event: any) {
 
 // Generate driver-friendly messages from Samsara events
 function generateDriverMessage(event: any) {
-  switch (event.type) {
-    case 'transport_assigned':
+  const eventType = event.eventType || event.type;
+  
+  switch (eventType) {
+    case 'route.assigned':
+      const route = event.data?.route;
+      const pickup = route?.stops?.find(s => s.type === 'pickup');
+      const delivery = route?.stops?.find(s => s.type === 'delivery');
+      
       return {
-        templateName: 'delivery_assignment',
-        components: [
-          {
-            type: 'body',
-            parameters: [
-              { type: 'text', text: event.pickupLocation },
-              { type: 'text', text: event.deliveryLocation },
-              { type: 'text', text: event.eta || 'TBD' }
-            ]
-          }
+        type: 'template',
+        header: '🚛 New Route Assigned',
+        body: `You have been assigned a new delivery route:
+
+📍 Pickup: ${pickup?.location || 'Unknown location'}
+🚩 Delivery: ${delivery?.location || 'Unknown location'}
+⏰ Pickup window: ${pickup?.scheduledTime ? new Date(pickup.scheduledTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) : 'TBD'}
+📊 Route: ${route?.name || 'Transport route'}`,
+        buttons: [
+          { text: 'Acknowledge Route', payload: 'acknowledge_route' },
+          { text: 'View Details', payload: 'view_details' }
         ]
       };
       
-    case 'pickup_reminder':
+    case 'route.pickup_reminder':
+      const stop = event.data?.stop;
       return {
-        templateName: 'pickup_notification',
-        components: [
-          {
-            type: 'body',
-            parameters: [
-              { type: 'text', text: event.location },
-              { type: 'text', text: event.timeWindow || 'ASAP' }
-            ]
-          }
+        type: 'template',
+        header: '⏰ Pickup Reminder',
+        body: `Reminder: Your pickup window starts soon.
+
+📍 ${stop?.location || 'Pickup location'}
+📍 ${stop?.address || 'Address not specified'}
+⏰ Window: ${stop?.timeWindow || 'ASAP'}
+📞 Contact: ${stop?.customerContact || 'N/A'}
+
+Please confirm your arrival time.`,
+        buttons: [
+          { text: 'On My Way', payload: 'en_route' },
+          { text: 'Share Location', payload: 'share_location' }
         ]
       };
       
-    case 'delivery_due':
+    case 'vehicle.location':
+      const location = event.data?.location;
       return {
-        templateName: 'delivery_reminder',
-        components: [
-          {
-            type: 'body',
-            parameters: [
-              { type: 'text', text: event.deliveryLocation },
-              { type: 'text', text: event.customerName || 'Customer' }
-            ]
-          }
+        type: 'text',
+        body: `📍 Location update received: ${location?.address || 'Current position'}
+Speed: ${location?.speed || 0} km/h`
+      };
+      
+    case 'vehicle.geofence.enter':
+      const geofence = event.data?.geofence;
+      return {
+        type: 'template',
+        header: '🎯 Arrival Confirmed',
+        body: `You have arrived at ${geofence?.name || 'destination'}.
+
+Please confirm when ${geofence?.type === 'pickup_location' ? 'pickup' : 'delivery'} is complete.`,
+        buttons: geofence?.type === 'pickup_location' ? [
+          { text: 'Pickup Confirmed', payload: 'pickup_confirmed' },
+          { text: 'Cargo Loaded', payload: 'loaded' }
+        ] : [
+          { text: 'Delivered', payload: 'delivered' },
+          { text: 'Issue/Delay', payload: 'report_issue' }
+        ]
+      };
+      
+    case 'route.delivery_due':
+      const deliveryStop = event.data?.stop;
+      return {
+        type: 'template',
+        header: '🚚 Delivery Due',
+        body: `Your delivery is approaching:
+
+🏭 ${deliveryStop?.location || 'Delivery location'}
+📍 ${deliveryStop?.address || 'Address not specified'}
+👤 Contact: ${deliveryStop?.customerName || 'Customer'}
+📝 Special: ${deliveryStop?.specialInstructions || 'Standard delivery'}`,
+        buttons: [
+          { text: 'Delivered', payload: 'delivered' },
+          { text: 'Issue/Delay', payload: 'report_issue' }
+        ]
+      };
+      
+    case 'driver.hos.warning':
+      const violation = event.data?.violation;
+      return {
+        type: 'template',
+        header: '⚠️ Hours of Service Warning',
+        body: `Drive time limit approaching!
+
+⏰ Time remaining: ${violation?.timeRemaining || 'Unknown'} minutes
+🛑 Mandatory break required
+📍 Next rest area: ${violation?.nextRestLocation || 'Check navigation'}
+
+Please plan your break accordingly.`,
+        buttons: [
+          { text: 'Taking Break', payload: 'need_break' },
+          { text: 'Continue to Delivery', payload: 'continue_delivery' }
         ]
       };
       
     default:
       return {
-        templateName: 'generic_notification',
-        components: [
-          {
-            type: 'body',
-            parameters: [
-              { type: 'text', text: event.message || 'Transport update available' }
-            ]
-          }
-        ]
+        type: 'text',
+        body: event.data?.message || event.message || 'Transport update available'
       };
   }
 }
