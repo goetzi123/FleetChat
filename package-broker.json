@@ -1,0 +1,27 @@
+{
+  "name": "fleetchat-message-broker",
+  "version": "1.0.0",
+  "description": "Headless message broker for WhatsApp-Samsara fleet communication",
+  "main": "server/message-broker.ts",
+  "scripts": {
+    "start": "npx tsx server/message-broker.ts",
+    "dev": "npx tsx watch server/message-broker.ts",
+    "health": "curl -s http://localhost:3000/health | jq"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "zod": "^3.22.4",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "fleet-management",
+    "whatsapp-business",
+    "samsara",
+    "message-broker",
+    "logistics"
+  ]
+}

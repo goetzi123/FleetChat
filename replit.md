@@ -1,8 +1,8 @@
-# ZeKju Platform - Replit Development Guide
+# FleetChat Message Broker - Replit Development Guide
 
 ## Overview
 
-ZeKju is a GDPR-compliant transport communication platform that enables workflow automation through popular messenger apps (WhatsApp, Telegram, Viber) without requiring dedicated mobile applications. The platform serves the logistics industry by connecting truck drivers, dispatchers, yard operators, and shippers through automated chat-based workflows.
+FleetChat is a headless message broker service that facilitates seamless communication between Samsara fleet management systems and WhatsApp Business API. The service operates without a user interface, functioning purely as an intelligent message routing and translation layer between TMS platforms and driver communication channels.
 
 ## System Architecture
 
