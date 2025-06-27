@@ -64,18 +64,27 @@ export const samsaraVehicleSchema = z.object({
   }).optional()
 });
 
-// Samsara Driver Schema
+// Samsara Driver Schema - Enhanced with proper phone number access
 export const samsaraDriverSchema = z.object({
   id: z.string(),
   name: z.string(),
   username: z.string().optional(),
   email: z.string().optional(),
-  phone: z.string().optional(),
+  phone: z.string().optional(), // Available with proper API scopes
+  phoneNumber: z.string().optional(), // Alternative field name in some responses
+  mobilePhone: z.string().optional(), // Additional phone field variant
   licenseNumber: z.string().optional(),
   licenseState: z.string().optional(),
+  licenseExpiration: z.string().optional(),
   dutyStatus: z.enum(["on_duty", "off_duty", "sleeper_berth", "driving"]).optional(),
   currentVehicleId: z.string().optional(),
-  isActive: z.boolean().default(true)
+  isActive: z.boolean().default(true),
+  // Additional driver app settings fields
+  appSettings: z.object({
+    canEditDutyStatus: z.boolean().optional(),
+    canReceiveAlerts: z.boolean().optional(),
+    phoneNumberVerified: z.boolean().optional()
+  }).optional()
 });
 
 // Samsara Route Schema
@@ -142,6 +151,8 @@ export interface SamsaraIntegrationConfig {
   webhookUrl?: string;
   enabledEvents: string[];
   syncInterval: number; // minutes
+  // Required API scopes for phone number access
+  requiredScopes: string[];
 }
 
 export interface SamsaraTransportMapping {
@@ -202,13 +213,59 @@ export class SamsaraAPIClient {
     return this.makeRequest(`/fleet/vehicles/${vehicleId}/stats?${params}`);
   }
 
-  // Driver Operations
+  // Driver Operations - Enhanced for phone number access
   async getDrivers() {
-    return this.makeRequest('/fleet/drivers');
+    // Request drivers with expanded fields including phone numbers
+    return this.makeRequest('/fleet/drivers?expand=appSettings');
   }
 
   async getDriver(driverId: string) {
-    return this.makeRequest(`/fleet/drivers/${driverId}`);
+    // Request specific driver with app settings to access phone number
+    return this.makeRequest(`/fleet/drivers/${driverId}?expand=appSettings`);
+  }
+
+  async getDriverWithPhone(driverId: string) {
+    try {
+      const driver = await this.makeRequest(`/fleet/drivers/${driverId}?expand=appSettings`);
+      
+      // Extract phone number from various possible field names
+      const phoneNumber = driver.phone || driver.phoneNumber || driver.mobilePhone;
+      
+      if (!phoneNumber) {
+        console.warn(`No phone number found for driver ${driverId}. Ensure:
+          1. Phone number is entered in Samsara Dashboard (Drivers → Settings → Phone Number)
+          2. API token includes 'Read Drivers' and 'Read Driver App Settings' scopes
+          3. Organization doesn't have privacy flags preventing phone number exposure`);
+      }
+      
+      return {
+        ...driver,
+        phoneNumber: phoneNumber,
+        hasPhoneNumber: Boolean(phoneNumber)
+      };
+    } catch (error) {
+      console.error(`Failed to fetch driver ${driverId} with phone:`, error);
+      throw error;
+    }
+  }
+
+  async validateDriverPhoneAccess() {
+    try {
+      const drivers = await this.getDrivers();
+      const driversWithPhone = drivers.data?.filter((driver: any) => 
+        driver.phone || driver.phoneNumber || driver.mobilePhone
+      ) || [];
+      
+      return {
+        totalDrivers: drivers.data?.length || 0,
+        driversWithPhone: driversWithPhone.length,
+        phoneAccessEnabled: driversWithPhone.length > 0,
+        missingPhoneCount: (drivers.data?.length || 0) - driversWithPhone.length
+      };
+    } catch (error) {
+      console.error('Failed to validate driver phone access:', error);
+      throw error;
+    }
   }
 
   async getDriverDutyStatus(driverId: string) {

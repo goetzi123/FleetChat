@@ -577,8 +577,130 @@ router.post("/api/samsara/routes", async (req, res) => {
 // Get Samsara vehicles
 router.get("/api/samsara/vehicles", async (req, res) => {
   try {
-    // This would integrate with actual Samsara API
-    // For now, return mock structure showing integration design
+    if (!samsaraService.isConfigured()) {
+      return res.status(503).json({ 
+        error: "Samsara integration not configured",
+        message: "Please configure SAMSARA_API_TOKEN and SAMSARA_ORG_ID environment variables"
+      });
+    }
+
+    const vehicles = await samsaraService.getVehicles();
+    res.json(vehicles);
+  } catch (error) {
+    res.status(500).json({ 
+      error: error instanceof Error ? error.message : "Failed to fetch Samsara vehicles",
+      configured: samsaraService.isConfigured()
+    });
+  }
+});
+
+// Get Samsara drivers with enhanced phone number access
+router.get("/api/samsara/drivers", async (req, res) => {
+  try {
+    if (!samsaraService.isConfigured()) {
+      return res.status(503).json({ 
+        error: "Samsara integration not configured",
+        message: "Please configure SAMSARA_API_TOKEN and SAMSARA_ORG_ID environment variables"
+      });
+    }
+
+    const drivers = await samsaraService.getDrivers();
+    res.json(drivers);
+  } catch (error) {
+    res.status(500).json({ 
+      error: error instanceof Error ? error.message : "Failed to fetch Samsara drivers",
+      configured: samsaraService.isConfigured()
+    });
+  }
+});
+
+// Get specific driver with phone number access
+router.get("/api/samsara/drivers/:driverId", async (req, res) => {
+  try {
+    if (!samsaraService.isConfigured()) {
+      return res.status(503).json({ 
+        error: "Samsara integration not configured"
+      });
+    }
+
+    const driverWithPhone = await samsaraService.getDriverWithPhone(req.params.driverId);
+    res.json(driverWithPhone);
+  } catch (error) {
+    res.status(500).json({ 
+      error: error instanceof Error ? error.message : "Failed to fetch driver details"
+    });
+  }
+});
+
+// Validate driver phone number access
+router.get("/api/samsara/validate-phone-access", async (req, res) => {
+  try {
+    if (!samsaraService.isConfigured()) {
+      return res.status(503).json({ 
+        error: "Samsara integration not configured",
+        phoneAccessEnabled: false,
+        totalDrivers: 0,
+        driversWithPhone: 0
+      });
+    }
+
+    const validation = await samsaraService.validateDriverPhoneAccess();
+    res.json(validation);
+  } catch (error) {
+    res.status(500).json({ 
+      error: error instanceof Error ? error.message : "Failed to validate phone access",
+      phoneAccessEnabled: false
+    });
+  }
+});
+
+// Sync driver phone numbers from Samsara
+router.post("/api/samsara/sync-drivers", async (req, res) => {
+  try {
+    if (!samsaraService.isConfigured()) {
+      return res.status(503).json({ 
+        error: "Samsara integration not configured"
+      });
+    }
+
+    const syncResult = await samsaraService.syncDriverPhoneNumbers();
+    res.json(syncResult);
+  } catch (error) {
+    res.status(500).json({ 
+      error: error instanceof Error ? error.message : "Failed to sync driver phone numbers"
+    });
+  }
+});
+
+// Link Samsara driver to WhatsApp
+router.post("/api/samsara/link-whatsapp", async (req, res) => {
+  try {
+    if (!samsaraService.isConfigured()) {
+      return res.status(503).json({ 
+        error: "Samsara integration not configured"
+      });
+    }
+
+    const { samsaraDriverId, whatsappNumber } = req.body;
+    
+    if (!samsaraDriverId || !whatsappNumber) {
+      return res.status(400).json({ 
+        error: "Missing required fields: samsaraDriverId and whatsappNumber" 
+      });
+    }
+
+    const linkResult = await samsaraService.linkDriverToWhatsApp(samsaraDriverId, whatsappNumber);
+    res.json(linkResult);
+  } catch (error) {
+    res.status(500).json({ 
+      error: error instanceof Error ? error.message : "Failed to link driver to WhatsApp"
+    });
+  }
+});
+
+// Get legacy mock vehicles for demo purposes
+router.get("/api/samsara/demo-vehicles", async (req, res) => {
+  try {
     const vehicles = [
       {
         id: "samsara_vehicle_001",
@@ -586,18 +708,6 @@ router.get("/api/samsara/vehicles", async (req, res) => {
         licensePlate: "ABC-123",
         make: "Volvo",
         model: "VNL",
-        location: {
-          latitude: 52.5200,
-          longitude: 13.4050,
-          address: "Berlin, Germany"
-        }
-      },
-      {
-        id: "samsara_vehicle_002", 
-        name: "Truck 002",
-        licensePlate: "DEF-456",
-        make: "Mercedes",
-        model: "Actros",
         location: {
           latitude: 48.1351,
           longitude: 11.5820,

@@ -30,10 +30,15 @@ export class SamsaraIntegrationService {
           SamsaraEventTypes.DOCUMENT_UPLOADED,
           SamsaraEventTypes.DRIVER_DUTY_STATUS
         ],
-        syncInterval: 5 // minutes
+        syncInterval: 5, // minutes
+        requiredScopes: [
+          'fleet:drivers:read',
+          'fleet:drivers:appSettings:read'
+        ]
       };
 
       this.apiClient = new SamsaraAPIClient(this.config);
+      this.initializeDriverPhoneAccess();
       this.startPeriodicSync();
     }
   }
@@ -312,6 +317,181 @@ export class SamsaraIntegrationService {
       throw new Error("Samsara API client not configured");
     }
     return await this.apiClient.getDrivers();
+  }
+
+  // Enhanced driver phone number management
+  public async getDriverWithPhone(driverId: string) {
+    if (!this.apiClient) {
+      throw new Error("Samsara API client not configured");
+    }
+    return await this.apiClient.getDriverWithPhone(driverId);
+  }
+
+  public async validateDriverPhoneAccess() {
+    if (!this.apiClient) {
+      throw new Error("Samsara API client not configured");
+    }
+    return await this.apiClient.validateDriverPhoneAccess();
+  }
+
+  // WhatsApp integration for Samsara drivers
+  public async linkDriverToWhatsApp(samsaraDriverId: string, whatsappNumber: string) {
+    try {
+      // Get driver details from Samsara with phone verification
+      const samsaraDriver = await this.getDriverWithPhone(samsaraDriverId);
+      
+      if (!samsaraDriver.hasPhoneNumber) {
+        throw new Error(`Driver ${samsaraDriverId} does not have a phone number in Samsara. Please add phone number in Samsara Dashboard.`);
+      }
+
+      // Create or update FleetChat user with Samsara driver mapping
+      let user = await storage.getUserByEmail(`samsara_${samsaraDriverId}@driver.local`);
+      
+      if (!user) {
+        user = await storage.createUser({
+          email: `samsara_${samsaraDriverId}@driver.local`,
+          name: samsaraDriver.name,
+          phone: samsaraDriver.phoneNumber,
+          role: 'driver',
+          isAnonymous: true,
+          pseudoId: `DRV_${samsaraDriverId.slice(-6)}`,
+          whatsappNumber: whatsappNumber
+        });
+      } else {
+        user = await storage.updateUser(user.id, {
+          phone: samsaraDriver.phoneNumber,
+          whatsappNumber: whatsappNumber
+        });
+      }
+
+      console.log(`Successfully linked Samsara driver ${samsaraDriverId} to WhatsApp ${whatsappNumber}`);
+      return {
+        success: true,
+        fleetChatUserId: user.id,
+        samsaraDriverId,
+        whatsappNumber,
+        samsaraPhone: samsaraDriver.phoneNumber
+      };
+
+    } catch (error) {
+      console.error(`Failed to link driver ${samsaraDriverId} to WhatsApp:`, error);
+      throw error;
+    }
+  }
+
+  public async syncDriverPhoneNumbers() {
+    try {
+      const phoneAccessValidation = await this.validateDriverPhoneAccess();
+      console.log('Driver phone access validation:', phoneAccessValidation);
+
+      if (!phoneAccessValidation.phoneAccessEnabled) {
+        console.warn('No drivers have phone numbers accessible. Check API scopes and dashboard configuration.');
+        return {
+          success: false,
+          error: 'Phone access not enabled',
+          validation: phoneAccessValidation
+        };
+      }
+
+      const drivers = await this.getDrivers();
+      const syncResults: Array<{
+        samsaraDriverId: string;
+        fleetChatUserId?: string;
+        phoneNumber: string | null;
+        synced: boolean;
+        reason?: string;
+        error?: string;
+      }> = [];
+
+      for (const driver of drivers.data || []) {
+        try {
+          const driverWithPhone = await this.getDriverWithPhone(driver.id);
+          
+          if (driverWithPhone.hasPhoneNumber) {
+            // Update existing FleetChat user or create mapping
+            let user = await storage.getUserByEmail(`samsara_${driver.id}@driver.local`);
+            
+            if (!user) {
+              user = await storage.createUser({
+                email: `samsara_${driver.id}@driver.local`,
+                name: driverWithPhone.name,
+                phone: driverWithPhone.phoneNumber,
+                role: 'driver',
+                isAnonymous: true,
+                pseudoId: `DRV_${driver.id.slice(-6)}`
+              });
+            } else {
+              user = await storage.updateUser(user.id, {
+                phone: driverWithPhone.phoneNumber
+              });
+            }
+
+            syncResults.push({
+              samsaraDriverId: driver.id,
+              fleetChatUserId: user.id,
+              phoneNumber: driverWithPhone.phoneNumber,
+              synced: true
+            });
+          } else {
+            syncResults.push({
+              samsaraDriverId: driver.id,
+              phoneNumber: null,
+              synced: false,
+              reason: 'No phone number in Samsara'
+            });
+          }
+        } catch (error) {
+          syncResults.push({
+            samsaraDriverId: driver.id,
+            phoneNumber: null,
+            synced: false,
+            error: error instanceof Error ? error.message : 'Unknown error'
+          });
+        }
+      }
+
+      return {
+        success: true,
+        validation: phoneAccessValidation,
+        syncResults,
+        syncedCount: syncResults.filter(r => r.synced).length
+      };
+
+    } catch (error) {
+      console.error('Failed to sync driver phone numbers:', error);
+      throw error;
+    }
+  }
+
+  private async initializeDriverPhoneAccess() {
+    try {
+      const validation = await this.validateDriverPhoneAccess();
+      console.log('Samsara driver phone access initialized:', validation);
+      
+      if (!validation.phoneAccessEnabled) {
+        console.warn(`
+=== Samsara Driver Phone Access Setup Required ===
+Phone numbers are not accessible for drivers. To enable WhatsApp integration:
+
+1. Ensure driver phone numbers are entered in Samsara Dashboard:
+   - Go to Drivers → Select Driver → Settings → Phone Number
+   
+2. Verify API token includes required scopes:
+   - 'fleet:drivers:read'
+   - 'fleet:drivers:appSettings:read'
+   
+3. Check organization privacy settings:
+   - Contact Samsara Support if privacy flags prevent phone number exposure
+   
+Current status: ${validation.driversWithPhone}/${validation.totalDrivers} drivers have accessible phone numbers
+=================================================
+        `);
+      } else {
+        console.log(`✓ Driver phone access enabled: ${validation.driversWithPhone}/${validation.totalDrivers} drivers have phone numbers`);
+      }
+    } catch (error) {
+      console.error('Failed to initialize driver phone access:', error);
+    }
   }
 
   public async getVehicleLocation(vehicleId: string) {
