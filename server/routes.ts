@@ -20,6 +20,7 @@ import {
   samsaraEventSchema,
   SamsaraEventTypes
 } from "./integrations/samsara";
+import { samsaraService } from "./integrations/samsara-service";
 import { whatsappResponseHandler } from "./integrations/whatsapp-response-handler";
 
 const router = express.Router();
