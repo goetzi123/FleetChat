@@ -7,10 +7,11 @@ import Tracking from "./pages/Tracking";
 import Users from "./pages/Users";
 import SamsaraIntegration from "./pages/SamsaraIntegration";
 import WhatsAppDemo from "./pages/WhatsAppDemo";
+import DemoEnvironment from "./pages/DemoEnvironment";
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: BarChart3 },
-  { name: 'WhatsApp Demo', href: '/whatsapp-demo', icon: MessageCircle },
+  { name: 'Demo Environment', href: '/demo', icon: MessageCircle },
   { name: 'Transports', href: '/transports', icon: Truck },
   { name: 'Users', href: '/users', icon: UsersIcon },
   { name: 'Documents', href: '/documents', icon: FileText },
@@ -53,6 +54,7 @@ function App() {
       <main className="flex-1 overflow-auto">
         <Router>
           <Route path="/" component={Dashboard} />
+          <Route path="/demo" component={DemoEnvironment} />
           <Route path="/transports" component={Transports} />
           <Route path="/users" component={Users} />
           <Route path="/documents" component={Documents} />
