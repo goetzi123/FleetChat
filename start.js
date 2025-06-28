@@ -1,43 +1,37 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
+const path = require('path');
 
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-const server = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    res.writeHead(200);
-    res.end();
-    return;
-  }
-
-  if (req.url === '/' || req.url === '/index.html') {
-    try {
-      const html = fs.readFileSync('demo.html', 'utf8');
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end(html);
-    } catch (error) {
-      console.error('Error reading demo.html:', error);
-      res.writeHead(500);
-      res.end('Error loading demo');
-    }
-  } else {
-    res.writeHead(404);
-    res.end('Not found');
-  }
+// Enable CORS for Replit
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`FleetChat Samsara-WhatsApp demo running on port ${PORT}`);
+// Serve static files
+app.use(express.static(__dirname));
+
+// Main route
+app.get('/', (req, res) => {
+  console.log('Serving FleetChat demo');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('Server shutting down...');
-  server.close(() => {
-    process.exit(0);
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok',
+    service: 'FleetChat Demo',
+    port: PORT,
+    timestamp: new Date().toISOString()
   });
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`FleetChat demo server listening on port ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
 });
