@@ -1,34 +1,27 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
+const path = require('path');
 
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-const server = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+// Serve static files from current directory
+app.use(express.static(__dirname));
 
-  if (req.method === 'OPTIONS') {
-    res.writeHead(200);
-    res.end();
-    return;
-  }
-
-  if (req.url === '/' || req.url === '/index.html') {
-    try {
-      const html = fs.readFileSync('demo.html', 'utf8');
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end(html);
-    } catch (error) {
-      res.writeHead(500);
-      res.end('Error loading demo');
-    }
-  } else {
-    res.writeHead(404);
-    res.end('Not found');
-  }
+// Main route - serve the demo
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Samsara-WhatsApp demo running on port ${PORT}`);
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'running',
+    service: 'FleetChat Demo',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`FleetChat demo server running on port ${PORT}`);
 });
