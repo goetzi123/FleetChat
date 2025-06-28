@@ -5,7 +5,7 @@ const path = require('path');
 const PORT = process.env.PORT || 3000;
 
 const server = http.createServer((req, res) => {
-  // Set CORS headers for demo
+  // Handle CORS for all requests
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,39 +16,38 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  let filePath = '';
-  
-  if (req.url === '/' || req.url === '/demo') {
-    filePath = path.join(__dirname, 'demo', 'whatsapp-driver-interface.html');
-  } else if (req.url === '/health') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ 
-      status: 'running', 
-      demo: 'FleetChat WhatsApp Interface Demo',
-      timestamp: new Date().toISOString() 
-    }));
-    return;
-  } else {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('Demo not found. Access the demo at the root URL /');
-    return;
-  }
-
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      res.writeHead(500, { 'Content-Type': 'text/plain' });
-      res.end('Error loading demo file');
-      return;
+  // Serve the demo HTML file
+  if (req.url === '/' || req.url === '/index.html') {
+    try {
+      const html = fs.readFileSync('index.html', 'utf8');
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(html);
+    } catch (error) {
+      res.writeHead(404);
+      res.end('Demo file not found');
     }
-
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end(data);
-  });
+  } else {
+    res.writeHead(404);
+    res.end('Not found');
+  }
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`FleetChat Demo running on port ${PORT}`);
-  console.log(`Access demo at: http://localhost:${PORT}`);
+  console.log(`FleetChat Demo Server running on port ${PORT}`);
+  console.log(`Access the demo at: http://localhost:${PORT}`);
 });
 
-module.exports = server;
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('Shutting down demo server gracefully');
+  server.close(() => {
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('Shutting down demo server gracefully');
+  server.close(() => {
+    process.exit(0);
+  });
+});
