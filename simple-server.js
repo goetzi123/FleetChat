@@ -1,26 +1,31 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
-const PORT = 3000;
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const server = http.createServer((req, res) => {
-  if (req.url === '/' || req.url === '/index.html') {
-    fs.readFile('demo.html', 'utf8', (err, data) => {
-      if (err) {
-        res.writeHead(500);
-        res.end('Server Error');
-        return;
-      }
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end(data);
-    });
-  } else {
-    res.writeHead(404);
-    res.end('Not Found');
+// Middleware
+app.use(express.static('.'));
+app.use(express.json());
+
+// Main route
+app.get('/', (req, res) => {
+  try {
+    const htmlContent = fs.readFileSync('index.html', 'utf8');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error serving index.html:', error);
+    res.status(500).send('Server Error');
   }
 });
 
-server.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`FleetChat demo running on port ${PORT}`);
+  console.log(`Access at: http://localhost:${PORT}`);
 });
