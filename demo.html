@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetChat Demo - WhatsApp Driver Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #111b21;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .demo-container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            background: #1f2937;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .phone-mockup {
+            width: 350px;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            border-radius: 16px 0 0 16px;
+        }
+
+        .status-bar {
+            background: #000;
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .whatsapp-header {
+            background: #2a2f32;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            border-bottom: 1px solid #3e4145;
+        }
+
+        .driver-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #00a884;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .driver-info h3 {
+            color: #d1d7db;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .driver-info p {
+            color: #8696a0;
+            font-size: 13px;
+        }
+
+        .chat-area {
+            flex: 1;
+            background: #0b141a;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .message.incoming {
+            background: #1f2937;
+            color: #d1d7db;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.outgoing {
+            background: #005c4b;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #8696a0;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .quick-reply {
+            background: #1f2937;
+            border: 1px solid #3e4145;
+            color: #00a884;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .quick-reply:hover {
+            background: #2a2f32;
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .demo-controls {
+            flex: 1;
+            padding: 32px;
+            background: #374151;
+            overflow-y: auto;
+        }
+
+        .demo-controls h2 {
+            color: #f9fafb;
+            margin-bottom: 24px;
+            font-size: 24px;
+        }
+
+        .demo-controls p {
+            color: #d1d5db;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .demo-button {
+            display: block;
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+        }
+
+        .demo-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: #8696a0;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #8696a0;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        .status-indicator {
+            color: #00a884;
+            font-size: 12px;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                flex-direction: column;
+                width: 95%;
+                height: 95vh;
+            }
+            
+            .phone-mockup {
+                width: 100%;
+                border-radius: 16px 16px 0 0;
+            }
+            
+            .demo-controls {
+                border-radius: 0 0 16px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="phone-mockup">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>📶 📶 📶 🔋</span>
+            </div>
+            
+            <div class="whatsapp-header">
+                <div class="driver-avatar">JD</div>
+                <div class="driver-info">
+                    <h3>FleetChat Dispatch</h3>
+                    <p>Online</p>
+                </div>
+            </div>
+            
+            <div class="chat-area" id="chatArea">
+                <div class="message incoming">
+                    <div>Welcome to FleetChat! 👋</div>
+                    <div>I'll send you updates about your deliveries and transport assignments.</div>
+                    <div class="message-time">9:15 AM</div>
+                </div>
+                
+                <div class="typing-indicator" id="typingIndicator">
+                    <span>FleetChat is typing</span>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="status-indicator">
+                Ready to receive fleet updates
+            </div>
+        </div>
+        
+        <div class="demo-controls">
+            <h2>FleetChat Demo Controls</h2>
+            <p>Click the buttons below to simulate different Samsara fleet events and see how they translate into WhatsApp messages for drivers.</p>
+            
+            <button class="demo-button" onclick="simulateEvent('route')">🚛 Route Assignment</button>
+            <button class="demo-button" onclick="simulateEvent('pickup')">📋 Pickup Reminder</button>
+            <button class="demo-button" onclick="simulateEvent('arrival')">📍 Arrival Notification</button>
+            <button class="demo-button" onclick="simulateEvent('delivery')">📦 Delivery Due</button>
+            <button class="demo-button" onclick="simulateEvent('hos')">⚠️ HOS Warning</button>
+            <button class="demo-button" onclick="simulateEvent('geofence')">🎯 Geofence Entry</button>
+            <button class="demo-button" onclick="clearChat()">🗑️ Clear Chat</button>
+        </div>
+    </div>
+
+    <script>
+        const chatArea = document.getElementById('chatArea');
+        const typingIndicator = document.getElementById('typingIndicator');
+        
+        const eventMessages = {
+            route: {
+                message: "New route assigned! 📋\n\nPickup: Warehouse District, 123 Industrial Blvd\nDelivery: Downtown Office Complex\nEstimated duration: 2h 15min\n\nPlease confirm when you're ready to start.",
+                replies: ["✅ Ready to start", "⏰ Need 15 minutes", "❓ Route details"]
+            },
+            pickup: {
+                message: "Pickup reminder 📋\n\nLocation: Warehouse District\nContact: Sarah Johnson (555-0123)\nItems: 3 pallets, signed POD required\n\nPlease confirm arrival at pickup location.",
+                replies: ["📍 Arrived at pickup", "🚗 5 minutes away", "⏰ Running late"]
+            },
+            arrival: {
+                message: "Great! You've arrived at the pickup location 📍\n\nPlease:\n1. Check in with warehouse staff\n2. Verify load details\n3. Take photos of items\n4. Get signed POD\n\nLet me know when loading is complete.",
+                replies: ["✅ Loading complete", "📸 Items documented", "❓ Issue with load"]
+            },
+            delivery: {
+                message: "Delivery window approaching 📦\n\nDelivery: Downtown Office Complex\nContact: Mike Chen (555-0198)\nWindow: 2:00 PM - 4:00 PM\nCurrent ETA: 2:30 PM\n\nPlease confirm delivery status.",
+                replies: ["📍 At delivery location", "🚗 En route", "⚠️ Will be late"]
+            },
+            hos: {
+                message: "HOS Alert ⚠️\n\nDriving time remaining: 1 hour 15 minutes\nCurrent delivery ETA: 45 minutes\n\nYou're on track to complete delivery within HOS limits. Safe driving!",
+                replies: ["✅ Understood", "🛑 Need break soon", "📞 Call dispatch"]
+            },
+            geofence: {
+                message: "Geofence entry detected 🎯\n\nYou've entered the delivery zone for Downtown Office Complex.\n\nPlease follow these steps:\n1. Find parking in loading zone\n2. Call recipient: Mike Chen\n3. Prepare delivery documentation",
+                replies: ["📞 Calling recipient", "🅿️ Looking for parking", "✅ Ready to unload"]
+            }
+        };
+        
+        function showTyping() {
+            typingIndicator.style.display = 'flex';
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        
+        function hideTyping() {
+            typingIndicator.style.display = 'none';
+        }
+        
+        function addMessage(text, isOutgoing = false, hasReplies = false, replies = []) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOutgoing ? 'outgoing' : 'incoming'}`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div>${text}</div>
+                <div class="message-time">${timeString}</div>
+            `;
+            
+            chatArea.insertBefore(messageDiv, typingIndicator);
+            
+            if (hasReplies && replies.length > 0) {
+                const repliesDiv = document.createElement('div');
+                repliesDiv.className = 'quick-replies';
+                
+                replies.forEach(reply => {
+                    const replyButton = document.createElement('button');
+                    replyButton.className = 'quick-reply';
+                    replyButton.textContent = reply;
+                    replyButton.onclick = () => handleQuickReply(reply, repliesDiv);
+                    repliesDiv.appendChild(replyButton);
+                });
+                
+                chatArea.insertBefore(repliesDiv, typingIndicator);
+            }
+            
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        
+        function handleQuickReply(replyText, repliesDiv) {
+            // Add user's reply
+            addMessage(replyText, true);
+            
+            // Remove the quick reply buttons
+            repliesDiv.remove();
+            
+            // Show typing and respond
+            setTimeout(() => {
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage("Thanks for the update! I'll notify dispatch and update your transport status. 👍");
+                }, 1500);
+            }, 500);
+        }
+        
+        function simulateEvent(eventType) {
+            const event = eventMessages[eventType];
+            if (!event) return;
+            
+            showTyping();
+            
+            setTimeout(() => {
+                hideTyping();
+                addMessage(event.message, false, true, event.replies);
+            }, 2000);
+        }
+        
+        function clearChat() {
+            // Keep only the welcome message
+            const messages = chatArea.querySelectorAll('.message, .quick-replies');
+            for (let i = 1; i < messages.length; i++) {
+                messages[i].remove();
+            }
+        }
+        
+        // Show initial typing indicator briefly
+        setTimeout(() => {
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+            }, 1000);
+        }, 500);
+    </script>
+</body>
+</html>
