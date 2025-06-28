@@ -194,6 +194,15 @@ FleetChat is a headless message broker service that facilitates seamless communi
 - **Response Generation**: Automatic contextual responses based on driver actions
 - **Security**: Webhook verification and signature validation for production deployment
 
+## Known Issues
+
+### Replit Preview System Compatibility
+- **Issue**: Replit preview panel fails to display demo despite server running successfully on port 3000
+- **Status**: Technical limitation with Replit's preview integration system
+- **Workaround**: Server accessible via direct port access and external browser tabs
+- **Impact**: Demo functionality fully operational, preview display issue only
+- **Date Reported**: June 28, 2025
+
 ## Changelog
 ```
 Changelog:
@@ -207,6 +216,7 @@ Changelog:
 - June 27, 2025. Created comprehensive prototype deployment specification confirming macro requirement for seamless WhatsApp conversation flow management with complete backend synchronization
 - June 27, 2025. Redesigned Samsara integration to ensure driver phone number access for WhatsApp communication with proper API scopes, validation systems, and GDPR-compliant driver mapping
 - June 27, 2025. Redesigned FleetChat as headless message broker service eliminating user interface complexity - pure API service for Samsara-WhatsApp communication routing
+- June 28, 2025. Documented Replit preview system compatibility issue - server running successfully but preview panel integration failing
 ```
 
 ## User Preferences
