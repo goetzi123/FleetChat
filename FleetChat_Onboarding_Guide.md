@@ -71,51 +71,36 @@ Enable these Samsara webhook events for FleetChat processing:
 
 ## Step 3: WhatsApp Business API Setup
 
-### Option A: FleetChat Managed WhatsApp (Recommended)
+### FleetChat Managed WhatsApp Service
 **Turnkey Solution - No WhatsApp Setup Required**
 
-FleetChat provides complete WhatsApp Business API management:
-- **Dedicated Phone Numbers**: Bulk-purchased business numbers assigned per fleet
+FleetChat provides complete WhatsApp Business API management as part of the service:
+
+**Included in FleetChat Service:**
+- **Dedicated Phone Numbers**: Each fleet receives a dedicated business number (e.g., +1-555-FLEET-01)
 - **Pre-Approved Templates**: Transport-specific message templates already approved by WhatsApp
-- **Instant Activation**: Ready-to-use within 24 hours of onboarding
+- **Instant Activation**: Ready-to-use within 24 hours of Samsara configuration
 - **Compliance Management**: FleetChat handles all WhatsApp Business policy requirements
 - **Rate Limiting**: Automated message throttling to prevent API violations
+- **24/7 Monitoring**: Continuous uptime monitoring and technical support
 
-**Fleet Operator Requirements**: None - FleetChat handles everything
+**Fleet Operator Requirements**: None - FleetChat handles all WhatsApp complexity
 
-**Configuration**:
+**Configuration (Automatic)**:
 ```
-# Provided by FleetChat automatically
-WHATSAPP_PHONE_NUMBER: +1-555-FLEET-01 (example)
-SERVICE_LEVEL: "managed"
+# Assigned automatically by FleetChat
+FLEET_WHATSAPP_NUMBER: +1-555-FLEET-[ID]
 MESSAGE_TEMPLATES: "transport-standard-v2"
+SERVICE_LEVEL: "fully-managed"
+DELIVERY_TRACKING: "enabled"
 ```
 
-### Option B: Fleet Operator Owned WhatsApp Business
-**For Large Enterprises with Existing WhatsApp Infrastructure**
-
-If fleet operator already has WhatsApp Business API:
-```
-WHATSAPP_ACCESS_TOKEN=<your_whatsapp_token>
-WHATSAPP_PHONE_NUMBER_ID=<your_business_phone_id>
-WHATSAPP_WEBHOOK_VERIFY_TOKEN=<webhook_verification_token>
-SERVICE_LEVEL: "self-managed"
-```
-
-**Requirements**:
-- Existing Meta Business account with WhatsApp API access
-- Approved business verification status
-- Transport industry message templates (FleetChat can assist)
-- Technical team for webhook configuration
-
-### Option C: Hybrid Model
-**FleetChat Provisions, Fleet Operator Owns**
-
-FleetChat facilitates WhatsApp Business API setup under fleet operator's Meta Business account:
-- FleetChat guides through Meta Business verification process
-- Fleet operator owns the WhatsApp Business account
-- FleetChat configures all technical integrations
-- Fleet operator maintains control over phone number and billing
+**Why Managed Service:**
+- Eliminates need for separate WhatsApp Business API relationship
+- No technical expertise required for WhatsApp setup
+- Pre-configured transport industry message templates
+- Simplified billing with single vendor relationship
+- Immediate deployment capability
 
 ## Step 4: Driver Phone Number Mapping
 
@@ -221,42 +206,45 @@ FleetChat provides real-time monitoring for:
 
 ## Cost Structure
 
-### WhatsApp Business API Pricing Models
+### FleetChat Service Pricing
+**All-Inclusive Managed Service - No Additional WhatsApp Costs**
 
-#### Option A: FleetChat Managed (Recommended for Most Fleets)
-**Includes Everything - No Separate WhatsApp Costs**
-- **Basic**: $15/driver/month - Standard templates, basic reporting, managed WhatsApp
-- **Professional**: $25/driver/month - Custom templates, advanced analytics, priority support
-- **Enterprise**: $35/driver/month - Multi-fleet support, dedicated account management, custom integrations
+#### Service Tiers
+- **Basic**: $15/driver/month
+  - Standard transport message templates
+  - Basic delivery reporting
+  - Dedicated WhatsApp business number
+  - Standard support (business hours)
 
-**What's Included in Managed Service:**
-- Dedicated WhatsApp Business phone number
-- Pre-approved transport message templates
-- WhatsApp Business API access and compliance
-- Message delivery infrastructure
-- 24/7 technical support
+- **Professional**: $25/driver/month
+  - Custom message templates
+  - Advanced driver analytics
+  - Priority support (24/7)
+  - Multi-language capabilities
 
-#### Option B: Fleet Operator Owned WhatsApp
-**Lower FleetChat Fees + Separate WhatsApp Costs**
-- **FleetChat Integration**: $8/driver/month - Pure middleware service
-- **WhatsApp Business API**: $0.005-0.025 per message (paid directly to Meta)
-- **WhatsApp Phone Number**: $15-50/month per business number (varies by region)
+- **Enterprise**: $35/driver/month
+  - Multi-fleet management
+  - Dedicated account manager
+  - Custom integration development
+  - Real-time API monitoring
 
-#### Option C: Hybrid Model
-**FleetChat Setup + Fleet Operator Billing**
-- **One-time Setup**: $2,500 - WhatsApp Business API provisioning and configuration
-- **Monthly Integration**: $10/driver/month - Ongoing middleware service
-- **WhatsApp Costs**: Billed directly by Meta to fleet operator
+#### What's Included in All Tiers
+- **WhatsApp Business API**: Complete access and management
+- **Dedicated Phone Number**: Business-grade number per fleet
+- **Message Templates**: Pre-approved transport industry templates
+- **Compliance Management**: WhatsApp Business policy adherence
+- **Technical Infrastructure**: 99.9% uptime SLA
+- **Driver Onboarding**: Automated invitation and consent management
 
-### Volume Discounts
+#### Volume Pricing
 - **50+ drivers**: 15% discount on all tiers
 - **200+ drivers**: 25% discount on all tiers  
-- **500+ drivers**: 35% discount + custom enterprise features
+- **500+ drivers**: 35% discount + enterprise features
 
-### Additional Services
+#### Additional Services
 - **Custom Message Templates**: $500 per template set
 - **Advanced Analytics Dashboard**: $200/month per fleet
-- **Multi-language Support**: $150/driver/month for non-English communications
-- **Priority Technical Support**: $1,000/month per fleet
+- **Priority Technical Support**: Included in Professional and Enterprise tiers
+- **Custom Samsara Integrations**: $1,500 one-time setup per custom workflow
 
 This onboarding process typically takes 2-3 weeks from initial configuration to full deployment, with most complexity handled by FleetChat's integration team to minimize fleet operator technical requirements.
