@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetChat - Executive Presentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .presentation {
+            max-width: 1024px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .slide {
+            width: 100%;
+            height: 768px;
+            padding: 60px;
+            box-sizing: border-box;
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .slide h1 {
+            font-size: 48px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .slide h2 {
+            font-size: 36px;
+            color: #34495e;
+            margin-bottom: 30px;
+        }
+        
+        .slide h3 {
+            font-size: 28px;
+            color: #2980b9;
+            margin-bottom: 15px;
+        }
+        
+        .slide p, .slide li {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        
+        .slide ul {
+            padding-left: 30px;
+        }
+        
+        .slide li {
+            margin-bottom: 10px;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .metric-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 5px solid #3498db;
+        }
+        
+        .metric-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2980b9;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-top: 10px;
+        }
+        
+        .value-props {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .value-prop {
+            background: #ecf0f1;
+            padding: 25px;
+            border-radius: 10px;
+            border-top: 4px solid #e74c3c;
+        }
+        
+        .business-model {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .tier {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #bdc3c7;
+        }
+        
+        .tier.professional {
+            border-color: #3498db;
+            background: #ebf3fd;
+        }
+        
+        .tier-price {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            margin: 0 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .slide-counter {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .intro-slide {
+            text-align: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .intro-slide h1 {
+            font-size: 72px;
+            margin-bottom: 30px;
+            border: none;
+            color: white;
+        }
+        
+        .intro-slide p {
+            font-size: 24px;
+            color: rgba(255,255,255,0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide active intro-slide">
+            <h1>FleetChat</h1>
+            <p>Invisible Communication Infrastructure for Fleet Management</p>
+            <div style="margin-top: 50px; font-size: 18px; opacity: 0.8;">
+                Headless Middleware Platform | Samsara Integration | WhatsApp Business API
+            </div>
+        </div>
+
+        <!-- Slide 2: Problem & Solution -->
+        <div class="slide">
+            <div class="logo">FleetChat</div>
+            <h2>The Communication Challenge</h2>
+            <div class="value-props">
+                <div>
+                    <h3 style="color: #e74c3c;">Current Problems</h3>
+                    <ul>
+                        <li>Fragmented communication between dispatchers and drivers</li>
+                        <li>Manual phone calls and text messages</li>
+                        <li>Paper-based documentation processes</li>
+                        <li>Driver resistance to fleet management apps</li>
+                        <li>80% dispatcher time spent on routine communication</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #27ae60;">FleetChat Solution</h3>
+                    <ul>
+                        <li>Automated Samsara-to-WhatsApp message routing</li>
+                        <li>Familiar WhatsApp interface for all drivers</li>
+                        <li>Digital document collection via WhatsApp</li>
+                        <li>Real-time status synchronization</li>
+                        <li>60-80% reduction in dispatcher workload</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-counter">2 / 8</div>
+        </div>
+
+        <!-- Slide 3: System Architecture -->
+        <div class="slide">
+            <div class="logo">FleetChat</div>
+            <h2>Headless Middleware Architecture</h2>
+            <div style="text-align: center; margin: 40px 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 50px 0;">
+                    <div style="background: #3498db; color: white; padding: 20px; border-radius: 10px; width: 200px;">
+                        <strong>Samsara TMS</strong><br>
+                        Fleet Events<br>
+                        Vehicle Data<br>
+                        Driver Management
+                    </div>
+                    <div style="font-size: 48px; color: #3498db;">→</div>
+                    <div style="background: #e74c3c; color: white; padding: 20px; border-radius: 10px; width: 200px;">
+                        <strong>FleetChat</strong><br>
+                        Event Translation<br>
+                        Message Routing<br>
+                        Response Processing
+                    </div>
+                    <div style="font-size: 48px; color: #3498db;">→</div>
+                    <div style="background: #27ae60; color: white; padding: 20px; border-radius: 10px; width: 200px;">
+                        <strong>WhatsApp</strong><br>
+                        Driver Messages<br>
+                        Document Upload<br>
+                        Status Updates
+                    </div>
+                </div>
+            </div>
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 10px; margin-top: 40px;">
+                <h3>Core Capabilities</h3>
+                <ul style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                    <li>Event Translation Engine</li>
+                    <li>Bidirectional Message Routing</li>
+                    <li>Document Processing Pipeline</li>
+                    <li>Multi-Tenant Architecture</li>
+                </ul>
+            </div>
+            <div class="slide-counter">3 / 8</div>
+        </div>
+
+        <!-- Slide 4: Value Proposition -->
+        <div class="slide">
+            <div class="logo">FleetChat</div>
+            <h2>Value Proposition</h2>
+            <div class="value-props">
+                <div class="value-prop">
+                    <h3>For Trucking Companies</h3>
+                    <ul>
+                        <li><strong>60-80% Efficiency Gain</strong> - Automated status updates and document collection</li>
+                        <li><strong>Zero Training Required</strong> - Drivers use familiar WhatsApp interface</li>
+                        <li><strong>Enhanced Compliance</strong> - Automated audit trails and document management</li>
+                        <li><strong>Improved Driver Satisfaction</strong> - No specialized apps required</li>
+                    </ul>
+                </div>
+                <div class="value-prop">
+                    <h3>For Drivers</h3>
+                    <ul>
+                        <li><strong>Familiar Interface</strong> - WhatsApp on every driver's phone</li>
+                        <li><strong>Contextual Communication</strong> - Clear, actionable messages</li>
+                        <li><strong>Simple Documentation</strong> - Photo and signature submission via WhatsApp</li>
+                        <li><strong>Privacy Protection</strong> - GDPR-compliant with consent management</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-counter">4 / 8</div>
+        </div>
+
+        <!-- Slide 5: Business Model -->
+        <div class="slide">
+            <div class="logo">FleetChat</div>
+            <h2>SaaS Business Model</h2>
+            <div class="business-model">
+                <div class="tier">
+                    <h3>Basic</h3>
+                    <div class="tier-price">$15</div>
+                    <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 20px;">per driver/month</div>
+                    <ul style="text-align: left; font-size: 16px;">
+                        <li>Standard templates</li>
+                        <li>Basic reporting</li>
+                        <li>Managed WhatsApp</li>
+                        <li>Business hours support</li>
+                    </ul>
+                </div>
+                <div class="tier professional">
+                    <h3>Professional</h3>
+                    <div class="tier-price">$25</div>
+                    <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 20px;">per driver/month</div>
+                    <ul style="text-align: left; font-size: 16px;">
+                        <li>Custom templates</li>
+                        <li>Advanced analytics</li>
+                        <li>24/7 support</li>
+                        <li>Multi-language</li>
+                    </ul>
+                </div>
+                <div class="tier">
+                    <h3>Enterprise</h3>
+                    <div class="tier-price">$35</div>
+                    <div style="font-size: 14px; color: #7f8c8d; margin-bottom: 20px;">per driver/month</div>
+                    <ul style="text-align: left; font-size: 16px;">
+                        <li>Multi-fleet management</li>
+                        <li>Dedicated account manager</li>
+                        <li>Custom integrations</li>
+                        <li>White-label options</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="background: #e8f5e8; padding: 25px; border-radius: 10px; margin-top: 30px;">
+                <h3 style="color: #27ae60; margin-bottom: 15px;">Volume Discounts</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center;">
+                    <div><strong>50+ drivers:</strong> 15% discount</div>
+                    <div><strong>200+ drivers:</strong> 25% discount</div>
+                    <div><strong>500+ drivers:</strong> 35% discount</div>
+                </div>
+            </div>
+            <div class="slide-counter">5 / 8</div>
+        </div>
+
+        <!-- Slide 6: Market Opportunity -->
+        <div class="slide">
+            <div class="logo">FleetChat</div>
+            <h2>Market Opportunity</h2>
+            <div class="metrics">
+                <div class="metric-card">
+                    <span class="metric-number">3.5M</span>
+                    <div class="metric-label">Commercial Drivers in US</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">15K+</span>
+                    <div class="metric-label">Samsara Customer Organizations</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">$2.1B</span>
+                    <div class="metric-label">Annual Addressable Market</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">2B+</span>
+                    <div class="metric-label">WhatsApp Global Users</div>
+                </div>
+            </div>
+            <div style="margin-top: 40px;">
+                <h3>Target Market Segments</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;">
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                        <h4 style="color: #2980b9;">Primary</h4>
+                        <p>Mid-size trucking companies (25-500 drivers) using Samsara TMS</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                        <h4 style="color: #2980b9;">Secondary</h4>
+                        <p>Large enterprise fleets seeking communication automation</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                        <h4 style="color: #2980b9;">Tertiary</h4>
+                        <p>Logistics brokers managing multiple carrier relationships</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-counter">6 / 8</div>
+        </div>
+
+        <!-- Slide 7: Implementation -->
+        <div class="slide">
+            <div class="logo">FleetChat</div>
+            <h2>Implementation & Onboarding</h2>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px;">
+                <div>
+                    <h3 style="color: #27ae60;">Simple Configuration</h3>
+                    <div style="background: #e8f5e8; padding: 25px; border-radius: 10px;">
+                        <h4>1. Samsara API Setup</h4>
+                        <ul>
+                            <li>Provide API credentials</li>
+                            <li>Configure webhook endpoints</li>
+                            <li>Upload driver phone mappings</li>
+                        </ul>
+                        
+                        <h4>2. Payment Configuration</h4>
+                        <ul>
+                            <li>Enter credit card details</li>
+                            <li>Select service tier</li>
+                            <li>Set billing contact</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: #3498db;">Automated Management</h3>
+                    <div style="background: #ebf3fd; padding: 25px; border-radius: 10px;">
+                        <h4>FleetChat Handles</h4>
+                        <ul>
+                            <li>WhatsApp Business API setup</li>
+                            <li>Dedicated phone number assignment</li>
+                            <li>Message template configuration</li>
+                            <li>Compliance and monitoring</li>
+                            <li>24/7 technical support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div style="background: #fff3cd; border: 2px solid #ffeaa7; padding: 25px; border-radius: 10px; margin-top: 30px; text-align: center;">
+                <h3 style="color: #e17055; margin-bottom: 15px;">⚡ 2-3 Day Deployment Timeline</h3>
+                <p style="font-size: 18px; margin-bottom: 0;">From signup to full operational status with minimal technical requirements</p>
+            </div>
+            <div class="slide-counter">7 / 8</div>
+        </div>
+
+        <!-- Slide 8: Financial Projections -->
+        <div class="slide">
+            <div class="logo">FleetChat</div>
+            <h2>Financial Projections & Growth</h2>
+            <div class="metrics">
+                <div class="metric-card">
+                    <span class="metric-number">50</span>
+                    <div class="metric-label">Year 1 Target Customers</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">2,500</span>
+                    <div class="metric-label">Average Active Drivers</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">$500K</span>
+                    <div class="metric-label">Monthly Recurring Revenue</div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">$6M</span>
+                    <div class="metric-label">Year 1 Annual Revenue</div>
+                </div>
+            </div>
+            <div style="margin-top: 40px;">
+                <h3>Growth Strategy</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+                    <div>
+                        <h4 style="color: #2980b9;">Customer Acquisition</h4>
+                        <ul>
+                            <li>Direct sales to mid-size trucking companies</li>
+                            <li>Samsara partner channel development</li>
+                            <li>Industry trade shows and conferences</li>
+                            <li>Customer referral program</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #2980b9;">Market Expansion</h4>
+                        <ul>
+                            <li>15% quarterly driver growth rate</li>
+                            <li>Service tier migration (Basic → Professional)</li>
+                            <li>Additional TMS platform integrations</li>
+                            <li>International market expansion</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-counter">8 / 8</div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                changeSlide(1);
+                e.preventDefault();
+            } else if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+                e.preventDefault();
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
