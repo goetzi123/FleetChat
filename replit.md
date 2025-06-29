@@ -96,12 +96,24 @@ FleetChat is a headless message broker service that facilitates seamless communi
 - Secure chat infrastructure
 - Privacy-first architecture
 
-## Deployment Strategy
+## Multi-Tenant Architecture
 
-### Multi-tenant Architecture
-- Support for multiple logistics companies
-- Isolated data and workflows per tenant
-- Shared infrastructure with tenant-specific configurations
+### Core Multi-Tenancy Design
+FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking companies with complete logical separation:
+
+**Tenant Isolation:**
+- Each fleet operator is a separate tenant with isolated data
+- Dedicated WhatsApp phone numbers per fleet (tenant)
+- Separate Samsara API configurations per tenant
+- Independent driver databases with GDPR compliance
+- Isolated message queues and webhook processing
+
+**Shared Infrastructure:**
+- Single FleetChat middleware instance serves all tenants
+- Shared WhatsApp Business API management layer
+- Common message template library with tenant customization
+- Unified billing and monitoring systems
+- Centralized compliance and security management
 
 ### Scalability Considerations
 - WhatsApp Business API rate limiting handling

@@ -44,6 +44,7 @@ export const UserRole = {
 // Base types for in-memory storage
 export interface User {
   id: string;
+  tenantId: string; // Multi-tenant isolation
   email?: string;
   name: string;
   phone?: string;
@@ -57,6 +58,7 @@ export interface User {
 
 export interface Transport {
   id: string;
+  tenantId: string; // Multi-tenant isolation
   externalId?: string; // TMS reference
   driverId?: string;
   dispatcherId?: string;
@@ -100,6 +102,7 @@ export interface Transport {
 
 export interface StatusUpdate {
   id: string;
+  tenantId: string; // Multi-tenant isolation
   transportId: string;
   status: string;
   location?: string;
@@ -112,6 +115,7 @@ export interface StatusUpdate {
 
 export interface Document {
   id: string;
+  tenantId: string; // Multi-tenant isolation
   transportId: string;
   type: string;
   filename: string;
@@ -130,6 +134,7 @@ export interface Document {
 
 export interface LocationTracking {
   id: string;
+  tenantId: string; // Multi-tenant isolation
   transportId: string;
   driverId: string;
   lat: number;
@@ -144,6 +149,7 @@ export interface LocationTracking {
 
 export interface YardOperation {
   id: string;
+  tenantId: string; // Multi-tenant isolation
   transportId: string;
   yardLocation: string;
   operationType: string; // check_in, call_off, check_out
@@ -157,6 +163,7 @@ export interface YardOperation {
 
 export interface TmsIntegration {
   id: string;
+  tenantId: string; // Multi-tenant isolation
   transportId: string;
   platform: string; // samsara, transporeon, agheera, project44, wanko, d_soft
   operation: string; // create, update, status_update, webhook_received
@@ -167,6 +174,36 @@ export interface TmsIntegration {
   timestamp: Date;
 }
 
+// Tenant configuration interface
+export interface Tenant {
+  id: string;
+  companyName: string;
+  contactEmail: string;
+  serviceTier: string; // basic, professional, enterprise
+  isActive: boolean;
+  
+  // Samsara Configuration
+  samsaraApiToken?: string; // encrypted
+  samsaraGroupId?: string;
+  samsaraWebhookSecret?: string; // encrypted
+  
+  // WhatsApp Configuration  
+  whatsappPhoneNumber: string;
+  whatsappPhoneNumberId: string;
+  whatsappBusinessAccountId: string;
+  
+  // Service Settings
+  messageTemplates: string;
+  complianceSettings: {
+    gdprEnabled: boolean;
+    dataRetentionDays: number;
+    driverConsentRequired: boolean;
+  };
+  
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // Insert types (without auto-generated fields)
 export type InsertUser = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
 export type InsertTransport = Omit<Transport, 'id' | 'createdAt' | 'updatedAt'>;
@@ -175,6 +212,7 @@ export type InsertDocument = Omit<Document, 'id' | 'createdAt'>;
 export type InsertLocationTracking = Omit<LocationTracking, 'id' | 'timestamp'>;
 export type InsertYardOperation = Omit<YardOperation, 'id' | 'createdAt'>;
 export type InsertTmsIntegration = Omit<TmsIntegration, 'id' | 'timestamp'>;
+export type InsertTenant = Omit<Tenant, 'id' | 'createdAt' | 'updatedAt'>;
 
 // Validation schemas
 export const createUserSchema = z.object({
