@@ -218,6 +218,7 @@ Changelog:
 - June 27, 2025. Redesigned FleetChat as headless message broker service eliminating user interface complexity - pure API service for Samsara-WhatsApp communication routing
 - June 28, 2025. Documented Replit preview system compatibility issue - server running successfully but preview panel integration failing
 - June 28, 2025. Created comprehensive 2-page system overview document summarizing FleetChat's headless middleware architecture, integration capabilities, and business impact
+- June 28, 2025. Developed complete fleet operator onboarding guide explaining Samsara API configuration, webhook setup, WhatsApp integration, and driver mapping requirements
 ```
 
 ## User Preferences
