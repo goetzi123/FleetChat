@@ -247,4 +247,40 @@ FleetChat provides real-time monitoring for:
 - **Priority Technical Support**: Included in Professional and Enterprise tiers
 - **Custom Samsara Integrations**: $1,500 one-time setup per custom workflow
 
-This onboarding process typically takes 2-3 weeks from initial configuration to full deployment, with most complexity handled by FleetChat's integration team to minimize fleet operator technical requirements.
+## Simplified Configuration Summary
+
+FleetChat requires only **two main configurations** from trucking companies:
+
+### 1. Samsara API Management
+- **API Token**: Fleet operator provides Samsara API credentials
+- **Webhook Setup**: FleetChat configures automatic event processing
+- **Driver Mapping**: Upload driver phone numbers with consent status
+
+### 2. Payment Configuration  
+- **Credit Card Details**: Enter payment method for automated monthly billing
+- **Billing Contact**: Designated person to receive invoices and billing communications
+- **Service Tier Selection**: Choose Basic ($15), Professional ($25), or Enterprise ($35) per driver
+
+### Automated Monthly Billing Process
+- **Active Driver Counting**: FleetChat automatically tracks drivers who send/receive messages each month
+- **Monthly Charges**: Credit card automatically charged for `(Active Drivers × Service Tier Price)` on the 1st of each month
+- **Usage Transparency**: Real-time dashboard shows current active driver count and projected monthly cost
+- **Volume Discounts**: Automatic application of discounts for 50+ drivers (15%), 200+ drivers (25%), 500+ drivers (35%)
+
+**Example Monthly Billing**:
+```
+ABC Trucking Company - June 2025
+Service Tier: Professional ($25/driver)
+Active Drivers: 47 drivers
+Volume Discount: None (under 50 drivers)
+Total Charge: $1,175.00
+```
+
+**What FleetChat Handles Automatically**:
+- WhatsApp Business phone number assignment and management
+- Message template creation and WhatsApp approval process
+- Driver communication infrastructure and compliance
+- Real-time message routing between Samsara and WhatsApp
+- Technical support and system maintenance
+
+This configuration typically takes 2-3 days from signup to full deployment, with most complexity handled by FleetChat's integration team to minimize fleet operator technical requirements.

@@ -233,6 +233,8 @@ Changelog:
 - June 28, 2025. Developed complete fleet operator onboarding guide explaining Samsara API configuration, webhook setup, WhatsApp integration, and driver mapping requirements
 - June 29, 2025. Simplified WhatsApp integration to FleetChat managed service only - eliminates need for fleet operators to handle separate WhatsApp Business API setup
 - June 29, 2025. Created comprehensive billing architecture document detailing driver-based pricing, automated invoice generation, and enterprise billing features
+- June 29, 2025. Confirmed FleetChat's simplified two-part configuration: Samsara API management and automated credit card billing for active drivers monthly
+- June 29, 2025. Implemented comprehensive multi-tenant architecture with tenant isolation, updated schema with tenantId fields, and created detailed multi-tenant documentation
 ```
 
 ## User Preferences
