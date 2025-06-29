@@ -1,4 +1,18 @@
 import { z } from "zod";
+import {
+  pgTable,
+  text,
+  varchar,
+  timestamp,
+  boolean,
+  integer,
+  decimal,
+  jsonb,
+  uuid,
+  index
+} from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { createInsertSchema } from "drizzle-zod";
 
 // Transport Status Enum
 export const TransportStatus = {
@@ -41,7 +55,224 @@ export const UserRole = {
   MANAGER: "manager"
 } as const;
 
-// Base types for in-memory storage
+// Database Tables
+
+// Session storage table for authentication
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// Fleet operators (tenants) table
+export const tenants = pgTable("tenants", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  companyName: varchar("company_name", { length: 255 }).notNull(),
+  contactEmail: varchar("contact_email", { length: 255 }).notNull(),
+  serviceTier: varchar("service_tier", { length: 50 }).notNull().default("professional"), // basic, professional, enterprise
+  isActive: boolean("is_active").notNull().default(true),
+  
+  // Samsara Configuration
+  samsaraApiToken: text("samsara_api_token"), // encrypted
+  samsaraGroupId: varchar("samsara_group_id", { length: 255 }),
+  samsaraWebhookSecret: text("samsara_webhook_secret"), // encrypted
+  
+  // WhatsApp Configuration (managed by FleetChat)
+  whatsappPhoneNumber: varchar("whatsapp_phone_number", { length: 20 }),
+  whatsappPhoneNumberId: varchar("whatsapp_phone_number_id", { length: 255 }),
+  whatsappBusinessAccountId: varchar("whatsapp_business_account_id", { length: 255 }),
+  
+  // Billing Configuration
+  stripeCustomerId: varchar("stripe_customer_id", { length: 255 }),
+  stripeSubscriptionId: varchar("stripe_subscription_id", { length: 255 }),
+  billingEmail: varchar("billing_email", { length: 255 }),
+  autoPayment: boolean("auto_payment").notNull().default(true),
+  
+  // Service Settings
+  messageTemplates: jsonb("message_templates").default('{}'),
+  complianceSettings: jsonb("compliance_settings").default('{"gdprEnabled":true,"dataRetentionDays":365,"driverConsentRequired":true}'),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Users table (fleet administrators and drivers)
+export const users = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  email: varchar("email", { length: 255 }),
+  name: varchar("name", { length: 255 }).notNull(),
+  phone: varchar("phone", { length: 20 }),
+  role: varchar("role", { length: 50 }).notNull(),
+  isAnonymous: boolean("is_anonymous").default(false),
+  pseudoId: varchar("pseudo_id", { length: 100 }), // For driver anonymity
+  whatsappNumber: varchar("whatsapp_number", { length: 20 }), // WhatsApp Business API phone number
+  samsaraDriverId: varchar("samsara_driver_id", { length: 255 }), // Link to Samsara driver
+  hasConsented: boolean("has_consented").default(false), // GDPR consent
+  consentedAt: timestamp("consented_at"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Transports table
+export const transports = pgTable("transports", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  externalId: varchar("external_id", { length: 255 }), // TMS reference
+  driverId: uuid("driver_id").references(() => users.id),
+  dispatcherId: uuid("dispatcher_id").references(() => users.id),
+  status: varchar("status", { length: 50 }).notNull(),
+  workflowType: varchar("workflow_type", { length: 50 }).notNull(),
+  
+  // Pickup details
+  pickupLocation: varchar("pickup_location", { length: 500 }).notNull(),
+  pickupAddress: text("pickup_address"),
+  pickupLat: decimal("pickup_lat", { precision: 10, scale: 7 }),
+  pickupLng: decimal("pickup_lng", { precision: 10, scale: 7 }),
+  pickupEta: timestamp("pickup_eta"),
+  pickupActual: timestamp("pickup_actual"),
+  
+  // Delivery details
+  deliveryLocation: varchar("delivery_location", { length: 500 }).notNull(),
+  deliveryAddress: text("delivery_address"),
+  deliveryLat: decimal("delivery_lat", { precision: 10, scale: 7 }),
+  deliveryLng: decimal("delivery_lng", { precision: 10, scale: 7 }),
+  deliveryEta: timestamp("delivery_eta"),
+  deliveryActual: timestamp("delivery_actual"),
+  
+  // Load details
+  loadReference: varchar("load_reference", { length: 255 }),
+  loadDescription: text("load_description"),
+  loadWeight: decimal("load_weight", { precision: 10, scale: 2 }),
+  loadValue: decimal("load_value", { precision: 10, scale: 2 }),
+  
+  // Samsara Integration
+  samsaraRouteId: varchar("samsara_route_id", { length: 255 }),
+  samsaraVehicleId: varchar("samsara_vehicle_id", { length: 255 }),
+  samsaraDriverId: varchar("samsara_driver_id", { length: 255 }),
+  
+  // Metadata
+  instructions: text("instructions"),
+  priority: integer("priority").default(1),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Status updates table
+export const statusUpdates = pgTable("status_updates", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  transportId: uuid("transport_id").references(() => transports.id).notNull(),
+  status: varchar("status", { length: 50 }).notNull(),
+  location: varchar("location", { length: 500 }),
+  lat: decimal("lat", { precision: 10, scale: 7 }),
+  lng: decimal("lng", { precision: 10, scale: 7 }),
+  notes: text("notes"),
+  createdBy: uuid("created_by").references(() => users.id),
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
+// Documents table
+export const documents = pgTable("documents", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  transportId: uuid("transport_id").references(() => transports.id).notNull(),
+  type: varchar("type", { length: 50 }).notNull(),
+  filename: varchar("filename", { length: 255 }).notNull(),
+  originalName: varchar("original_name", { length: 255 }),
+  fileUrl: text("file_url").notNull(),
+  fileSize: integer("file_size"),
+  mimeType: varchar("mime_type", { length: 100 }),
+  isApproved: boolean("is_approved").default(false),
+  approvedBy: uuid("approved_by").references(() => users.id),
+  approvedAt: timestamp("approved_at"),
+  notes: text("notes"),
+  metadata: jsonb("metadata"),
+  uploadedBy: uuid("uploaded_by").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Location tracking table
+export const locationTracking = pgTable("location_tracking", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  transportId: uuid("transport_id").references(() => transports.id).notNull(),
+  driverId: uuid("driver_id").references(() => users.id).notNull(),
+  lat: decimal("lat", { precision: 10, scale: 7 }).notNull(),
+  lng: decimal("lng", { precision: 10, scale: 7 }).notNull(),
+  accuracy: decimal("accuracy", { precision: 6, scale: 2 }),
+  speed: decimal("speed", { precision: 6, scale: 2 }),
+  heading: decimal("heading", { precision: 6, scale: 2 }),
+  isGeofenced: boolean("is_geofenced").default(false),
+  geofenceType: varchar("geofence_type", { length: 50 }),
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
+// Yard operations table
+export const yardOperations = pgTable("yard_operations", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  transportId: uuid("transport_id").references(() => transports.id).notNull(),
+  yardLocation: varchar("yard_location", { length: 500 }).notNull(),
+  operationType: varchar("operation_type", { length: 50 }).notNull(), // check_in, call_off, check_out
+  operatorId: uuid("operator_id").references(() => users.id),
+  driverId: uuid("driver_id").references(() => users.id),
+  instructions: text("instructions"),
+  qrCode: varchar("qr_code", { length: 255 }),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// TMS integrations table
+export const tmsIntegrations = pgTable("tms_integrations", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  transportId: uuid("transport_id").references(() => transports.id),
+  platform: varchar("platform", { length: 50 }).notNull(), // samsara, transporeon, etc.
+  operation: varchar("operation", { length: 100 }).notNull(), // create, update, status_update, etc.
+  payload: jsonb("payload"),
+  response: jsonb("response"),
+  success: boolean("success").default(true),
+  errorMessage: text("error_message"),
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
+// WhatsApp messages table for audit and debugging
+export const whatsappMessages = pgTable("whatsapp_messages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  transportId: uuid("transport_id").references(() => transports.id),
+  driverId: uuid("driver_id").references(() => users.id),
+  messageId: varchar("message_id", { length: 255 }),
+  direction: varchar("direction", { length: 10 }).notNull(), // inbound, outbound
+  messageType: varchar("message_type", { length: 50 }).notNull(), // text, image, document, etc.
+  content: text("content"),
+  metadata: jsonb("metadata"),
+  status: varchar("status", { length: 50 }).default("sent"), // sent, delivered, read, failed
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
+// Billing records table
+export const billingRecords = pgTable("billing_records", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  billingPeriod: varchar("billing_period", { length: 7 }).notNull(), // YYYY-MM format
+  activeDrivers: integer("active_drivers").notNull(),
+  pricePerDriver: decimal("price_per_driver", { precision: 6, scale: 2 }).notNull(),
+  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
+  stripeInvoiceId: varchar("stripe_invoice_id", { length: 255 }),
+  status: varchar("status", { length: 50 }).notNull().default("pending"), // pending, paid, failed
+  paidAt: timestamp("paid_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Base types for compatibility
 export interface User {
   id: string;
   tenantId: string; // Multi-tenant isolation
@@ -305,4 +536,22 @@ export const yardOperationSchema = z.object({
   driverId: z.string().optional(),
   instructions: z.string().optional(),
   qrCode: z.string().optional()
+});
+
+// Fleet onboarding schemas
+export const fleetSetupSchema = z.object({
+  companyName: z.string().min(1, "Company name is required"),
+  contactEmail: z.string().email("Valid email is required"),
+  serviceTier: z.enum(["basic", "professional", "enterprise"]).default("professional"),
+  samsaraApiToken: z.string().min(1, "Samsara API token is required"),
+  samsaraGroupId: z.string().optional(),
+  billingEmail: z.string().email("Valid billing email is required"),
+  autoPayment: z.boolean().default(true),
+});
+
+export const driverOnboardingSchema = z.object({
+  name: z.string().min(1, "Driver name is required"),
+  phone: z.string().min(1, "Phone number is required"),
+  samsaraDriverId: z.string().min(1, "Samsara driver ID is required"),
+  hasConsented: z.boolean().default(false),
 });
