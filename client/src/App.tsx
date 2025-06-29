@@ -8,6 +8,7 @@ import Users from "./pages/Users";
 import SamsaraIntegration from "./pages/SamsaraIntegration";
 import WhatsAppDemo from "./pages/WhatsAppDemo";
 import DemoEnvironment from "./pages/DemoEnvironment";
+import FleetSetup from "./pages/FleetSetup";
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: BarChart3 },
