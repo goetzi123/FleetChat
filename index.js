@@ -710,37 +710,41 @@ app.get('/demo', (req, res) => {
                 </div>
             \`;
             
-            // Find the button container for the relevant event type
-            const buttons = document.querySelectorAll('button[onclick*="sendEvent"]');
-            let targetButton = null;
+            // Find the specific button for the event type and insert response panel
+            const samsaraPanel = document.getElementById('samsaraPanel');
+            if (!samsaraPanel) {
+                console.log('Samsara panel not found');
+                return;
+            }
             
-            buttons.forEach(button => {
+            const buttonContainer = samsaraPanel.querySelector('.space-y-4');
+            if (!buttonContainer) {
+                console.log('Button container not found');
+                return;
+            }
+            
+            // Find the correct button based on event type
+            let targetButton = null;
+            const buttons = buttonContainer.querySelectorAll('button[onclick]');
+            
+            console.log('Found buttons:', buttons.length);
+            buttons.forEach((button, index) => {
                 const onclickAttr = button.getAttribute('onclick');
+                console.log(`Button ${index}: ${onclickAttr}`);
                 if (onclickAttr && onclickAttr.includes(eventType)) {
                     targetButton = button;
+                    console.log('Found target button for:', eventType);
                 }
             });
             
             if (targetButton) {
-                // Find the space-y-4 container (button container) to insert after the button
-                const buttonContainer = targetButton.closest('.space-y-4');
-                if (buttonContainer) {
-                    // Insert the response panel after the target button within the container
-                    targetButton.insertAdjacentElement('afterend', responsePanel);
-                } else {
-                    // Fallback: insert after the button directly
-                    targetButton.insertAdjacentElement('afterend', responsePanel);
-                }
+                // Insert the response panel directly after the target button
+                targetButton.insertAdjacentElement('afterend', responsePanel);
+                console.log('Response panel inserted after button');
             } else {
-                console.log('Target button not found for event type:', eventType);
-                // Fallback: add to the Samsara panel directly
-                const samsaraPanel = document.getElementById('samsaraPanel');
-                if (samsaraPanel) {
-                    const buttonArea = samsaraPanel.querySelector('.space-y-4');
-                    if (buttonArea) {
-                        buttonArea.appendChild(responsePanel);
-                    }
-                }
+                console.log('Target button not found, adding to button container');
+                // Fallback: add to the end of the button container
+                buttonContainer.appendChild(responsePanel);
             }
                 
                 // Auto remove after 2 seconds
