@@ -564,6 +564,55 @@
             50% { opacity: 0.5; }
         }
         
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+        }
+        
+        .tab-button:hover {
+            color: #2563eb;
+        }
+        
+        .tab-button.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            min-height: 600px;
+        }
+        
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .tab-panel.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         /* Responsive */
         @media (min-width: 640px) {
             .hero-actions {
@@ -659,143 +708,152 @@
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Main Content Tabs -->
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Why Fleet Operators Choose Fleet.Chat</h2>
-            <p class="section-subtitle">Transform your fleet communication with our invisible infrastructure that just works</p>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>10-Minute Setup</h3>
-                    <p>Connect your Samsara account, provide payment details, and start communicating. No technical setup required from your team.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">📱</div>
-                    <h3>No Driver Apps</h3>
-                    <p>Drivers use WhatsApp they already have. No downloads, training, or resistance. Immediate adoption across your entire fleet.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>GDPR Compliant</h3>
-                    <p>Anonymous driver tracking, automated consent management, and privacy-first architecture. Your drivers' data stays protected.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Pay Only for Active Use</h3>
-                    <p>Billing based only on drivers who send/receive messages each month. No contracts, no minimum commitments.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🚀</div>
-                    <h3>Enterprise Infrastructure</h3>
-                    <p>99.9% uptime SLA, automatic scaling, and 24/7 monitoring. Built for mission-critical fleet operations.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Real-time Synchronization</h3>
-                    <p>Bidirectional sync between Samsara and WhatsApp. Driver responses instantly update your TMS records.</p>
-                </div>
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-button active" data-tab="why">Why</button>
+                <button class="tab-button" data-tab="how">How</button>
+                <button class="tab-button" data-tab="pricing">Pricing</button>
             </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="section" style="background: #f9fafb;">
-        <div class="container">
-            <h2 class="section-title">How It Works</h2>
-            <p class="section-subtitle">Three simple steps to transform your fleet communication</p>
             
-            <div class="process-steps">
-                <div class="process-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Connect Your Samsara Account</h3>
-                        <p>Provide your Samsara API credentials and we'll automatically discover your drivers and vehicles. Takes 2 minutes.</p>
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Why Tab -->
+                <div id="why-tab" class="tab-panel active">
+                    <h2 class="section-title">Why Fleet Operators Choose Fleet.Chat</h2>
+                    <p class="section-subtitle">Transform your fleet communication with our invisible infrastructure that just works</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h3>10-Minute Setup</h3>
+                            <p>Connect your Samsara account, provide payment details, and start communicating. No technical setup required from your team.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">📱</div>
+                            <h3>No Driver Apps</h3>
+                            <p>Drivers use WhatsApp they already have. No downloads, training, or resistance. Immediate adoption across your entire fleet.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🔒</div>
+                            <h3>GDPR Compliant</h3>
+                            <p>Anonymous driver tracking, automated consent management, and privacy-first architecture. Your drivers' data stays protected.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">💰</div>
+                            <h3>Pay Only for Active Use</h3>
+                            <p>Billing based only on drivers who send/receive messages each month. No contracts, no minimum commitments.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🚀</div>
+                            <h3>Enterprise Infrastructure</h3>
+                            <p>99.9% uptime SLA, automatic scaling, and 24/7 monitoring. Built for mission-critical fleet operations.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🔄</div>
+                            <h3>Real-time Synchronization</h3>
+                            <p>Bidirectional sync between Samsara and WhatsApp. Driver responses instantly update your TMS records.</p>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="process-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Choose Your Drivers</h3>
-                        <p>Select which drivers to include in WhatsApp communication. We handle all invitation and consent management automatically.</p>
+                <!-- How Tab -->
+                <div id="how-tab" class="tab-panel">
+                    <h2 class="section-title">How It Works</h2>
+                    <p class="section-subtitle">Three simple steps to transform your fleet communication</p>
+                    
+                    <div class="process-steps">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3>Connect Your Samsara Account</h3>
+                                <p>Provide your Samsara API credentials and we'll automatically discover your drivers and vehicles. Takes 2 minutes.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3>Choose Your Drivers</h3>
+                                <p>Select which drivers to include in WhatsApp communication. We handle all invitation and consent management automatically.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3>Start Communicating</h3>
+                                <p>Fleet.Chat automatically sends WhatsApp messages for transport events. Drivers respond naturally, and your Samsara records update in real-time.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="process-step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Start Communicating</h3>
-                        <p>Fleet.Chat automatically sends WhatsApp messages for transport events. Drivers respond naturally, and your Samsara records update in real-time.</p>
+                <!-- Pricing Tab -->
+                <div id="pricing-tab" class="tab-panel">
+                    <h2 class="section-title">Simple, Transparent Pricing</h2>
+                    <p class="section-subtitle">Only pay for drivers who actively use WhatsApp messaging</p>
+                    
+                    <div class="pricing-grid">
+                        <div class="pricing-card">
+                            <h3 class="pricing-title">Starter</h3>
+                            <p class="pricing-description">Perfect for small fleets getting started</p>
+                            <div class="pricing-price">$15</div>
+                            <div class="price-period">per active driver/month</div>
+                            <ul class="pricing-features">
+                                <li>WhatsApp messaging</li>
+                                <li>Basic document handling</li>
+                                <li>Transport tracking</li>
+                                <li>Standard support</li>
+                            </ul>
+                            <a href="#contact" class="btn btn-outline" style="width: 100%;">Start Free Trial</a>
+                        </div>
+                        
+                        <div class="pricing-card featured">
+                            <div class="pricing-badge">Most Popular</div>
+                            <h3 class="pricing-title">Professional</h3>
+                            <p class="pricing-description">Ideal for growing fleet operations</p>
+                            <div class="pricing-price">$25</div>
+                            <div class="price-period">per active driver/month</div>
+                            <ul class="pricing-features">
+                                <li>All Starter features</li>
+                                <li>Advanced analytics</li>
+                                <li>Custom workflows</li>
+                                <li>Priority support</li>
+                                <li>24/7 support</li>
+                            </ul>
+                            <a href="#contact" class="btn btn-primary" style="width: 100%;">Start Free Trial</a>
+                        </div>
+                        
+                        <div class="pricing-card">
+                            <h3 class="pricing-title">Enterprise</h3>
+                            <p class="pricing-description">Complete solution for large operations</p>
+                            <div class="pricing-price">$35</div>
+                            <div class="price-period">per active driver/month</div>
+                            <ul class="pricing-features">
+                                <li>All Professional features</li>
+                                <li>Multi-fleet management</li>
+                                <li>Dedicated account manager</li>
+                                <li>Custom integrations</li>
+                                <li>SLA guarantees</li>
+                            </ul>
+                            <a href="#contact" class="btn btn-outline" style="width: 100%;">Contact Sales</a>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <p style="color: #6b7280; font-size: 0.875rem;">
+                            Volume discounts: 15% off at 50+ drivers • 25% off at 200+ drivers • 35% off at 500+ drivers
+                        </p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing" class="pricing">
-        <div class="container">
-            <h2 class="section-title">Simple, Transparent Pricing</h2>
-            <p class="section-subtitle">Only pay for drivers who actively use WhatsApp messaging</p>
-            
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3 class="pricing-title">Starter</h3>
-                    <p class="pricing-description">Perfect for small fleets getting started</p>
-                    <div class="pricing-price">$15</div>
-                    <div class="price-period">per active driver/month</div>
-                    <ul class="pricing-features">
-                        <li>WhatsApp messaging</li>
-                        <li>Basic document handling</li>
-                        <li>Transport tracking</li>
-                        <li>Standard support</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-outline" style="width: 100%;">Start Free Trial</a>
-                </div>
-                
-                <div class="pricing-card featured">
-                    <div class="pricing-badge">Most Popular</div>
-                    <h3 class="pricing-title">Professional</h3>
-                    <p class="pricing-description">Ideal for growing fleet operations</p>
-                    <div class="pricing-price">$25</div>
-                    <div class="price-period">per active driver/month</div>
-                    <ul class="pricing-features">
-                        <li>All Starter features</li>
-                        <li>Advanced analytics</li>
-                        <li>Custom workflows</li>
-                        <li>Priority support</li>
-                        <li>24/7 support</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-primary" style="width: 100%;">Start Free Trial</a>
-                </div>
-                
-                <div class="pricing-card">
-                    <h3 class="pricing-title">Enterprise</h3>
-                    <p class="pricing-description">Complete solution for large operations</p>
-                    <div class="pricing-price">$35</div>
-                    <div class="price-period">per active driver/month</div>
-                    <ul class="pricing-features">
-                        <li>All Professional features</li>
-                        <li>Multi-fleet management</li>
-                        <li>Dedicated account manager</li>
-                        <li>Custom integrations</li>
-                        <li>SLA guarantees</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-outline" style="width: 100%;">Contact Sales</a>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 2rem;">
-                <p style="color: #6b7280; font-size: 0.875rem;">
-                    Volume discounts: 15% off at 50+ drivers • 25% off at 200+ drivers • 35% off at 500+ drivers
-                </p>
             </div>
         </div>
     </section>
@@ -875,6 +933,26 @@
     </footer>
 
     <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and panels
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanels.forEach(panel => panel.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding panel
+                    this.classList.add('active');
+                    document.getElementById(targetTab + '-tab').classList.add('active');
+                });
+            });
+        });
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
