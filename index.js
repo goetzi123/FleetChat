@@ -681,8 +681,8 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Catch all other routes and redirect to homepage
-app.get('*', (req, res) => {
+// Handle remaining routes - fix for path-to-regexp issue
+app.use((req, res) => {
   // Don't interfere with admin routes or demo routes
   if (req.path.startsWith('/admin') || req.path.startsWith('/api/admin') || req.path.startsWith('/demo') || req.path.startsWith('/api/demo')) {
     return res.status(404).send('Not Found');
