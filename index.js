@@ -472,13 +472,13 @@ app.get('/demo', (req, res) => {
         .typing-indicator { animation: pulse 1.5s infinite; }
         
         /* Popup animations for Samsara feedback */
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-100%); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes slideInFromTop {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slideOutLeft {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(-100%); }
+        @keyframes slideOutToTop {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
         }
         
         /* Pulse animation for typing indicator */
@@ -673,10 +673,22 @@ app.get('/demo', (req, res) => {
         }
         
         function showSamsaraFeedback(message) {
-            // Create popup element
+            // Create popup element positioned over the Samsara Fleet Events panel
             const popup = document.createElement('div');
-            popup.className = 'fixed top-4 left-4 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm';
-            popup.style.animation = 'slideInLeft 0.3s ease-out';
+            popup.className = 'absolute top-4 left-4 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-xs';
+            popup.style.animation = 'slideInFromTop 0.3s ease-out';
+            
+            // Position relative to the Samsara Fleet Events panel (first white panel)
+            const samsaraPanels = document.querySelectorAll('.bg-white.rounded-lg.shadow-lg');
+            const samsaraPanel = samsaraPanels[0]; // First panel is the Samsara Fleet Events panel
+            if (samsaraPanel) {
+                samsaraPanel.style.position = 'relative';
+                samsaraPanel.appendChild(popup);
+            } else {
+                // Fallback to body if panel not found
+                popup.className = 'fixed top-20 left-8 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-xs';
+                document.body.appendChild(popup);
+            }
             popup.innerHTML = \`
                 <div class="flex items-start space-x-2">
                     <div class="flex-shrink-0">
@@ -696,7 +708,7 @@ app.get('/demo', (req, res) => {
             
             // Auto remove after 2.5 seconds
             setTimeout(() => {
-                popup.style.animation = 'slideOutLeft 0.3s ease-in';
+                popup.style.animation = 'slideOutToTop 0.3s ease-in';
                 setTimeout(() => {
                     if (popup.parentNode) {
                         popup.parentNode.removeChild(popup);
