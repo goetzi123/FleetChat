@@ -429,12 +429,17 @@ const messageTemplates = {
   }),
   
   location_update: (event) => ({
-    type: 'text',
+    type: 'interactive',
     text: `📍 Location Update Request\n\n` +
           `Current: ${event.data.address}\n` +
           `Speed: ${event.data.speed} km/h\n` +
           `Status: ${event.data.status}\n\n` +
           `Please share your current location for route optimization.`,
+    buttons: [
+      { id: 'share_location', text: '📍 Share Current Location' },
+      { id: 'location_accurate', text: '✅ Current Location Accurate' },
+      { id: 'location_issue', text: '⚠️ GPS Issue - Need Help' }
+    ],
     timestamp: new Date().toISOString()
   }),
   
@@ -645,6 +650,9 @@ app.get('/demo', (req, res) => {
                 'accept_route': '✅ Route accepted! ETA updated.',
                 'request_details': 'ℹ️ Route details sent to your device.',
                 'report_issue': '⚠️ Issue reported to dispatch.',
+                'share_location': '📍 Location shared: 52.5200° N, 13.4050° E (Berlin, Germany)',
+                'location_accurate': '✅ Current location confirmed as accurate.',
+                'location_issue': '⚠️ GPS issue reported. Technical support notified.',
                 'start_loading': '📦 Loading started. Will update when complete.',
                 'report_arrival': '📍 Arrival confirmed. Standing by for instructions.',
                 'need_assistance': '🆘 Assistance request sent to operations.'
@@ -655,6 +663,9 @@ app.get('/demo', (req, res) => {
                 'accept_route': '✅ Driver accepted route assignment - Route status updated in Samsara',
                 'request_details': 'ℹ️ Driver requested route details - Additional info sent via Samsara',
                 'report_issue': '⚠️ Driver reported issue - Alert created in Samsara dispatch system',
+                'share_location': '📍 Driver shared location - GPS coordinates updated in Samsara tracking',
+                'location_accurate': '✅ Driver confirmed location accuracy - Samsara positioning verified',
+                'location_issue': '⚠️ Driver reported GPS issue - Samsara technical support notified',
                 'start_loading': '📦 Driver started loading - Transport status updated to "Loading"',
                 'report_arrival': '📍 Driver confirmed arrival - Geofence status updated in Samsara',
                 'need_assistance': '🆘 Driver needs assistance - Emergency alert sent to Samsara operations'
@@ -684,6 +695,9 @@ app.get('/demo', (req, res) => {
                 'accept_route': 'route_assignment',
                 'request_details': 'route_assignment', 
                 'report_issue': 'route_assignment',
+                'share_location': 'location_update',
+                'location_accurate': 'location_update',
+                'location_issue': 'location_update',
                 'start_loading': 'geofence_entry',
                 'report_arrival': 'geofence_entry',
                 'need_assistance': 'geofence_entry'
@@ -730,7 +744,7 @@ app.get('/demo', (req, res) => {
             console.log('Found buttons:', buttons.length);
             buttons.forEach((button, index) => {
                 const onclickAttr = button.getAttribute('onclick');
-                console.log(`Button ${index}: ${onclickAttr}`);
+                console.log('Button ' + index + ': ' + onclickAttr);
                 if (onclickAttr && onclickAttr.includes(eventType)) {
                     targetButton = button;
                     console.log('Found target button for:', eventType);
