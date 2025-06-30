@@ -214,7 +214,7 @@ app.get('/demo', (req, res) => {
                 var buttonsHtml = '';
                 for (var i = 0; i < message.buttons.length; i++) {
                     var btn = message.buttons[i];
-                    buttonsHtml += '<button onclick="handleDriverResponse(\\'' + btn.id + '\\')" ' +
+                    buttonsHtml += '<button onclick="handleDriverResponse(\'' + btn.id + '\')" ' +
                                   'class="block w-full text-left px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm mb-2">' +
                                   btn.text + '</button>';
                 }
