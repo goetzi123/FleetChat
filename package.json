@@ -33,6 +33,7 @@
     "drizzle-orm": "^0.44.2",
     "drizzle-zod": "^0.8.2",
     "express": "^5.1.0",
+    "express-session": "^1.18.1",
     "lucide-react": "^0.523.0",
     "memoizee": "^0.4.17",
     "openid-client": "^6.6.1",
