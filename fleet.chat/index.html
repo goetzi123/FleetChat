@@ -564,12 +564,21 @@
             50% { opacity: 0.5; }
         }
         
+        /* Tab Section */
+        .tab-section {
+            background: #f8fafc;
+            padding: 3rem 0;
+            margin: 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
         /* Tab Navigation */
         .tab-navigation {
             display: flex;
             justify-content: center;
             margin-bottom: 3rem;
             border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 1rem;
         }
         
         .tab-button {
@@ -583,20 +592,41 @@
             border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
             margin: 0 0.5rem;
+            border-radius: 8px 8px 0 0;
         }
         
         .tab-button:hover {
             color: #2563eb;
+            background: rgba(37, 99, 235, 0.05);
         }
         
         .tab-button.active {
             color: #2563eb;
             border-bottom-color: #2563eb;
+            background: white;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
         
         /* Tab Content */
         .tab-content {
             min-height: 600px;
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .tab-panel {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+            opacity: 1;
         }
         
         .tab-panel {
@@ -680,36 +710,8 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-container">
-            <h1>Connect Your Fleet to WhatsApp in 10 Minutes</h1>
-            <p>Invisible middleware that bridges Samsara TMS with WhatsApp Business API. No driver app downloads, no complex integrations. Just seamless communication.</p>
-            
-            <div class="hero-actions">
-                <a href="#contact" class="btn btn-hero">Start Free Trial</a>
-                <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
-            </div>
-            
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-number">10min</span>
-                    <span class="hero-stat-label">Setup Time</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">99.9%</span>
-                    <span class="hero-stat-label">Uptime SLA</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">24/7</span>
-                    <span class="hero-stat-label">Support</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Main Content Tabs -->
-    <section class="section">
+    <section class="tab-section">
         <div class="container">
             <!-- Tab Navigation -->
             <div class="tab-navigation">
@@ -857,6 +859,36 @@
             </div>
         </div>
     </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1>Connect Your Fleet to WhatsApp in 10 Minutes</h1>
+            <p>Invisible middleware that bridges Samsara TMS with WhatsApp Business API. No driver app downloads, no complex integrations. Just seamless communication.</p>
+            
+            <div class="hero-actions">
+                <a href="#contact" class="btn btn-hero">Start Free Trial</a>
+                <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number">10min</span>
+                    <span class="hero-stat-label">Setup Time</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">99.9%</span>
+                    <span class="hero-stat-label">Uptime SLA</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">24/7</span>
+                    <span class="hero-stat-label">Support</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
 
     <!-- CTA Section -->
     <section id="get-started" class="cta">
