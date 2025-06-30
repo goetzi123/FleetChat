@@ -27,13 +27,49 @@ import { setupAdminRoutes } from "./admin-routes";
 
 const router = express.Router();
 
-// Serve the public Fleet.Chat website
+// Serve the dynamic Fleet.Chat website with real-time pricing
 router.get("/fleet.chat", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "fleet-chat-public.html"));
+  res.sendFile(path.join(process.cwd(), "fleet-chat-dynamic.html"));
 });
 
 router.get("/public", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "fleet-chat-dynamic.html"));
+});
+
+// Serve static version for comparison
+router.get("/static", (req, res) => {
   res.sendFile(path.join(process.cwd(), "fleet-chat-public.html"));
+});
+
+// Public pricing API endpoint - dynamic pricing from admin system
+router.get("/api/pricing", async (req, res) => {
+  try {
+    const { adminStorage } = await import("./admin-storage");
+    const pricingTiers = await adminStorage.getActivePricingTiers();
+    
+    // Format pricing for public consumption
+    const publicPricing = pricingTiers.map(tier => ({
+      name: tier.name,
+      description: tier.description,
+      pricePerDriver: parseFloat(tier.pricePerDriver),
+      minDrivers: tier.minDrivers,
+      maxDrivers: tier.maxDrivers,
+      features: tier.features,
+      isActive: tier.isActive
+    }));
+
+    res.json({
+      success: true,
+      pricing: publicPricing,
+      lastUpdated: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("Error fetching pricing:", error);
+    res.status(500).json({ 
+      success: false, 
+      error: "Failed to fetch pricing data" 
+    });
+  }
 });
 
 // Helper function to generate anonymized pseudo IDs for drivers
