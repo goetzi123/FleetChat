@@ -471,14 +471,14 @@ app.get('/demo', (req, res) => {
         }
         .typing-indicator { animation: pulse 1.5s infinite; }
         
-        /* Popup animations for Samsara feedback */
-        @keyframes slideInFromTop {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Panel animations for Samsara feedback */
+        @keyframes slideInFromLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-        @keyframes slideOutToTop {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-20px); }
+        @keyframes slideOutToLeft {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(-20px); }
         }
         
         /* Pulse animation for typing indicator */
@@ -570,6 +570,9 @@ app.get('/demo', (req, res) => {
         async function sendEvent(eventType) {
             const chatArea = document.getElementById('chatArea');
             const lastEventEl = document.getElementById('lastEvent');
+            
+            // Track the event type for response targeting
+            lastEventType = eventType;
             
             showTypingIndicator();
             
@@ -669,53 +672,67 @@ app.get('/demo', (req, res) => {
             chatArea.scrollTop = chatArea.scrollHeight;
             
             // Show bidirectional feedback in Samsara panel
-            showSamsaraFeedback(samsaraFeedback[buttonId] || 'Driver response received');
+            showSamsaraFeedback(samsaraFeedback[buttonId] || 'Driver response received', buttonId);
         }
         
-        function showSamsaraFeedback(message) {
-            // Create popup element positioned over the Samsara Fleet Events panel
-            const popup = document.createElement('div');
-            popup.className = 'absolute top-4 right-4 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-xl border-2 border-blue-400 max-w-xs';
-            popup.style.animation = 'slideInFromTop 0.3s ease-out';
-            popup.style.zIndex = '1000';
+        // Track which event type was last sent to show response in correct location
+        let lastEventType = null;
+        
+        function showSamsaraFeedback(message, responseType) {
+            // Determine which button area to show the response under
+            const buttonMapping = {
+                'accept_route': 'route_assignment',
+                'request_details': 'route_assignment', 
+                'report_issue': 'route_assignment',
+                'start_loading': 'geofence_entry',
+                'report_arrival': 'geofence_entry',
+                'need_assistance': 'geofence_entry'
+            };
             
-            // Position relative to the Samsara Fleet Events panel
-            const samsaraPanel = document.getElementById('samsaraPanel');
-            if (samsaraPanel) {
-                samsaraPanel.style.position = 'relative';
-                popup.style.zIndex = '1000';
-                samsaraPanel.appendChild(popup);
-            } else {
-                // Fallback to body if panel not found
-                popup.className = 'fixed top-20 left-8 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-xs';
-                document.body.appendChild(popup);
-            }
-            popup.innerHTML = \`
+            const eventType = buttonMapping[responseType] || lastEventType || 'route_assignment';
+            
+            // Create response panel element
+            const responsePanel = document.createElement('div');
+            responsePanel.className = 'mt-3 p-3 bg-green-50 border-l-4 border-green-400 rounded-r-lg transition-all duration-300';
+            responsePanel.style.animation = 'slideInFromLeft 0.3s ease-out';
+            responsePanel.innerHTML = \`
                 <div class="flex items-start space-x-2">
                     <div class="flex-shrink-0">
-                        <svg class="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-4 h-4 text-green-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                         </svg>
                     </div>
                     <div class="flex-1">
-                        <p class="text-sm font-medium">Samsara System Update</p>
-                        <p class="text-xs text-blue-100 mt-1">\${message}</p>
+                        <p class="text-sm font-medium text-green-800">Driver Response Received</p>
+                        <p class="text-xs text-green-600 mt-1">\${message}</p>
                     </div>
                 </div>
             \`;
             
-            // Add to page
-            document.body.appendChild(popup);
+            // Find the button container for the relevant event type
+            const buttons = document.querySelectorAll('button[onclick*="sendEvent"]');
+            let targetButton = null;
             
-            // Auto remove after 2.5 seconds
-            setTimeout(() => {
-                popup.style.animation = 'slideOutToTop 0.3s ease-in';
+            buttons.forEach(button => {
+                if (button.onclick.toString().includes(eventType)) {
+                    targetButton = button;
+                }
+            });
+            
+            if (targetButton && targetButton.parentNode) {
+                // Insert the response panel after the button
+                targetButton.parentNode.insertBefore(responsePanel, targetButton.nextSibling);
+                
+                // Auto remove after 2 seconds
                 setTimeout(() => {
-                    if (popup.parentNode) {
-                        popup.parentNode.removeChild(popup);
-                    }
-                }, 300);
-            }, 2500);
+                    responsePanel.style.animation = 'slideOutToLeft 0.3s ease-in';
+                    setTimeout(() => {
+                        if (responsePanel.parentNode) {
+                            responsePanel.parentNode.removeChild(responsePanel);
+                        }
+                    }, 300);
+                }, 2000);
+            }
             
             // Also update the last event display to show the response was processed
             const lastEventEl = document.getElementById('lastEvent');
