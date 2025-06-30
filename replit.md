@@ -158,10 +158,11 @@ FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking
 - `GET /api/health` - Service health with WhatsApp pool statistics
 
 ### User Interface Components
-- **Fleet.Chat Landing Page**: Service overview with value proposition and pricing
+- **Public Fleet.Chat Website**: Professional marketing site describing service capabilities and value proposition
+- **Fleet.Chat Production App**: Complete onboarding and dashboard system for fleet operators
 - **Fleet Onboarding Wizard**: Three-step setup process (Company/Samsara → Driver Discovery → Billing)
 - **Fleet Dashboard**: Multi-tab interface (Transports, Drivers, Billing, Settings)
-- **Real-time Status Monitoring**: Transport tracking, driver activity, and system health
+- **Demo Environment**: Original FleetChat system preserved for development and testing
 
 ## Samsara Integration Architecture
 
@@ -253,6 +254,7 @@ Changelog:
 - June 29, 2025. Confirmed single fleet administrator model per tenant - one user per trucking company handles both Samsara API and payment configuration
 - June 29, 2025. Created comprehensive onboarding summary document detailing the complete two-step configuration process, single administrator model, and deployment timeline
 - June 29, 2025. Implemented complete production Fleet.Chat system with PostgreSQL database, Samsara API integration, WhatsApp Business API management, fleet onboarding UI, Stripe payment integration, and comprehensive dashboard
+- June 30, 2025. Created professional public website for fleet.chat with comprehensive service description, pricing information, feature overview, and contact integration for fleet operator inquiries
 ```
 
 ## User Preferences

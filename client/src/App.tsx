@@ -9,6 +9,8 @@ import SamsaraIntegration from "./pages/SamsaraIntegration";
 import WhatsAppDemo from "./pages/WhatsAppDemo";
 import DemoEnvironment from "./pages/DemoEnvironment";
 import FleetSetup from "./pages/FleetSetup";
+import FleetChatPublicSite from "./pages/FleetChatPublicSite";
+import FleetChatApp from "./pages/FleetChatApp";
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: BarChart3 },
@@ -49,6 +51,19 @@ function Sidebar() {
 }
 
 function App() {
+  const [location] = useLocation();
+  
+  // Show public site for fleet.chat routes
+  if (location.startsWith('/fleet.chat') || location === '/public') {
+    return <FleetChatPublicSite />;
+  }
+  
+  // Show Fleet.Chat production app for /fleet routes
+  if (location.startsWith('/fleet')) {
+    return <FleetChatApp />;
+  }
+
+  // Default demo system
   return (
     <div className="flex h-screen bg-background">
       <Sidebar />
