@@ -237,27 +237,22 @@ app.get('/demo', (req, res) => {
             let messageHtml = '';
             
             if (message.type === 'interactive') {
-                messageHtml = \`
-                    <div class="message-bubble bg-green-100 p-4 rounded-lg mb-4 max-w-sm">
-                        <p class="text-gray-800 whitespace-pre-line">\${message.text}</p>
-                        <div class="mt-3 space-y-2">
-                            \${message.buttons.map(btn => \`
-                                <button onclick="handleDriverResponse('\${btn.id}')" 
-                                        class="block w-full text-left px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm">
-                                    \${btn.text}
-                                </button>
-                            \`).join('')}
-                        </div>
-                        <div class="text-xs text-gray-500 mt-2">\${new Date(message.timestamp).toLocaleTimeString()}</div>
-                    </div>
-                \`;
+                const buttonsHtml = message.buttons.map(btn => 
+                    '<button onclick="handleDriverResponse(\'' + btn.id + '\')" ' +
+                    'class="block w-full text-left px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 text-sm">' +
+                    btn.text + '</button>'
+                ).join('');
+                
+                messageHtml = '<div class="message-bubble bg-green-100 p-4 rounded-lg mb-4 max-w-sm">' +
+                    '<p class="text-gray-800 whitespace-pre-line">' + message.text + '</p>' +
+                    '<div class="mt-3 space-y-2">' + buttonsHtml + '</div>' +
+                    '<div class="text-xs text-gray-500 mt-2">' + new Date(message.timestamp).toLocaleTimeString() + '</div>' +
+                    '</div>';
             } else {
-                messageHtml = \`
-                    <div class="message-bubble bg-green-100 p-4 rounded-lg mb-4 max-w-sm">
-                        <p class="text-gray-800 whitespace-pre-line">\${message.text}</p>
-                        <div class="text-xs text-gray-500 mt-2">\${new Date(message.timestamp).toLocaleTimeString()}</div>
-                    </div>
-                \`;
+                messageHtml = '<div class="message-bubble bg-green-100 p-4 rounded-lg mb-4 max-w-sm">' +
+                    '<p class="text-gray-800 whitespace-pre-line">' + message.text + '</p>' +
+                    '<div class="text-xs text-gray-500 mt-2">' + new Date(message.timestamp).toLocaleTimeString() + '</div>' +
+                    '</div>';
             }
             
             chatArea.innerHTML = messageHtml;
@@ -291,12 +286,10 @@ app.get('/demo', (req, res) => {
             };
             
             const responseText = responses[buttonId] || 'Response received';
-            const driverMessage = \`
-                <div class="message-bubble bg-blue-100 p-3 rounded-lg mb-4 max-w-sm ml-auto">
-                    <p class="text-gray-800">\${responseText}</p>
-                    <div class="text-xs text-gray-500 mt-1">\${new Date().toLocaleTimeString()}</div>
-                </div>
-            \`;
+            const driverMessage = '<div class="message-bubble bg-blue-100 p-3 rounded-lg mb-4 max-w-sm ml-auto">' +
+                '<p class="text-gray-800">' + responseText + '</p>' +
+                '<div class="text-xs text-gray-500 mt-1">' + new Date().toLocaleTimeString() + '</div>' +
+                '</div>';
             
             chatArea.innerHTML += driverMessage;
             chatArea.scrollTop = chatArea.scrollHeight;
@@ -325,19 +318,17 @@ app.get('/demo', (req, res) => {
             // Create response panel
             const responsePanel = document.createElement('div');
             responsePanel.className = 'response-panel mt-2 p-3 bg-green-50 border border-green-200 rounded-lg';
-            responsePanel.innerHTML = \`
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                            <span class="text-white text-xs">✓</span>
-                        </div>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-green-800">Driver Response Received</p>
-                        <p class="text-xs text-green-600">\${message}</p>
-                    </div>
-                </div>
-            \`;
+            responsePanel.innerHTML = '<div class="flex items-center">' +
+                '<div class="flex-shrink-0">' +
+                '<div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">' +
+                '<span class="text-white text-xs">✓</span>' +
+                '</div>' +
+                '</div>' +
+                '<div class="ml-3">' +
+                '<p class="text-sm font-medium text-green-800">Driver Response Received</p>' +
+                '<p class="text-xs text-green-600">' + message + '</p>' +
+                '</div>' +
+                '</div>';
             
             // Find the specific button for the event type and insert response panel
             const samsaraPanel = document.getElementById('samsaraPanel');
