@@ -258,6 +258,7 @@ Changelog:
 - June 30, 2025. Created professional public website for fleet.chat with comprehensive service description, pricing information, feature overview, and contact integration for fleet operator inquiries
 - June 30, 2025. Implemented complete admin management system with secure authentication, pricing tier management, usage analytics, billing oversight, and system configuration controls
 - June 30, 2025. Created dynamic pricing synchronization between admin system and public website - pricing changes in admin panel automatically update on fleet.chat website via real-time API
+- June 30, 2025. Added comprehensive Fleet.Chat Privacy Policy (effective 06/29/2025) to website with dedicated privacy page and footer navigation integration
 ```
 
 ## User Preferences

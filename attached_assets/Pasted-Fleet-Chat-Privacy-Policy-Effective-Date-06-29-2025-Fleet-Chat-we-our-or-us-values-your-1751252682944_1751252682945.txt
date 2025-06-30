@@ -1,0 +1,122 @@
+Fleet-Chat Privacy Policy
+
+Effective Date: 06/29/2025
+
+Fleet-Chat ("we", "our", or "us") values your trust and is committed to protecting your privacy. This Privacy Policy explains how we collect, use, share, and safeguard your information when you use the Fleet-Chat web and mobile services (the “Service”).
+
+1. Who We Are
+
+Fleet-Chat is a communication platform that enables dispatchers and drivers to coordinate logistics in real time. Our platform includes web interfaces and integrations with selected third-party services, including WhatsApp.
+
+2. Information We Collect
+
+We collect personal information only when necessary to provide and improve the Service. This includes:
+
+From Dispatchers:
+
+First and last name
+
+Company name and address
+
+Email address
+
+Phone number
+
+Preferred language
+
+Optional company identifiers (e.g. business registration number)
+
+From Drivers:
+
+First and last name
+
+Phone number
+
+Preferred language
+
+Transport status (e.g. loaded, en route, unloaded)
+
+Location data (if enabled by the driver)
+
+3. How We Use Your Data
+
+We use the information we collect for the following purposes:
+
+To enable communication between dispatchers and drivers
+
+To share order status and driver location (if enabled)
+
+To maintain system functionality and user authentication
+
+To comply with legal obligations
+
+We do not use your data for advertising, resale, or behavior profiling.
+
+4. Use of WhatsApp
+
+Fleet-Chat enables communication between drivers and dispatchers through WhatsApp, provided you (the user) have installed WhatsApp on your mobile device and agreed to its terms of service.
+
+By choosing to use WhatsApp:
+
+You consent to sharing your phone number and message content with WhatsApp and Fleet-Chat for order-related communications
+
+Fleet-Chat will not access your device contacts or send unsolicited messages
+
+WhatsApp may process your data in accordance with WhatsApp’s Privacy Policy
+
+Use of WhatsApp is entirely optional. You may choose to communicate via SMS or other methods supported by Fleet-Chat.
+
+Please be aware that WhatsApp’s servers may be located outside North America and governed by different privacy laws. Fleet-Chat is not responsible for WhatsApp’s data handling practices but will handle any data it processes with the utmost care and confidentiality.
+
+5. Sharing of Information
+
+We do not sell your data. We may share your information:
+
+With dispatchers or employers authorized to receive your updates
+
+With trusted service providers under strict data processing agreements
+
+When required by law, subpoena, or regulatory request
+
+All third parties are required to safeguard your data and use it only for the purpose intended by Fleet-Chat.
+
+6. Data Retention
+
+We retain your information only as long as necessary for operational or legal reasons. Afterward, data is securely deleted or anonymized. For example, transport-related communications are retained for the duration of the assignment or contract.
+
+7. Your Rights
+
+Depending on your location, you may have rights under U.S. (e.g. CCPA, CPRA) or Canadian (PIPEDA) law, including the right to:
+
+Access your data
+
+Correct inaccurate information
+
+Request deletion
+
+Withdraw consent at any time by messaging "STOP"
+
+Object to certain data uses
+
+Receive a copy of your data in a portable format (if applicable)
+
+To exercise your rights, contact: privacy@fleet-chat.ai
+
+8. Security Measures
+
+Fleet-Chat uses administrative, physical, and technical safeguards to protect your information. However, no system is 100% secure. Users are responsible for maintaining the security of their own login credentials and device settings.
+
+9. Children’s Privacy
+
+Fleet-Chat is intended for professional use by adults. We do not knowingly collect data from individuals under the age of 16.
+
+10. Changes to This Policy
+
+We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated effective date. If changes are significant, we will provide advance notice or seek renewed consent, where required.
+
+11. Contact Us
+
+If you have any questions or concerns about this Privacy Policy or our data practices, contact us at:
+
+Fleet-Chat Privacy Team
+Email: privacy@fleet-chat.ai

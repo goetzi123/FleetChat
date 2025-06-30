@@ -41,6 +41,11 @@ router.get("/static", (req, res) => {
   res.sendFile(path.join(process.cwd(), "fleet-chat-public.html"));
 });
 
+// Serve Privacy Policy page
+router.get("/privacy", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "privacy-policy.html"));
+});
+
 // Public pricing API endpoint - dynamic pricing from admin system
 router.get("/api/pricing", async (req, res) => {
   try {
