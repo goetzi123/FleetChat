@@ -55,104 +55,122 @@
         }
         
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #059669;
-        }
-        
-        .nav-links {
             display: flex;
-            gap: 2rem;
-            list-style: none;
+            align-items: center;
+            gap: 0.75rem;
         }
         
-        .nav-links a {
-            color: #4b5563;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        
-        .nav-links a:hover {
-            color: #059669;
-        }
-        
-        .cta-button {
-            background: #059669;
+        .logo-icon {
+            width: 2rem;
+            height: 2rem;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
+            font-weight: bold;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .logo-text p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .badge {
+            background: #ecfdf5;
+            color: #047857;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            border: 1px solid #d1fae5;
+        }
+        
+        .btn {
             padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
             text-decoration: none;
             font-weight: 600;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
         }
         
-        .cta-button:hover {
-            background: #047857;
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1d4ed8;
         }
         
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-            padding: 4rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 0;
             text-align: center;
         }
         
         .hero h1 {
             font-size: 3.5rem;
-            font-weight: 800;
-            color: #1f2937;
+            font-weight: bold;
             margin-bottom: 1.5rem;
             line-height: 1.1;
         }
         
-        .hero .subtitle {
+        .hero p {
             font-size: 1.25rem;
-            color: #6b7280;
             margin-bottom: 2rem;
-            max-width: 800px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
         
-        .hero-buttons {
+        .hero-actions {
             display: flex;
+            flex-direction: column;
             gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
+            align-items: center;
             margin-bottom: 3rem;
         }
         
-        .btn-primary {
-            background: #059669;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: background-color 0.2s;
-        }
-        
-        .btn-primary:hover {
-            background: #047857;
-        }
-        
-        .btn-secondary {
+        .btn-hero {
             background: white;
-            color: #059669;
-            border: 2px solid #059669;
+            color: #2563eb;
+            font-size: 1.125rem;
             padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.2s;
         }
         
-        .btn-secondary:hover {
-            background: #059669;
+        .btn-hero:hover {
+            background: #f8fafc;
+        }
+        
+        .btn-outline {
+            background: transparent;
             color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: #2563eb;
         }
         
         .hero-stats {
@@ -163,46 +181,45 @@
             margin: 0 auto;
         }
         
-        .stat {
+        .hero-stat {
             text-align: center;
         }
         
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #059669;
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
             display: block;
         }
         
-        .stat-label {
-            color: #6b7280;
-            font-size: 0.9rem;
+        .hero-stat-label {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.8);
         }
         
-        /* Features Section */
-        .features {
+        /* Section Styles */
+        .section {
             padding: 5rem 0;
-            background: #ffffff;
         }
         
         .section-title {
             font-size: 2.5rem;
-            font-weight: 700;
+            font-weight: bold;
             text-align: center;
             margin-bottom: 1rem;
             color: #1f2937;
         }
         
         .section-subtitle {
-            font-size: 1.1rem;
-            color: #6b7280;
+            font-size: 1.25rem;
             text-align: center;
+            color: #6b7280;
             margin-bottom: 3rem;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
         
+        /* Features Grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -211,29 +228,29 @@
         }
         
         .feature-card {
-            background: #f9fafb;
+            background: white;
             padding: 2rem;
             border-radius: 1rem;
-            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             border: 1px solid #e5e7eb;
         }
         
         .feature-icon {
             width: 3rem;
             height: 3rem;
-            background: #dcfce7;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
+            background: #dbeafe;
+            border-radius: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 1rem;
             font-size: 1.5rem;
         }
         
         .feature-card h3 {
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             color: #1f2937;
         }
         
@@ -242,13 +259,56 @@
             line-height: 1.6;
         }
         
-        /* Pricing Section */
-        .pricing {
-            padding: 5rem 0;
-            background: #f9fafb;
+        /* Process Steps */
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-top: 3rem;
         }
         
-        .pricing-cards {
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step-number {
+            width: 3rem;
+            height: 3rem;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+        
+        .step-content p {
+            color: #6b7280;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            background: #f9fafb;
+            padding: 5rem 0;
+        }
+        
+        .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
@@ -257,208 +317,296 @@
         
         .pricing-card {
             background: white;
-            padding: 2.5rem;
+            padding: 2rem;
             border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             text-align: center;
-            border: 1px solid #e5e7eb;
             position: relative;
+            border: 2px solid transparent;
         }
         
         .pricing-card.featured {
-            border: 2px solid #059669;
+            border-color: #2563eb;
             transform: scale(1.05);
         }
         
         .pricing-badge {
-            background: #059669;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-            font-weight: 600;
             position: absolute;
-            top: -0.5rem;
+            top: -0.75rem;
             left: 50%;
             transform: translateX(-50%);
+            background: #2563eb;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
         }
         
         .pricing-title {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: bold;
             margin-bottom: 0.5rem;
             color: #1f2937;
         }
         
         .pricing-description {
             color: #6b7280;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         
         .pricing-price {
             font-size: 3rem;
-            font-weight: 700;
-            color: #059669;
+            font-weight: bold;
+            color: #2563eb;
             margin-bottom: 0.5rem;
         }
         
-        .pricing-period {
+        .price-period {
+            font-size: 0.875rem;
             color: #6b7280;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         
         .pricing-features {
             list-style: none;
-            margin-bottom: 2rem;
             text-align: left;
+            margin-bottom: 2rem;
         }
         
         .pricing-features li {
-            padding: 0.5rem 0;
-            color: #4b5563;
-            display: flex;
-            align-items: center;
+            padding: 0.25rem 0;
+            font-size: 0.875rem;
+            color: #6b7280;
         }
         
         .pricing-features li::before {
             content: "✓";
-            color: #059669;
+            color: #10b981;
             font-weight: bold;
             margin-right: 0.5rem;
         }
         
-        /* How It Works Section */
-        .how-it-works {
-            padding: 5rem 0;
-            background: #ffffff;
-        }
-        
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-        
-        .step {
-            text-align: center;
-            position: relative;
-        }
-        
-        .step-number {
-            width: 3rem;
-            height: 3rem;
-            background: #059669;
+        /* CTA Section */
+        .cta {
+            background: #1f2937;
             color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin: 0 auto 1rem;
+            padding: 5rem 0;
+            text-align: center;
         }
         
-        .step h3 {
+        .cta h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .cta p {
             font-size: 1.25rem;
+            color: #d1d5db;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn-cta {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .btn-cta:hover {
+            background: #1d4ed8;
+        }
+        
+        .btn-outline-white {
+            color: white;
+            border: 2px solid white;
+            background: transparent;
+        }
+        
+        .btn-outline-white:hover {
+            background: white;
+            color: #1f2937;
+        }
+        
+        /* Privacy Policy Section */
+        .privacy-section {
+            background: #f9fafb;
+            padding: 5rem 0;
+        }
+        
+        .privacy-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .privacy-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            color: #1f2937;
+        }
+        
+        .privacy-content h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem 0;
+            color: #1f2937;
+        }
+        
+        .privacy-content p {
+            margin-bottom: 1.5rem;
+            color: #374151;
+        }
+        
+        .privacy-content ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        
+        .privacy-content li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        
+        .contact-box {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin: 2rem 0;
+            border-left: 4px solid #2563eb;
+        }
+        
+        .contact-box h3 {
+            margin-top: 0 !important;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #f9fafb;
+            padding: 3rem 0;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-section h3 {
             font-weight: 600;
             margin-bottom: 1rem;
             color: #1f2937;
         }
         
-        .step p {
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
             color: #6b7280;
-            line-height: 1.6;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 5rem 0;
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            color: white;
-            text-align: center;
-        }
-        
-        .cta-section h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        
-        .cta-section p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .cta-section .btn-primary {
-            background: white;
-            color: #059669;
-        }
-        
-        .cta-section .btn-primary:hover {
-            background: #f3f4f6;
-        }
-        
-        /* Footer */
-        .footer {
-            background: #1f2937;
-            color: white;
-            padding: 3rem 0 1rem;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-section h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: white;
-        }
-        
-        .footer-section p,
-        .footer-section a {
-            color: #9ca3af;
             text-decoration: none;
-            line-height: 1.8;
+            font-size: 0.875rem;
         }
         
-        .footer-section a:hover {
-            color: white;
+        .footer-links a:hover {
+            color: #1f2937;
         }
         
         .footer-bottom {
-            border-top: 1px solid #374151;
-            padding-top: 1rem;
-            text-align: center;
-            color: #9ca3af;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         
-        /* Responsive Design */
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .status-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Responsive */
+        @media (min-width: 640px) {
+            .hero-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+            
+            .process-steps {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .cta-actions {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+        
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
             }
             
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .pricing-card.featured {
-                transform: none;
-            }
-            
-            .nav-links {
-                display: none;
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
             }
             
             .section-title {
                 font-size: 2rem;
+            }
+            
+            .process-steps {
+                align-items: stretch;
+            }
+            
+            .process-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
             }
         }
     </style>
@@ -468,16 +616,17 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">Fleet.Chat</div>
-                <nav>
-                    <ul class="nav-links">
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#how-it-works">How It Works</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </nav>
-                <a href="#contact" class="cta-button">Get Started</a>
+                <div class="logo">
+                    <div class="logo-icon">💬</div>
+                    <div class="logo-text">
+                        <h1>Fleet.Chat</h1>
+                        <p>Invisible Communication Infrastructure</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="badge">Production Ready</span>
+                    <a href="#get-started" class="btn btn-primary">Get Started</a>
+                </div>
             </div>
         </div>
     </header>
@@ -485,117 +634,106 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-container">
-            <h1>Invisible Communication Infrastructure for Fleet Operations</h1>
-            <p class="subtitle">
-                Fleet.Chat connects your Samsara fleet management system to WhatsApp Business API. 
-                Enable real-time driver communication without complexity. 10-minute setup, pay-per-use pricing.
-            </p>
-            <div class="hero-buttons">
-                <a href="#contact" class="btn-primary">Start Free Trial</a>
-                <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+            <h1>Connect Your Fleet to WhatsApp in 10 Minutes</h1>
+            <p>Invisible middleware that bridges Samsara TMS with WhatsApp Business API. No driver app downloads, no complex integrations. Just seamless communication.</p>
+            
+            <div class="hero-actions">
+                <a href="#contact" class="btn btn-hero">Start Free Trial</a>
+                <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
             </div>
+            
             <div class="hero-stats">
-                <div class="stat">
-                    <span class="stat-number">10min</span>
-                    <span class="stat-label">Setup Time</span>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">10min</span>
+                    <span class="hero-stat-label">Setup Time</span>
                 </div>
-                <div class="stat">
-                    <span class="stat-number">99.9%</span>
-                    <span class="stat-label">Uptime SLA</span>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">99.9%</span>
+                    <span class="hero-stat-label">Uptime SLA</span>
                 </div>
-                <div class="stat">
-                    <span class="stat-number">$3</span>
-                    <span class="stat-label">Per Driver/Month</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">24/7</span>
-                    <span class="stat-label">Enterprise Support</span>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">24/7</span>
+                    <span class="hero-stat-label">Support</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="features">
+    <section class="section">
         <div class="container">
-            <h2 class="section-title">Invisible Middleware That Just Works</h2>
-            <p class="section-subtitle">
-                Fleet.Chat operates as headless communication infrastructure. Your drivers get WhatsApp messages, 
-                your Samsara system stays updated. No apps to install, no interfaces to learn.
-            </p>
+            <h2 class="section-title">Why Fleet Operators Choose Fleet.Chat</h2>
+            <p class="section-subtitle">Transform your fleet communication with our invisible infrastructure that just works</p>
             
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">🔗</div>
-                    <h3>Seamless Samsara Integration</h3>
-                    <p>Direct API connection to your Samsara fleet management system. Real-time event processing with automated status synchronization.</p>
+                    <div class="feature-icon">⚡</div>
+                    <h3>10-Minute Setup</h3>
+                    <p>Connect your Samsara account, provide payment details, and start communicating. No technical setup required from your team.</p>
                 </div>
                 
                 <div class="feature-card">
                     <div class="feature-icon">📱</div>
-                    <h3>WhatsApp Business API</h3>
-                    <p>Professional WhatsApp messaging infrastructure managed by Fleet.Chat. No separate Business API setup required.</p>
+                    <h3>No Driver Apps</h3>
+                    <p>Drivers use WhatsApp they already have. No downloads, training, or resistance. Immediate adoption across your entire fleet.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Real-Time Communication</h3>
-                    <p>Instant bidirectional messaging between fleet events and driver responses. Transport status updates in real-time.</p>
+                    <div class="feature-icon">🔒</div>
+                    <h3>GDPR Compliant</h3>
+                    <p>Anonymous driver tracking, automated consent management, and privacy-first architecture. Your drivers' data stays protected.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Context-Aware Messages</h3>
-                    <p>Intelligent message generation based on transport context. Arrival notifications, loading confirmations, delivery updates.</p>
+                    <div class="feature-icon">💰</div>
+                    <h3>Pay Only for Active Use</h3>
+                    <p>Billing based only on drivers who send/receive messages each month. No contracts, no minimum commitments.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">📄</div>
-                    <h3>Document Processing</h3>
-                    <p>Automatic POD collection via WhatsApp. Images uploaded by drivers are instantly attached to transport records.</p>
+                    <div class="feature-icon">🚀</div>
+                    <h3>Enterprise Infrastructure</h3>
+                    <p>99.9% uptime SLA, automatic scaling, and 24/7 monitoring. Built for mission-critical fleet operations.</p>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-icon">🏢</div>
-                    <h3>Multi-Tenant Architecture</h3>
-                    <p>Complete data isolation for multiple fleet operators. Dedicated WhatsApp numbers and separate Samsara configurations.</p>
+                    <div class="feature-icon">🔄</div>
+                    <h3>Real-time Synchronization</h3>
+                    <p>Bidirectional sync between Samsara and WhatsApp. Driver responses instantly update your TMS records.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- How It Works Section -->
-    <section id="how-it-works" class="how-it-works">
+    <section id="how-it-works" class="section" style="background: #f9fafb;">
         <div class="container">
-            <h2 class="section-title">Two-Step Configuration</h2>
-            <p class="section-subtitle">
-                Fleet.Chat requires minimal setup. Connect your Samsara API and configure billing. 
-                Your drivers get onboarded automatically.
-            </p>
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Three simple steps to transform your fleet communication</p>
             
-            <div class="steps">
-                <div class="step">
+            <div class="process-steps">
+                <div class="process-step">
                     <div class="step-number">1</div>
-                    <h3>Samsara API Connection</h3>
-                    <p>Connect your Samsara fleet management system using your API credentials. Fleet.Chat discovers your drivers and vehicles automatically.</p>
+                    <div class="step-content">
+                        <h3>Connect Your Samsara Account</h3>
+                        <p>Provide your Samsara API credentials and we'll automatically discover your drivers and vehicles. Takes 2 minutes.</p>
+                    </div>
                 </div>
                 
-                <div class="step">
+                <div class="process-step">
                     <div class="step-number">2</div>
-                    <h3>Billing Configuration</h3>
-                    <p>Set up automated billing with your credit card. Pay only for active drivers communicating through the system each month.</p>
+                    <div class="step-content">
+                        <h3>Choose Your Drivers</h3>
+                        <p>Select which drivers to include in WhatsApp communication. We handle all invitation and consent management automatically.</p>
+                    </div>
                 </div>
                 
-                <div class="step">
+                <div class="process-step">
                     <div class="step-number">3</div>
-                    <h3>Automatic Driver Onboarding</h3>
-                    <p>Drivers receive WhatsApp invitations automatically. They accept terms and start receiving transport notifications immediately.</p>
-                </div>
-                
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h3>Invisible Operation</h3>
-                    <p>Fleet.Chat operates transparently. Samsara events become WhatsApp messages. Driver responses update transport status.</p>
+                    <div class="step-content">
+                        <h3>Start Communicating</h3>
+                        <p>Fleet.Chat automatically sends WhatsApp messages for transport events. Drivers respond naturally, and your Samsara records update in real-time.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -604,109 +742,233 @@
     <!-- Pricing Section -->
     <section id="pricing" class="pricing">
         <div class="container">
-            <h2 class="section-title">Transparent Usage-Based Pricing</h2>
-            <p class="section-subtitle">
-                Pay only for drivers who actively communicate through the system. 
-                No setup fees, no minimum commitments, no hidden costs.
-            </p>
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">Only pay for drivers who actively use WhatsApp messaging</p>
             
-            <div class="pricing-cards">
+            <div class="pricing-grid">
                 <div class="pricing-card">
                     <h3 class="pricing-title">Starter</h3>
                     <p class="pricing-description">Perfect for small fleets getting started</p>
-                    <div class="pricing-price">$3</div>
-                    <div class="pricing-period">per active driver/month</div>
+                    <div class="pricing-price">$15</div>
+                    <div class="price-period">per active driver/month</div>
                     <ul class="pricing-features">
-                        <li>WhatsApp Business API included</li>
-                        <li>Samsara integration</li>
-                        <li>Real-time messaging</li>
-                        <li>Document processing</li>
-                        <li>Email support</li>
+                        <li>WhatsApp messaging</li>
+                        <li>Basic document handling</li>
+                        <li>Transport tracking</li>
+                        <li>Standard support</li>
                     </ul>
-                    <a href="#contact" class="btn-primary">Start Free Trial</a>
+                    <a href="#contact" class="btn btn-outline" style="width: 100%;">Start Free Trial</a>
                 </div>
                 
                 <div class="pricing-card featured">
                     <div class="pricing-badge">Most Popular</div>
                     <h3 class="pricing-title">Professional</h3>
                     <p class="pricing-description">Ideal for growing fleet operations</p>
-                    <div class="pricing-price">$2</div>
-                    <div class="pricing-period">per active driver/month</div>
+                    <div class="pricing-price">$25</div>
+                    <div class="price-period">per active driver/month</div>
                     <ul class="pricing-features">
-                        <li>Everything in Starter</li>
-                        <li>Priority support</li>
-                        <li>Custom message templates</li>
+                        <li>All Starter features</li>
                         <li>Advanced analytics</li>
-                        <li>Phone support</li>
-                        <li>99.9% uptime SLA</li>
+                        <li>Custom workflows</li>
+                        <li>Priority support</li>
+                        <li>24/7 support</li>
                     </ul>
-                    <a href="#contact" class="btn-primary">Start Free Trial</a>
+                    <a href="#contact" class="btn btn-primary" style="width: 100%;">Start Free Trial</a>
                 </div>
                 
                 <div class="pricing-card">
                     <h3 class="pricing-title">Enterprise</h3>
-                    <p class="pricing-description">For large fleets with custom needs</p>
-                    <div class="pricing-price">Custom</div>
-                    <div class="pricing-period">contact for pricing</div>
+                    <p class="pricing-description">Complete solution for large operations</p>
+                    <div class="pricing-price">$35</div>
+                    <div class="price-period">per active driver/month</div>
                     <ul class="pricing-features">
-                        <li>Everything in Professional</li>
+                        <li>All Professional features</li>
+                        <li>Multi-fleet management</li>
                         <li>Dedicated account manager</li>
                         <li>Custom integrations</li>
-                        <li>White-label options</li>
-                        <li>24/7 dedicated support</li>
-                        <li>Service level agreements</li>
+                        <li>SLA guarantees</li>
                     </ul>
-                    <a href="#contact" class="btn-primary">Contact Sales</a>
+                    <a href="#contact" class="btn btn-outline" style="width: 100%;">Contact Sales</a>
                 </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: #6b7280; font-size: 0.875rem;">
+                    Volume discounts: 15% off at 50+ drivers • 25% off at 200+ drivers • 35% off at 500+ drivers
+                </p>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="cta-section">
+    <section id="get-started" class="cta">
         <div class="container">
             <h2>Ready to Transform Your Fleet Communication?</h2>
-            <p>Join leading fleet operators who trust Fleet.Chat for invisible, reliable communication infrastructure.</p>
-            <a href="#contact" class="btn-primary">Start Your Free Trial Today</a>
+            <p>Join hundreds of fleet operators who've eliminated communication friction with Fleet.Chat</p>
+            
+            <div class="cta-actions">
+                <a href="#contact" class="btn btn-cta">Start Free Trial</a>
+                <a href="mailto:support@fleet.chat" class="btn btn-outline-white">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Policy Section -->
+    <section id="privacy" class="privacy-section">
+        <div class="container">
+            <h2 class="section-title">Privacy Policy</h2>
+            <p style="text-align: center; color: #6b7280; margin-bottom: 2rem; font-size: 1.125rem;">Effective Date: June 29, 2025</p>
+            
+            <div class="privacy-content">
+                <p>Fleet-Chat ("we", "our", or "us") values your trust and is committed to protecting your privacy. This Privacy Policy explains how we collect, use, share, and safeguard your information when you use the Fleet-Chat web and mobile services (the "Service").</p>
+
+                <h3>1. Who We Are</h3>
+                <p>Fleet-Chat is a communication platform that enables dispatchers and drivers to coordinate logistics in real time. Our platform includes web interfaces and integrations with selected third-party services, including WhatsApp.</p>
+
+                <h3>2. Information We Collect</h3>
+                <p>We collect personal information only when necessary to provide and improve the Service. This includes:</p>
+
+                <h4>From Dispatchers:</h4>
+                <ul>
+                    <li>First and last name</li>
+                    <li>Company name and address</li>
+                    <li>Email address</li>
+                    <li>Phone number</li>
+                    <li>Preferred language</li>
+                    <li>Optional company identifiers (e.g. business registration number)</li>
+                </ul>
+
+                <h4>From Drivers:</h4>
+                <ul>
+                    <li>First and last name</li>
+                    <li>Phone number</li>
+                    <li>Preferred language</li>
+                    <li>Transport status (e.g. loaded, en route, unloaded)</li>
+                    <li>Location data (if enabled by the driver)</li>
+                </ul>
+
+                <h3>3. How We Use Your Data</h3>
+                <p>We use the information we collect for the following purposes:</p>
+                <ul>
+                    <li>To enable communication between dispatchers and drivers</li>
+                    <li>To share order status and driver location (if enabled)</li>
+                    <li>To maintain system functionality and user authentication</li>
+                    <li>To comply with legal obligations</li>
+                </ul>
+                <p>We do not use your data for advertising, resale, or behavior profiling.</p>
+
+                <h3>4. Use of WhatsApp</h3>
+                <p>Fleet-Chat enables communication between drivers and dispatchers through WhatsApp, provided you (the user) have installed WhatsApp on your mobile device and agreed to its terms of service.</p>
+                
+                <p>By choosing to use WhatsApp:</p>
+                <ul>
+                    <li>You consent to sharing your phone number and message content with WhatsApp and Fleet-Chat for order-related communications</li>
+                    <li>Fleet-Chat will not access your device contacts or send unsolicited messages</li>
+                    <li>WhatsApp may process your data in accordance with WhatsApp's Privacy Policy</li>
+                </ul>
+                
+                <p>Use of WhatsApp is entirely optional. You may choose to communicate via SMS or other methods supported by Fleet-Chat.</p>
+                
+                <p>Please be aware that WhatsApp's servers may be located outside North America and governed by different privacy laws. Fleet-Chat is not responsible for WhatsApp's data handling practices but will handle any data it processes with the utmost care and confidentiality.</p>
+
+                <h3>5. Sharing of Information</h3>
+                <p>We do not sell your data. We may share your information:</p>
+                <ul>
+                    <li>With dispatchers or employers authorized to receive your updates</li>
+                    <li>With trusted service providers under strict data processing agreements</li>
+                    <li>When required by law, subpoena, or regulatory request</li>
+                </ul>
+                <p>All third parties are required to safeguard your data and use it only for the purpose intended by Fleet-Chat.</p>
+
+                <h3>6. Data Retention</h3>
+                <p>We retain your information only as long as necessary for operational or legal reasons. Afterward, data is securely deleted or anonymized. For example, transport-related communications are retained for the duration of the assignment or contract.</p>
+
+                <h3>7. Your Rights</h3>
+                <p>Depending on your location, you may have rights under U.S. (e.g. CCPA, CPRA) or Canadian (PIPEDA) law, including the right to:</p>
+                <ul>
+                    <li>Access your data</li>
+                    <li>Correct inaccurate information</li>
+                    <li>Request deletion</li>
+                    <li>Withdraw consent at any time by messaging "STOP"</li>
+                    <li>Object to certain data uses</li>
+                    <li>Receive a copy of your data in a portable format (if applicable)</li>
+                </ul>
+                <p>To exercise your rights, contact: privacy@fleet-chat.ai</p>
+
+                <h3>8. Security Measures</h3>
+                <p>Fleet-Chat uses administrative, physical, and technical safeguards to protect your information. However, no system is 100% secure. Users are responsible for maintaining the security of their own login credentials and device settings.</p>
+
+                <h3>9. Children's Privacy</h3>
+                <p>Fleet-Chat is intended for professional use by adults. We do not knowingly collect data from individuals under the age of 16.</p>
+
+                <h3>10. Changes to This Policy</h3>
+                <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated effective date. If changes are significant, we will provide advance notice or seek renewed consent, where required.</p>
+
+                <div class="contact-box">
+                    <h3>11. Contact Us</h3>
+                    <p>If you have any questions or concerns about this Privacy Policy or our data practices, contact us at:</p>
+                    <p><strong>Fleet-Chat Privacy Team</strong><br>
+                    Email: privacy@fleet-chat.ai</p>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contact" class="footer">
+    <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Fleet.Chat</h3>
-                    <p>Invisible communication infrastructure for fleet operations. Connect your Samsara system to WhatsApp Business API in minutes.</p>
-                </div>
-                
+            <div class="footer-grid">
                 <div class="footer-section">
                     <h3>Product</h3>
-                    <a href="#features">Features</a><br>
-                    <a href="#pricing">Pricing</a><br>
-                    <a href="#how-it-works">How It Works</a><br>
-                    <a href="#">Documentation</a>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#integrations">Integrations</a></li>
+                    </ul>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Company</h3>
-                    <a href="#">About Us</a><br>
-                    <a href="#">Privacy Policy</a><br>
-                    <a href="#">Terms of Service</a><br>
-                    <a href="#">Support</a>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#press">Press</a></li>
+                    </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Contact</h3>
-                    <p>Email: hello@fleet.chat</p>
-                    <p>Phone: +1 (555) 123-4567</p>
-                    <p>Sales: sales@fleet.chat</p>
-                    <p>Support: support@fleet.chat</p>
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#documentation">Documentation</a></li>
+                        <li><a href="#api">API Reference</a></li>
+                        <li><a href="#support">Support Center</a></li>
+                        <li><a href="#status">System Status</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                        <li><a href="#gdpr">GDPR Compliance</a></li>
+                        <li><a href="#security">Security</a></li>
+                    </ul>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 Fleet.Chat. All rights reserved.</p>
+                <div class="footer-logo">
+                    <div class="logo-icon">💬</div>
+                    <span>© 2025 Fleet.Chat. All rights reserved.</span>
+                </div>
+                
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>All systems operational</span>
+                </div>
             </div>
         </div>
     </footer>
@@ -718,31 +980,7 @@
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Simple form handling for contact forms (if added later)
-        function handleContactForm(event) {
-            event.preventDefault();
-            // This would typically send the form data to a backend service
-            alert('Thank you for your interest! We will contact you within 24 hours.');
-        }
-
-        // Add some interactive behavior to pricing cards
-        document.querySelectorAll('.pricing-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px)';
-                this.style.transition = 'transform 0.3s ease';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('featured')) {
-                    this.style.transform = 'translateY(0)';
+                    target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
