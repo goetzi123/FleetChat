@@ -1,5 +1,6 @@
 import express from "express";
 import { z } from "zod";
+import path from "path";
 import { storage } from "./storage";
 import {
   createUserSchema,
@@ -24,6 +25,15 @@ import { samsaraService } from "./integrations/samsara-service";
 import { whatsappResponseHandler } from "./integrations/whatsapp-response-handler";
 
 const router = express.Router();
+
+// Serve the public Fleet.Chat website
+router.get("/fleet.chat", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "fleet-chat-public.html"));
+});
+
+router.get("/public", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "fleet-chat-public.html"));
+});
 
 // Helper function to generate anonymized pseudo IDs for drivers
 function generatePseudoId(): string {
