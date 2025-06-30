@@ -286,8 +286,9 @@ app.post('/api/admin/logout', (req, res) => {
 });
 
 // Serve the dynamic Fleet.Chat website with real-time pricing
+// Default route serves demo for preview
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'fleet-chat-dynamic.html'));
+  res.redirect('/demo');
 });
 
 app.get('/public', (req, res) => {
