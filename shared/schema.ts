@@ -52,7 +52,8 @@ export const UserRole = {
   DRIVER: "driver",
   DISPATCHER: "dispatcher",
   YARD_OPERATOR: "yard_operator",
-  MANAGER: "manager"
+  MANAGER: "manager",
+  ADMIN: "admin"
 } as const;
 
 // Database Tables
@@ -272,6 +273,56 @@ export const billingRecords = pgTable("billing_records", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Admin users table
+export const admins = pgTable("admins", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  name: varchar("name", { length: 255 }).notNull(),
+  passwordHash: text("password_hash").notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  permissions: jsonb("permissions").default('{"canManagePricing":true,"canViewReports":true,"canManageSystem":true}'),
+  lastLoginAt: timestamp("last_login_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// System pricing configuration table
+export const pricingTiers = pgTable("pricing_tiers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: varchar("name", { length: 100 }).notNull(),
+  description: text("description"),
+  pricePerDriver: decimal("price_per_driver", { precision: 6, scale: 2 }).notNull(),
+  minDrivers: integer("min_drivers").notNull().default(1),
+  maxDrivers: integer("max_drivers"), // null for unlimited
+  features: jsonb("features").default('[]'),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// System usage analytics table
+export const usageAnalytics = pgTable("usage_analytics", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  date: varchar("date", { length: 10 }).notNull(), // YYYY-MM-DD format
+  activeDrivers: integer("active_drivers").notNull().default(0),
+  totalMessages: integer("total_messages").notNull().default(0),
+  totalTransports: integer("total_transports").notNull().default(0),
+  totalDocuments: integer("total_documents").notNull().default(0),
+  apiCalls: integer("api_calls").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// System configuration table
+export const systemConfig = pgTable("system_config", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  key: varchar("key", { length: 255 }).notNull().unique(),
+  value: text("value").notNull(),
+  description: text("description"),
+  updatedBy: uuid("updated_by").references(() => admins.id),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Base types for compatibility
 export interface User {
   id: string;
@@ -435,6 +486,70 @@ export interface Tenant {
   updatedAt: Date;
 }
 
+// Admin interfaces
+export interface Admin {
+  id: string;
+  email: string;
+  name: string;
+  passwordHash: string;
+  isActive: boolean;
+  permissions: {
+    canManagePricing: boolean;
+    canViewReports: boolean;
+    canManageSystem: boolean;
+  };
+  lastLoginAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface PricingTier {
+  id: string;
+  name: string;
+  description?: string;
+  pricePerDriver: number;
+  minDrivers: number;
+  maxDrivers?: number;
+  features: string[];
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface UsageAnalytics {
+  id: string;
+  tenantId: string;
+  date: string; // YYYY-MM-DD format
+  activeDrivers: number;
+  totalMessages: number;
+  totalTransports: number;
+  totalDocuments: number;
+  apiCalls: number;
+  createdAt: Date;
+}
+
+export interface SystemConfig {
+  id: string;
+  key: string;
+  value: string;
+  description?: string;
+  updatedBy?: string;
+  updatedAt: Date;
+}
+
+export interface BillingRecord {
+  id: string;
+  tenantId: string;
+  billingPeriod: string; // YYYY-MM format
+  activeDrivers: number;
+  pricePerDriver: number;
+  totalAmount: number;
+  stripeInvoiceId?: string;
+  status: string; // pending, paid, failed
+  paidAt?: Date;
+  createdAt: Date;
+}
+
 // Insert types (without auto-generated fields)
 export type InsertUser = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
 export type InsertTransport = Omit<Transport, 'id' | 'createdAt' | 'updatedAt'>;
@@ -444,6 +559,11 @@ export type InsertLocationTracking = Omit<LocationTracking, 'id' | 'timestamp'>;
 export type InsertYardOperation = Omit<YardOperation, 'id' | 'createdAt'>;
 export type InsertTmsIntegration = Omit<TmsIntegration, 'id' | 'timestamp'>;
 export type InsertTenant = Omit<Tenant, 'id' | 'createdAt' | 'updatedAt'>;
+export type InsertAdmin = Omit<Admin, 'id' | 'createdAt' | 'updatedAt'>;
+export type InsertPricingTier = Omit<PricingTier, 'id' | 'createdAt' | 'updatedAt'>;
+export type InsertUsageAnalytics = Omit<UsageAnalytics, 'id' | 'createdAt'>;
+export type InsertSystemConfig = Omit<SystemConfig, 'id' | 'updatedAt'>;
+export type InsertBillingRecord = Omit<BillingRecord, 'id' | 'createdAt'>;
 
 // Validation schemas
 export const createUserSchema = z.object({
