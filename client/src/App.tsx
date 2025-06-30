@@ -11,6 +11,8 @@ import DemoEnvironment from "./pages/DemoEnvironment";
 import FleetSetup from "./pages/FleetSetup";
 import FleetChatPublicSite from "./pages/FleetChatPublicSite";
 import FleetChatApp from "./pages/FleetChatApp";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: BarChart3 },
@@ -61,6 +63,15 @@ function App() {
   // Show Fleet.Chat production app for /fleet routes
   if (location.startsWith('/fleet')) {
     return <FleetChatApp />;
+  }
+  
+  // Show admin system for /admin routes
+  if (location.startsWith('/admin')) {
+    if (location === '/admin/login') {
+      return <AdminLogin />;
+    } else {
+      return <AdminDashboard />;
+    }
   }
 
   // Default demo system

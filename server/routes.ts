@@ -23,6 +23,7 @@ import {
 } from "./integrations/samsara";
 import { samsaraService } from "./integrations/samsara-service";
 import { whatsappResponseHandler } from "./integrations/whatsapp-response-handler";
+import { setupAdminRoutes } from "./admin-routes";
 
 const router = express.Router();
 
@@ -911,6 +912,11 @@ function extractMessageContent(message: any) {
     default:
       return {};
   }
+}
+
+// Initialize admin routes
+export function initializeAdminRoutes(app: express.Application) {
+  setupAdminRoutes(app);
 }
 
 export default router;
