@@ -470,6 +470,22 @@ app.get('/demo', (req, res) => {
             to { opacity: 1; transform: translateY(0); }
         }
         .typing-indicator { animation: pulse 1.5s infinite; }
+        
+        /* Popup animations for Samsara feedback */
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideOutLeft {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(-100%); }
+        }
+        
+        /* Pulse animation for typing indicator */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -631,6 +647,16 @@ app.get('/demo', (req, res) => {
                 'need_assistance': '🆘 Assistance request sent to operations.'
             };
             
+            // Samsara feedback messages for bidirectional communication
+            const samsaraFeedback = {
+                'accept_route': '✅ Driver accepted route assignment - Route status updated in Samsara',
+                'request_details': 'ℹ️ Driver requested route details - Additional info sent via Samsara',
+                'report_issue': '⚠️ Driver reported issue - Alert created in Samsara dispatch system',
+                'start_loading': '📦 Driver started loading - Transport status updated to "Loading"',
+                'report_arrival': '📍 Driver confirmed arrival - Geofence status updated in Samsara',
+                'need_assistance': '🆘 Driver needs assistance - Emergency alert sent to Samsara operations'
+            };
+            
             const responseText = responses[buttonId] || 'Response received';
             const driverMessage = \`
                 <div class="message-bubble bg-blue-100 p-3 rounded-lg mb-4 max-w-sm ml-auto">
@@ -641,6 +667,60 @@ app.get('/demo', (req, res) => {
             
             chatArea.innerHTML += driverMessage;
             chatArea.scrollTop = chatArea.scrollHeight;
+            
+            // Show bidirectional feedback in Samsara panel
+            showSamsaraFeedback(samsaraFeedback[buttonId] || 'Driver response received');
+        }
+        
+        function showSamsaraFeedback(message) {
+            // Create popup element
+            const popup = document.createElement('div');
+            popup.className = 'fixed top-4 left-4 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm';
+            popup.style.animation = 'slideInLeft 0.3s ease-out';
+            popup.innerHTML = \`
+                <div class="flex items-start space-x-2">
+                    <div class="flex-shrink-0">
+                        <svg class="w-5 h-5 text-blue-200" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium">Samsara System Update</p>
+                        <p class="text-xs text-blue-100 mt-1">\${message}</p>
+                    </div>
+                </div>
+            \`;
+            
+            // Add to page
+            document.body.appendChild(popup);
+            
+            // Auto remove after 2.5 seconds
+            setTimeout(() => {
+                popup.style.animation = 'slideOutLeft 0.3s ease-in';
+                setTimeout(() => {
+                    if (popup.parentNode) {
+                        popup.parentNode.removeChild(popup);
+                    }
+                }, 300);
+            }, 2500);
+            
+            // Also update the last event display to show the response was processed
+            const lastEventEl = document.getElementById('lastEvent');
+            if (lastEventEl) {
+                const currentEvent = lastEventEl.textContent;
+                try {
+                    const eventObj = JSON.parse(currentEvent);
+                    eventObj.driverResponse = {
+                        timestamp: new Date().toISOString(),
+                        message: message,
+                        status: 'processed'
+                    };
+                    lastEventEl.textContent = JSON.stringify(eventObj, null, 2);
+                } catch (e) {
+                    // If parsing fails, just append the response info
+                    lastEventEl.textContent = currentEvent + \`\n\nDriver Response: \${message}\`;
+                }
+            }
         }
         
         function showErrorMessage() {
