@@ -690,6 +690,7 @@ app.get('/demo', (req, res) => {
             };
             
             const eventType = buttonMapping[responseType] || lastEventType || 'route_assignment';
+            console.log('Showing feedback for responseType:', responseType, 'mapped to eventType:', eventType);
             
             // Create response panel element
             const responsePanel = document.createElement('div');
@@ -714,14 +715,33 @@ app.get('/demo', (req, res) => {
             let targetButton = null;
             
             buttons.forEach(button => {
-                if (button.onclick.toString().includes(eventType)) {
+                const onclickAttr = button.getAttribute('onclick');
+                if (onclickAttr && onclickAttr.includes(eventType)) {
                     targetButton = button;
                 }
             });
             
-            if (targetButton && targetButton.parentNode) {
-                // Insert the response panel after the button
-                targetButton.parentNode.insertBefore(responsePanel, targetButton.nextSibling);
+            if (targetButton) {
+                // Find the space-y-4 container (button container) to insert after the button
+                const buttonContainer = targetButton.closest('.space-y-4');
+                if (buttonContainer) {
+                    // Insert the response panel after the target button within the container
+                    targetButton.insertAdjacentElement('afterend', responsePanel);
+                } else {
+                    // Fallback: insert after the button directly
+                    targetButton.insertAdjacentElement('afterend', responsePanel);
+                }
+            } else {
+                console.log('Target button not found for event type:', eventType);
+                // Fallback: add to the Samsara panel directly
+                const samsaraPanel = document.getElementById('samsaraPanel');
+                if (samsaraPanel) {
+                    const buttonArea = samsaraPanel.querySelector('.space-y-4');
+                    if (buttonArea) {
+                        buttonArea.appendChild(responsePanel);
+                    }
+                }
+            }
                 
                 // Auto remove after 2 seconds
                 setTimeout(() => {
