@@ -502,7 +502,7 @@ app.get('/demo', (req, res) => {
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                <div id="samsaraPanel" class="bg-white rounded-lg shadow-lg p-6">
                     <h2 class="text-2xl font-semibold mb-4 text-blue-600">🚛 Samsara Fleet Events</h2>
                     <p class="text-gray-600 mb-6">Simulate fleet management events from Samsara TMS</p>
                     
@@ -675,14 +675,15 @@ app.get('/demo', (req, res) => {
         function showSamsaraFeedback(message) {
             // Create popup element positioned over the Samsara Fleet Events panel
             const popup = document.createElement('div');
-            popup.className = 'absolute top-4 left-4 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-xs';
+            popup.className = 'absolute top-4 right-4 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-xl border-2 border-blue-400 max-w-xs';
             popup.style.animation = 'slideInFromTop 0.3s ease-out';
+            popup.style.zIndex = '1000';
             
-            // Position relative to the Samsara Fleet Events panel (first white panel)
-            const samsaraPanels = document.querySelectorAll('.bg-white.rounded-lg.shadow-lg');
-            const samsaraPanel = samsaraPanels[0]; // First panel is the Samsara Fleet Events panel
+            // Position relative to the Samsara Fleet Events panel
+            const samsaraPanel = document.getElementById('samsaraPanel');
             if (samsaraPanel) {
                 samsaraPanel.style.position = 'relative';
+                popup.style.zIndex = '1000';
                 samsaraPanel.appendChild(popup);
             } else {
                 // Fallback to body if panel not found
