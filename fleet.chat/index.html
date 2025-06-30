@@ -628,6 +628,33 @@
             display: block;
             opacity: 1;
         }
+
+        /* Hero Features Grid for What Tab */
+        .hero-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .hero-feature {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 4px solid #2563eb;
+        }
+
+        .hero-feature h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .hero-feature p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
         
         .tab-panel {
             display: none;
@@ -715,15 +742,54 @@
         <div class="container">
             <!-- Tab Navigation -->
             <div class="tab-navigation">
-                <button class="tab-button active" data-tab="why">Why</button>
+                <button class="tab-button active" data-tab="what">What</button>
+                <button class="tab-button" data-tab="why">Why</button>
                 <button class="tab-button" data-tab="how">How</button>
                 <button class="tab-button" data-tab="pricing">Pricing</button>
             </div>
             
             <!-- Tab Content -->
             <div class="tab-content">
+                <!-- What Tab -->
+                <div id="what-tab" class="tab-panel active">
+                    <h2 class="section-title">Connect Your Fleet to WhatsApp in 10 Minutes</h2>
+                    <p class="section-subtitle">Fleet.Chat is the invisible middleware that instantly connects your Samsara fleet management system to WhatsApp Business, enabling seamless driver communication without apps, training, or technical complexity.</p>
+                    
+                    <div class="hero-features">
+                        <div class="hero-feature">
+                            <h3>🚛 Fleet Management Integration</h3>
+                            <p>Direct connection to Samsara TMS for real-time transport data, driver information, and route management</p>
+                        </div>
+                        
+                        <div class="hero-feature">
+                            <h3>📱 WhatsApp Business Communication</h3>
+                            <p>Automated messaging to drivers using WhatsApp they already have - no new apps or training required</p>
+                        </div>
+                        
+                        <div class="hero-feature">
+                            <h3>🔄 Bidirectional Synchronization</h3>
+                            <p>Driver responses via WhatsApp automatically update your Samsara records in real-time</p>
+                        </div>
+                        
+                        <div class="hero-feature">
+                            <h3>📋 Smart Document Handling</h3>
+                            <p>Drivers send PODs, photos, and documents via WhatsApp - automatically uploaded to transport records</p>
+                        </div>
+                        
+                        <div class="hero-feature">
+                            <h3>📍 Location Tracking</h3>
+                            <p>One-click location sharing from drivers with geofencing and ETA calculations</p>
+                        </div>
+                        
+                        <div class="hero-feature">
+                            <h3>⚡ 10-Minute Setup</h3>
+                            <p>Connect Samsara API, add payment method, and start communicating - no technical configuration required</p>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Why Tab -->
-                <div id="why-tab" class="tab-panel active">
+                <div id="why-tab" class="tab-panel">
                     <h2 class="section-title">Why Fleet Operators Choose Fleet.Chat</h2>
                     <p class="section-subtitle">Transform your fleet communication with our invisible infrastructure that just works</p>
                     
@@ -860,33 +926,7 @@
         </div>
     </section>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-container">
-            <h1>Connect Your Fleet to WhatsApp in 10 Minutes</h1>
-            <p>Invisible middleware that bridges Samsara TMS with WhatsApp Business API. No driver app downloads, no complex integrations. Just seamless communication.</p>
-            
-            <div class="hero-actions">
-                <a href="#contact" class="btn btn-hero">Start Free Trial</a>
-                <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
-            </div>
-            
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-number">10min</span>
-                    <span class="hero-stat-label">Setup Time</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">99.9%</span>
-                    <span class="hero-stat-label">Uptime SLA</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-number">24/7</span>
-                    <span class="hero-stat-label">Support</span>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
 
 
