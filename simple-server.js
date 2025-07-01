@@ -1,31 +1,21 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(express.static('.'));
-app.use(express.json());
+// Serve static files
+app.use(express.static(__dirname));
 
-// Main route
+// Redirect root to demo
 app.get('/', (req, res) => {
-  try {
-    const htmlContent = fs.readFileSync('index.html', 'utf8');
-    res.send(htmlContent);
-  } catch (error) {
-    console.error('Error serving index.html:', error);
-    res.status(500).send('Server Error');
-  }
+  res.redirect('/demo');
 });
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+// Serve the demo HTML file
+app.get('/demo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'demo.html'));
 });
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`FleetChat demo running on port ${PORT}`);
-  console.log(`Access at: http://localhost:${PORT}`);
+  console.log(`Fleet.Chat Demo Server running on port ${PORT}`);
 });
