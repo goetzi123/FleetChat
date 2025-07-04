@@ -4,9 +4,17 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Only serve the public Fleet.Chat website
+// Serve static files from fleet.chat directory
+app.use(express.static(path.join(__dirname, 'fleet.chat')));
+
+// Serve the Fleet.Chat website
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'fleet-chat-public.html'));
+  res.sendFile(path.join(__dirname, 'fleet.chat', 'index.html'));
+});
+
+// Serve privacy policy
+app.get('/privacy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'fleet.chat', 'privacy.html'));
 });
 
 // Health check for deployment
@@ -20,7 +28,7 @@ app.get('/health', (req, res) => {
 
 // Catch all other routes and redirect to homepage
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'fleet-chat-public.html'));
+  res.sendFile(path.join(__dirname, 'fleet.chat', 'index.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {
