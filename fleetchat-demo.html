@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetChat Demo - Bidirectional Communication</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes driverResponse {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes statusPulse {
+            from { background-color: #fef3c7; }
+            to { background-color: #f0f9ff; }
+        }
+        .fleet-message { animation: messageSlide 0.5s ease-out; }
+        .driver-message { animation: driverResponse 0.5s ease-out; }
+        .status-update { animation: statusPulse 1s ease-out; }
+        .typing-dots { animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-6xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold text-gray-900 text-center">FleetChat Demonstration</h1>
+            <p class="text-lg text-gray-600 text-center mt-2">Samsara Fleet Events ↔ WhatsApp Driver Communication</p>
+        </div>
+    </div>
+
+    <!-- Demo Container -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Samsara Panel -->
+            <div class="bg-white rounded-lg shadow-lg">
+                <div class="bg-blue-600 text-white p-4 rounded-t-lg">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <span class="mr-3">🚛</span>Samsara Fleet Events
+                    </h2>
+                    <p class="text-blue-100 text-sm mt-1">Click events to trigger driver messages</p>
+                </div>
+                
+                <div class="p-6 space-y-4">
+                    <button onclick="sendSamsaraEvent('route')" class="w-full text-left p-4 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-all transform hover:scale-105">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center mr-3">🚚</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Route Assignment</h3>
+                                <p class="text-sm text-gray-600">New delivery route assigned</p>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="sendSamsaraEvent('pickup')" class="w-full text-left p-4 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg transition-all transform hover:scale-105">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center mr-3">📋</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Pickup Reminder</h3>
+                                <p class="text-sm text-gray-600">Scheduled pickup approaching</p>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="sendSamsaraEvent('arrival')" class="w-full text-left p-4 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-all transform hover:scale-105">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center mr-3">📍</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Arrival Notification</h3>
+                                <p class="text-sm text-gray-600">Driver arrived at location</p>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="sendSamsaraEvent('document')" class="w-full text-left p-4 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg transition-all transform hover:scale-105">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center mr-3">📄</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Document Request</h3>
+                                <p class="text-sm text-gray-600">POD or signature required</p>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="sendSamsaraEvent('hos')" class="w-full text-left p-4 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-all transform hover:scale-105">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center mr-3">⚠️</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">HOS Warning</h3>
+                                <p class="text-sm text-gray-600">Duty time limit approaching</p>
+                            </div>
+                        </div>
+                    </button>
+                    
+                    <button onclick="sendSamsaraEvent('geofence')" class="w-full text-left p-4 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg transition-all transform hover:scale-105">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center mr-3">🎯</div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900">Geofence Entry</h3>
+                                <p class="text-sm text-gray-600">Vehicle entered zone</p>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+                
+                <!-- Samsara Status -->
+                <div class="bg-gray-50 p-4 rounded-b-lg border-t">
+                    <h4 class="font-semibold text-gray-700 mb-2">System Status</h4>
+                    <div id="samsara-status" class="text-sm space-y-1">
+                        <div class="text-gray-600">Ready to process events...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- WhatsApp Panel -->
+            <div class="bg-white rounded-lg shadow-lg">
+                <div class="bg-green-600 text-white p-4 rounded-t-lg">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <span class="mr-3">💬</span>WhatsApp Driver Interface
+                    </h2>
+                    <p class="text-green-100 text-sm mt-1">Messages appear automatically</p>
+                </div>
+                
+                <!-- Chat Area -->
+                <div class="h-80 bg-green-25 p-4 overflow-y-auto" style="background: linear-gradient(to bottom, #f0fdf4, #f7fee7);">
+                    <div id="chat-messages" class="space-y-3">
+                        <div class="text-center text-gray-500 text-sm py-8">
+                            Messages will appear when Samsara events are triggered
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Driver Response Area -->
+                <div class="bg-gray-50 p-4 rounded-b-lg border-t">
+                    <h4 class="font-semibold text-gray-700 mb-2">Driver Response Options</h4>
+                    <div id="response-buttons" class="space-y-2">
+                        <div class="text-sm text-gray-600">Response options will appear with messages</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="text-center mt-8">
+            <button onclick="clearChat()" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+                Clear Demo
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentEventType = null;
+        let messageCount = 0;
+
+        // Event configurations
+        const fleetEvents = {
+            route: {
+                message: "🚚 New delivery route assigned: ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt and estimated departure time.",
+                responses: ["✅ Confirm Route", "🗺️ Need Navigation", "⚠️ Report Delay"]
+            },
+            pickup: {
+                message: "📋 Pickup reminder: ACME Corp at 123 Industrial Blvd in 30 minutes. Need any navigation assistance?",
+                responses: ["🚗 On My Way", "📍 Send Location", "⏰ Running Late"]
+            },
+            arrival: {
+                message: "📍 Arrived at ACME Corp. Please share loading status and any delays.",
+                responses: ["🔄 Loading Started", "📍 Share Location", "📸 Upload Photo"]
+            },
+            document: {
+                message: "📄 Please upload signed delivery receipt and any customer notes for ACME Corp delivery.",
+                responses: ["📋 Upload POD", "✍️ Add Notes", "✍️ Customer Signature"]
+            },
+            hos: {
+                message: "⚠️ HOS Alert: 1 hour remaining on duty. Plan for required rest period.",
+                responses: ["🛏️ Find Rest Area", "📝 Extension Request", "🚫 Off Duty Soon"]
+            },
+            geofence: {
+                message: "🎯 Entered Chicago Distribution Center. Please confirm your activity and estimated duration.",
+                responses: ["📦 Loading Activity", "🔧 Maintenance Stop", "☕ Driver Break"]
+            }
+        };
+
+        // Main event trigger function
+        function sendSamsaraEvent(eventType) {
+            console.log('Event triggered:', eventType);
+            
+            const eventConfig = fleetEvents[eventType];
+            if (!eventConfig) {
+                console.error('Unknown event type:', eventType);
+                return;
+            }
+            
+            currentEventType = eventType;
+            
+            // Update Samsara status immediately
+            addSamsaraStatus(`Processing ${eventType} event...`);
+            
+            // Show typing indicator after short delay
+            setTimeout(() => {
+                showTypingIndicator();
+            }, 800);
+            
+            // Send message after typing delay
+            setTimeout(() => {
+                hideTypingIndicator();
+                addWhatsAppMessage(eventConfig.message, 'fleet');
+                showResponseOptions(eventConfig.responses);
+                addSamsaraStatus(`Message sent to driver. Awaiting response...`);
+            }, 2800);
+        }
+
+        // Add message to WhatsApp chat
+        function addWhatsAppMessage(message, sender) {
+            const chatContainer = document.getElementById('chat-messages');
+            
+            // Clear placeholder on first message
+            if (messageCount === 0) {
+                chatContainer.innerHTML = '';
+            }
+            messageCount++;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `${sender === 'fleet' ? 'fleet-message ml-4' : 'driver-message mr-4'}`;
+            
+            const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div class="${sender === 'fleet' ? 'bg-blue-500 text-white ml-auto' : 'bg-white text-gray-800'} rounded-xl p-3 max-w-sm shadow-sm">
+                    <div class="text-sm leading-relaxed">${message}</div>
+                    <div class="text-xs mt-1 ${sender === 'fleet' ? 'text-blue-100' : 'text-gray-500'}">${timestamp}</div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="ml-4">
+                    <div class="bg-gray-200 rounded-xl p-3 max-w-sm">
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-gray-500 rounded-full typing-dots"></div>
+                            <div class="w-2 h-2 bg-gray-500 rounded-full typing-dots" style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 bg-gray-500 rounded-full typing-dots" style="animation-delay: 0.4s"></div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1">FleetChat is typing...</div>
+                    </div>
+                </div>
+            `;
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // Show driver response options
+        function showResponseOptions(responses) {
+            const responseContainer = document.getElementById('response-buttons');
+            responseContainer.innerHTML = '';
+            
+            responses.forEach((response, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left p-3 bg-green-100 hover:bg-green-200 border border-green-300 rounded-lg transition-colors';
+                button.textContent = response;
+                button.onclick = () => sendDriverResponse(response);
+                responseContainer.appendChild(button);
+            });
+        }
+
+        // Send driver response
+        function sendDriverResponse(response) {
+            console.log('Driver response:', response);
+            
+            // Add driver message
+            addWhatsAppMessage(response, 'driver');
+            
+            // Clear response options
+            const responseContainer = document.getElementById('response-buttons');
+            responseContainer.innerHTML = '<div class="text-sm text-green-600">✓ Response sent</div>';
+            
+            // Update Samsara system
+            setTimeout(() => {
+                addSamsaraStatus(`Driver responded: "${response}"`);
+            }, 1000);
+            
+            setTimeout(() => {
+                const statusUpdate = getSamsaraUpdate(currentEventType, response);
+                addSamsaraStatus(statusUpdate);
+            }, 2500);
+        }
+
+        // Add status to Samsara panel
+        function addSamsaraStatus(message) {
+            const statusContainer = document.getElementById('samsara-status');
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'text-sm p-2 bg-blue-50 border-l-4 border-blue-400 rounded status-update';
+            
+            const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            statusDiv.innerHTML = `<strong>${timestamp}:</strong> ${message}`;
+            
+            statusContainer.appendChild(statusDiv);
+            
+            // Keep only recent statuses
+            const statuses = statusContainer.querySelectorAll('.status-update');
+            if (statuses.length > 6) {
+                statuses[0].remove();
+            }
+        }
+
+        // Get status update based on event and response
+        function getSamsaraUpdate(eventType, response) {
+            const updates = {
+                route: "✅ Route confirmed. Transport record updated with ETA.",
+                pickup: "📍 Pickup status updated. Driver en route.",
+                arrival: "🚛 Arrival logged. Loading status confirmed.",
+                document: "📋 Document received. POD uploaded to transport record.",
+                hos: "⏰ HOS status updated. Compliance maintained.",
+                geofence: "🎯 Location activity logged. Duration estimated."
+            };
+            return updates[eventType] || "✅ Status updated successfully.";
+        }
+
+        // Clear demo function
+        function clearChat() {
+            console.log('Clearing demo');
+            
+            // Reset chat
+            document.getElementById('chat-messages').innerHTML = `
+                <div class="text-center text-gray-500 text-sm py-8">
+                    Messages will appear when Samsara events are triggered
+                </div>
+            `;
+            
+            // Reset responses
+            document.getElementById('response-buttons').innerHTML = `
+                <div class="text-sm text-gray-600">Response options will appear with messages</div>
+            `;
+            
+            // Reset status
+            document.getElementById('samsara-status').innerHTML = `
+                <div class="text-gray-600">Ready to process events...</div>
+            `;
+            
+            // Reset counters
+            messageCount = 0;
+            currentEventType = null;
+        }
+
+        // Initialize demo
+        console.log('FleetChat Demo initialized');
+    </script>
+</body>
+</html>
