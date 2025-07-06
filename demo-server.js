@@ -9,7 +9,7 @@ app.use(express.static('.'));
 
 // Main demo route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'fleetchat-demo.html'));
+  res.sendFile(path.join(__dirname, 'working-demo.html'));
 });
 
 // Demo health check

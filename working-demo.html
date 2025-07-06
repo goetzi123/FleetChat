@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetChat Demo - Bidirectional Communication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .panel-header {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .samsara-header {
+            background: #2563eb;
+        }
+        
+        .whatsapp-header {
+            background: #25d366;
+        }
+        
+        .panel-content {
+            padding: 20px;
+        }
+        
+        .event-button {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        
+        .event-button:hover {
+            border-color: #2563eb;
+            background: #f8fafc;
+            transform: translateY(-1px);
+        }
+        
+        .event-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        
+        .event-desc {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .chat-area {
+            height: 300px;
+            background: linear-gradient(to bottom, #e3f2fd, #f0f4c3);
+            padding: 15px;
+            overflow-y: auto;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .fleet-message {
+            text-align: right;
+        }
+        
+        .driver-message {
+            text-align: left;
+        }
+        
+        .message-bubble {
+            display: inline-block;
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+        
+        .fleet-bubble {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .driver-bubble {
+            background: white;
+            color: #1f2937;
+            border: 1px solid #e5e5e5;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        
+        .typing-indicator {
+            text-align: left;
+            margin: 15px 0;
+        }
+        
+        .typing-dots {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            border: 1px solid #e5e5e5;
+        }
+        
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        .response-area {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e5e5e5;
+        }
+        
+        .response-button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #25d366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .response-button:hover {
+            background: #20b358;
+            transform: translateY(-1px);
+        }
+        
+        .status-area {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e5e5e5;
+            margin-top: 15px;
+        }
+        
+        .status-item {
+            font-size: 14px;
+            padding: 8px;
+            margin-bottom: 5px;
+            background: #e3f2fd;
+            border-left: 4px solid #2563eb;
+            border-radius: 4px;
+        }
+        
+        .clear-button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .clear-button:hover {
+            background: #374151;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes typing {
+            0%, 80%, 100% { 
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .placeholder {
+            text-align: center;
+            color: #6b7280;
+            font-style: italic;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FleetChat Demo - Bidirectional Communication</h1>
+            <p>Samsara Fleet Events ↔ WhatsApp Driver Messages</p>
+        </div>
+        
+        <div class="demo-grid">
+            <!-- Samsara Panel -->
+            <div class="panel">
+                <div class="panel-header samsara-header">
+                    🚛 Samsara Fleet Events
+                </div>
+                <div class="panel-content">
+                    <button class="event-button" onclick="triggerEvent('route')">
+                        <div class="event-title">🚚 Route Assignment</div>
+                        <div class="event-desc">New delivery route assigned to driver</div>
+                    </button>
+                    
+                    <button class="event-button" onclick="triggerEvent('pickup')">
+                        <div class="event-title">📋 Pickup Reminder</div>
+                        <div class="event-desc">Scheduled pickup time approaching</div>
+                    </button>
+                    
+                    <button class="event-button" onclick="triggerEvent('arrival')">
+                        <div class="event-title">📍 Arrival Notification</div>
+                        <div class="event-desc">Driver arrived at customer location</div>
+                    </button>
+                    
+                    <button class="event-button" onclick="triggerEvent('document')">
+                        <div class="event-title">📄 Document Request</div>
+                        <div class="event-desc">POD or delivery receipt required</div>
+                    </button>
+                    
+                    <button class="event-button" onclick="triggerEvent('hos')">
+                        <div class="event-title">⚠️ HOS Warning</div>
+                        <div class="event-desc">Hours of service limit approaching</div>
+                    </button>
+                    
+                    <button class="event-button" onclick="triggerEvent('geofence')">
+                        <div class="event-title">🎯 Geofence Entry</div>
+                        <div class="event-desc">Vehicle entered designated area</div>
+                    </button>
+                    
+                    <div class="status-area">
+                        <h4>System Status</h4>
+                        <div id="samsara-status">
+                            <div class="status-item">Ready to process events...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- WhatsApp Panel -->
+            <div class="panel">
+                <div class="panel-header whatsapp-header">
+                    💬 WhatsApp Driver Interface
+                </div>
+                <div class="panel-content">
+                    <div class="chat-area" id="chat-area">
+                        <div class="placeholder">
+                            Messages will appear when you trigger Samsara events
+                        </div>
+                    </div>
+                    
+                    <div class="response-area">
+                        <h4>Driver Response Options</h4>
+                        <div id="response-options">
+                            <div style="color: #6b7280; font-size: 14px;">Response options will appear with messages</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="clear-button" onclick="clearDemo()">Clear Demo</button>
+    </div>
+
+    <script>
+        // Event definitions
+        const events = {
+            route: {
+                message: "New delivery route assigned: ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt and estimated departure time.",
+                responses: ["Confirm Route", "Need Navigation", "Report Delay"]
+            },
+            pickup: {
+                message: "Pickup reminder: ACME Corp at 123 Industrial Blvd in 30 minutes. Need any navigation assistance?",
+                responses: ["On My Way", "Send Location", "Running Late"]
+            },
+            arrival: {
+                message: "Arrived at ACME Corp. Please share loading status and any delays.",
+                responses: ["Loading Started", "Share Location", "Upload Photo"]
+            },
+            document: {
+                message: "Please upload signed delivery receipt and any customer notes for ACME Corp delivery.",
+                responses: ["Upload POD", "Add Notes", "Customer Signature"]
+            },
+            hos: {
+                message: "HOS Alert: 1 hour remaining on duty. Plan for required rest period.",
+                responses: ["Find Rest Area", "Extension Request", "Off Duty Soon"]
+            },
+            geofence: {
+                message: "Entered Chicago Distribution Center. Please confirm your activity and estimated duration.",
+                responses: ["Loading Activity", "Maintenance Stop", "Driver Break"]
+            }
+        };
+
+        let currentEvent = null;
+        let messageCount = 0;
+
+        function triggerEvent(eventType) {
+            console.log('Triggering event:', eventType);
+            
+            const event = events[eventType];
+            if (!event) {
+                console.error('Event not found:', eventType);
+                return;
+            }
+            
+            currentEvent = eventType;
+            
+            // Update Samsara status
+            addSamsaraStatus('Processing ' + eventType + ' event...');
+            
+            // Show typing indicator
+            setTimeout(() => {
+                showTypingIndicator();
+            }, 500);
+            
+            // Send message
+            setTimeout(() => {
+                hideTypingIndicator();
+                addFleetMessage(event.message);
+                showResponseOptions(event.responses);
+                addSamsaraStatus('Message sent to driver. Awaiting response...');
+            }, 2500);
+        }
+
+        function addFleetMessage(message) {
+            const chatArea = document.getElementById('chat-area');
+            
+            // Clear placeholder
+            if (messageCount === 0) {
+                chatArea.innerHTML = '';
+            }
+            messageCount++;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message fleet-message';
+            messageDiv.innerHTML = `
+                <div class="message-bubble fleet-bubble">
+                    ${message}
+                    <div class="message-time">${getCurrentTime()}</div>
+                </div>
+            `;
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function addDriverMessage(message) {
+            const chatArea = document.getElementById('chat-area');
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message driver-message';
+            messageDiv.innerHTML = `
+                <div class="message-bubble driver-bubble">
+                    ${message}
+                    <div class="message-time">${getCurrentTime()}</div>
+                </div>
+            `;
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const chatArea = document.getElementById('chat-area');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            `;
+            
+            chatArea.appendChild(typingDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        function showResponseOptions(responses) {
+            const responseArea = document.getElementById('response-options');
+            responseArea.innerHTML = '';
+            
+            responses.forEach(response => {
+                const button = document.createElement('button');
+                button.className = 'response-button';
+                button.textContent = response;
+                button.onclick = () => sendDriverResponse(response);
+                responseArea.appendChild(button);
+            });
+        }
+
+        function sendDriverResponse(response) {
+            console.log('Driver response:', response);
+            
+            addDriverMessage(response);
+            clearResponseOptions();
+            
+            setTimeout(() => {
+                addSamsaraStatus('Driver responded: "' + response + '"');
+            }, 1000);
+            
+            setTimeout(() => {
+                addSamsaraStatus('Transport status updated. ' + getStatusUpdate(currentEvent));
+            }, 2500);
+        }
+
+        function clearResponseOptions() {
+            const responseArea = document.getElementById('response-options');
+            responseArea.innerHTML = '<div style="color: #25d366; font-size: 14px;">✓ Response sent</div>';
+        }
+
+        function addSamsaraStatus(message) {
+            const statusArea = document.getElementById('samsara-status');
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'status-item';
+            statusDiv.innerHTML = '<strong>' + getCurrentTime() + ':</strong> ' + message;
+            
+            statusArea.appendChild(statusDiv);
+            
+            // Keep only last 5 statuses
+            const statuses = statusArea.querySelectorAll('.status-item');
+            if (statuses.length > 5) {
+                statuses[0].remove();
+            }
+        }
+
+        function getStatusUpdate(eventType) {
+            const updates = {
+                route: "Route confirmed. ETA logged.",
+                pickup: "Pickup status updated. On schedule.",
+                arrival: "Arrival confirmed. Loading in progress.",
+                document: "Document received. POD uploaded.",
+                hos: "HOS status updated. Compliance maintained.",
+                geofence: "Activity logged. Duration estimated."
+            };
+            return updates[eventType] || "Status updated successfully.";
+        }
+
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function clearDemo() {
+            console.log('Clearing demo');
+            
+            // Reset chat
+            document.getElementById('chat-area').innerHTML = `
+                <div class="placeholder">
+                    Messages will appear when you trigger Samsara events
+                </div>
+            `;
+            
+            // Reset responses
+            document.getElementById('response-options').innerHTML = `
+                <div style="color: #6b7280; font-size: 14px;">Response options will appear with messages</div>
+            `;
+            
+            // Reset status
+            document.getElementById('samsara-status').innerHTML = `
+                <div class="status-item">Ready to process events...</div>
+            `;
+            
+            // Reset counters
+            messageCount = 0;
+            currentEvent = null;
+        }
+
+        // Initialize
+        console.log('FleetChat Demo loaded successfully');
+    </script>
+</body>
+</html>
