@@ -512,15 +512,15 @@ app.get('/demo', (req, res) => {
                     <p class="text-gray-600 mb-6">Simulate fleet management events from Samsara TMS</p>
                     
                     <div class="space-y-4">
-                        <button onclick="sendEvent('route_assignment')" 
+                        <button data-event="route" onclick="handleDemoEvent('route')" 
                                 class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition">
                             📋 Route Assignment
                         </button>
-                        <button onclick="sendEvent('location_update')" 
+                        <button data-event="location" onclick="handleDemoEvent('location')" 
                                 class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg transition">
                             📍 Location Update Request
                         </button>
-                        <button onclick="sendEvent('geofence_entry')" 
+                        <button data-event="geofence" onclick="handleDemoEvent('geofence')" 
                                 class="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-4 rounded-lg transition">
                             🏁 Geofence Entry Alert
                         </button>
@@ -572,6 +572,66 @@ app.get('/demo', (req, res) => {
     </div>
 
     <script>
+        function handleDemoEvent(eventType) {
+            console.log('Demo event triggered:', eventType);
+            
+            const events = {
+                route: {
+                    message: "New route: ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt.",
+                    options: ["Confirm Route", "Need Help", "Delay Expected"]
+                },
+                location: {
+                    message: "Please share your current location for tracking.",
+                    options: ["Share Location", "On Route", "Need Break"]
+                },
+                geofence: {
+                    message: "Entered distribution center. Confirm activity.",
+                    options: ["Loading", "Maintenance", "Break"]
+                }
+            };
+            
+            const event = events[eventType];
+            if (!event) return;
+            
+            // Update last event
+            document.getElementById('lastEvent').textContent = eventType + ' - ' + new Date().toLocaleTimeString();
+            
+            // Show typing indicator
+            const chatArea = document.getElementById('chatArea');
+            chatArea.innerHTML = '<div class="text-center text-gray-500 py-4">Driver is typing...</div>';
+            
+            // Show message after delay
+            setTimeout(function() {
+                displayDemoMessage(event);
+            }, 2000);
+        }
+        
+        function displayDemoMessage(event) {
+            const chatArea = document.getElementById('chatArea');
+            chatArea.innerHTML = `
+                <div class="space-y-4">
+                    <div class="bg-blue-500 text-white p-3 rounded-lg">
+                        <div>${event.message}</div>
+                        <div class="text-xs mt-2">${new Date().toLocaleTimeString()}</div>
+                    </div>
+                    <div class="space-y-2">
+                        ${event.options.map(opt => `<button onclick="handleResponse('${opt}')" class="w-full bg-green-100 hover:bg-green-200 text-green-800 p-2 rounded">${opt}</button>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function handleResponse(response) {
+            const chatArea = document.getElementById('chatArea');
+            chatArea.innerHTML += `
+                <div class="bg-gray-200 text-gray-800 p-3 rounded-lg mt-2">
+                    <div>Driver: ${response}</div>
+                    <div class="text-xs mt-2">${new Date().toLocaleTimeString()}</div>
+                </div>
+                <div class="text-center text-green-600 font-medium py-2">✅ Response sent to Samsara</div>
+            `;
+        }
+
         async function sendEvent(eventType) {
             const chatArea = document.getElementById('chatArea');
             const lastEventEl = document.getElementById('lastEvent');
