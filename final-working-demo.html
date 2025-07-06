@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetChat Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { text-align: center; background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .demo-row { display: flex; gap: 20px; margin-bottom: 20px; }
+        .panel { flex: 1; background: white; border-radius: 8px; overflow: hidden; }
+        .panel-header { padding: 15px; color: white; font-weight: bold; }
+        .samsara-header { background: #2563eb; }
+        .whatsapp-header { background: #25d366; }
+        .panel-body { padding: 20px; }
+        .event-btn { width: 100%; padding: 15px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9; cursor: pointer; text-align: left; }
+        .event-btn:hover { background: #e9e9e9; }
+        .chat-box { height: 300px; border: 1px solid #ddd; padding: 15px; background: #f8f8f8; overflow-y: auto; margin-bottom: 15px; }
+        .message { margin-bottom: 10px; }
+        .fleet-msg { text-align: right; }
+        .driver-msg { text-align: left; }
+        .msg-bubble { display: inline-block; max-width: 70%; padding: 10px; border-radius: 15px; }
+        .fleet-bubble { background: #2563eb; color: white; }
+        .driver-bubble { background: white; border: 1px solid #ddd; }
+        .response-btn { width: 100%; padding: 10px; margin-bottom: 5px; background: #25d366; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .response-btn:hover { background: #20b854; }
+        .status-box { background: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: 10px; }
+        .status-item { font-size: 12px; margin: 5px 0; padding: 5px; background: #e3f2fd; border-left: 3px solid #2563eb; }
+        .clear-btn { display: block; margin: 20px auto; padding: 10px 20px; background: #666; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FleetChat Demo - Bidirectional Communication</h1>
+            <p>Click Samsara events to see WhatsApp messages</p>
+        </div>
+        
+        <div class="demo-row">
+            <div class="panel">
+                <div class="panel-header samsara-header">🚛 Samsara Fleet Events</div>
+                <div class="panel-body">
+                    <button class="event-btn" id="route-btn">
+                        <strong>🚚 Route Assignment</strong><br>
+                        <small>New delivery route assigned</small>
+                    </button>
+                    <button class="event-btn" id="pickup-btn">
+                        <strong>📋 Pickup Reminder</strong><br>
+                        <small>Pickup time approaching</small>
+                    </button>
+                    <button class="event-btn" id="arrival-btn">
+                        <strong>📍 Arrival Notification</strong><br>
+                        <small>Driver arrived at location</small>
+                    </button>
+                    <button class="event-btn" id="document-btn">
+                        <strong>📄 Document Request</strong><br>
+                        <small>POD required</small>
+                    </button>
+                    <button class="event-btn" id="hos-btn">
+                        <strong>⚠️ HOS Warning</strong><br>
+                        <small>Duty time limit approaching</small>
+                    </button>
+                    <button class="event-btn" id="geofence-btn">
+                        <strong>🎯 Geofence Entry</strong><br>
+                        <small>Entered designated area</small>
+                    </button>
+                    
+                    <div class="status-box">
+                        <strong>System Status:</strong>
+                        <div id="status-log">
+                            <div class="status-item">Ready to process events...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-header whatsapp-header">💬 WhatsApp Driver Interface</div>
+                <div class="panel-body">
+                    <div class="chat-box" id="chat">
+                        <div style="text-align: center; color: #666; padding: 50px 0;">
+                            Messages appear when events are triggered
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <strong>Driver Response Options:</strong>
+                        <div id="responses">
+                            <div style="color: #666; font-size: 14px;">Response options will appear with messages</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="clear-btn" id="clear-btn">Clear Demo</button>
+    </div>
+
+    <script>
+        // Event data
+        var eventData = {
+            route: {
+                msg: "New delivery route assigned: ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt and estimated departure time.",
+                options: ["Confirm Route", "Need Navigation", "Report Delay"]
+            },
+            pickup: {
+                msg: "Pickup reminder: ACME Corp at 123 Industrial Blvd in 30 minutes. Need any navigation assistance?",
+                options: ["On My Way", "Send Location", "Running Late"]
+            },
+            arrival: {
+                msg: "Arrived at ACME Corp. Please share loading status and any delays.",
+                options: ["Loading Started", "Share Location", "Upload Photo"]
+            },
+            document: {
+                msg: "Please upload signed delivery receipt and any customer notes for ACME Corp delivery.",
+                options: ["Upload POD", "Add Notes", "Customer Signature"]
+            },
+            hos: {
+                msg: "HOS Alert: 1 hour remaining on duty. Plan for required rest period.",
+                options: ["Find Rest Area", "Extension Request", "Off Duty Soon"]
+            },
+            geofence: {
+                msg: "Entered Chicago Distribution Center. Please confirm your activity and estimated duration.",
+                options: ["Loading Activity", "Maintenance Stop", "Driver Break"]
+            }
+        };
+
+        var currentEvent = null;
+        var msgCount = 0;
+
+        // Event handlers
+        document.getElementById('route-btn').addEventListener('click', function() { processEvent('route'); });
+        document.getElementById('pickup-btn').addEventListener('click', function() { processEvent('pickup'); });
+        document.getElementById('arrival-btn').addEventListener('click', function() { processEvent('arrival'); });
+        document.getElementById('document-btn').addEventListener('click', function() { processEvent('document'); });
+        document.getElementById('hos-btn').addEventListener('click', function() { processEvent('hos'); });
+        document.getElementById('geofence-btn').addEventListener('click', function() { processEvent('geofence'); });
+        document.getElementById('clear-btn').addEventListener('click', clearDemo);
+
+        function processEvent(eventType) {
+            console.log('Processing event:', eventType);
+            
+            var event = eventData[eventType];
+            if (!event) {
+                console.error('Event not found:', eventType);
+                return;
+            }
+            
+            currentEvent = eventType;
+            addStatus('Processing ' + eventType + ' event...');
+            
+            // Show typing after delay
+            setTimeout(function() {
+                showTyping();
+            }, 800);
+            
+            // Send message after typing
+            setTimeout(function() {
+                hideTyping();
+                addFleetMessage(event.msg);
+                showResponses(event.options);
+                addStatus('Message sent to driver. Awaiting response...');
+            }, 3000);
+        }
+
+        function addFleetMessage(message) {
+            var chat = document.getElementById('chat');
+            
+            if (msgCount === 0) {
+                chat.innerHTML = '';
+            }
+            msgCount++;
+            
+            var msgDiv = document.createElement('div');
+            msgDiv.className = 'message fleet-msg';
+            msgDiv.innerHTML = '<div class="msg-bubble fleet-bubble">' + message + 
+                              '<div style="font-size: 10px; margin-top: 5px;">' + getTime() + '</div></div>';
+            
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addDriverMessage(message) {
+            var chat = document.getElementById('chat');
+            
+            var msgDiv = document.createElement('div');
+            msgDiv.className = 'message driver-msg';
+            msgDiv.innerHTML = '<div class="msg-bubble driver-bubble">' + message + 
+                              '<div style="font-size: 10px; margin-top: 5px;">' + getTime() + '</div></div>';
+            
+            chat.appendChild(msgDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function showTyping() {
+            var chat = document.getElementById('chat');
+            var typingDiv = document.createElement('div');
+            typingDiv.id = 'typing';
+            typingDiv.className = 'message driver-msg';
+            typingDiv.innerHTML = '<div class="msg-bubble driver-bubble">FleetChat is typing...</div>';
+            chat.appendChild(typingDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function hideTyping() {
+            var typing = document.getElementById('typing');
+            if (typing) {
+                typing.remove();
+            }
+        }
+
+        function showResponses(options) {
+            var responseDiv = document.getElementById('responses');
+            responseDiv.innerHTML = '';
+            
+            for (var i = 0; i < options.length; i++) {
+                var btn = document.createElement('button');
+                btn.className = 'response-btn';
+                btn.textContent = options[i];
+                btn.onclick = (function(response) {
+                    return function() { sendResponse(response); };
+                })(options[i]);
+                responseDiv.appendChild(btn);
+            }
+        }
+
+        function sendResponse(response) {
+            console.log('Driver response:', response);
+            
+            addDriverMessage(response);
+            clearResponses();
+            
+            setTimeout(function() {
+                addStatus('Driver responded: "' + response + '"');
+            }, 1000);
+            
+            setTimeout(function() {
+                addStatus('Transport status updated. ' + getStatusUpdate(currentEvent));
+            }, 2500);
+        }
+
+        function clearResponses() {
+            document.getElementById('responses').innerHTML = '<div style="color: #25d366;">✓ Response sent</div>';
+        }
+
+        function addStatus(message) {
+            var statusLog = document.getElementById('status-log');
+            var statusDiv = document.createElement('div');
+            statusDiv.className = 'status-item';
+            statusDiv.innerHTML = '<strong>' + getTime() + ':</strong> ' + message;
+            
+            statusLog.appendChild(statusDiv);
+            
+            // Keep only last 5 statuses
+            var statuses = statusLog.querySelectorAll('.status-item');
+            if (statuses.length > 5) {
+                statuses[0].remove();
+            }
+        }
+
+        function getStatusUpdate(eventType) {
+            var updates = {
+                route: "Route confirmed. ETA logged.",
+                pickup: "Pickup status updated. On schedule.",
+                arrival: "Arrival confirmed. Loading in progress.",
+                document: "Document received. POD uploaded.",
+                hos: "HOS status updated. Compliance maintained.",
+                geofence: "Activity logged. Duration estimated."
+            };
+            return updates[eventType] || "Status updated successfully.";
+        }
+
+        function getTime() {
+            return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function clearDemo() {
+            console.log('Clearing demo');
+            
+            document.getElementById('chat').innerHTML = 
+                '<div style="text-align: center; color: #666; padding: 50px 0;">Messages appear when events are triggered</div>';
+            
+            document.getElementById('responses').innerHTML = 
+                '<div style="color: #666; font-size: 14px;">Response options will appear with messages</div>';
+            
+            document.getElementById('status-log').innerHTML = 
+                '<div class="status-item">Ready to process events...</div>';
+            
+            msgCount = 0;
+            currentEvent = null;
+        }
+
+        // Initialize
+        console.log('FleetChat Demo initialized successfully');
+    </script>
+</body>
+</html>
