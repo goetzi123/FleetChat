@@ -1,44 +1,7 @@
-const express = require('express');
-const path = require('path');
-const bcrypt = require('bcrypt');
-const session = require('express-session');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret: 'fleet-chat-admin-secret-2025',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 } // 24 hours
-}));
-
-// Test admin credentials
-const ADMIN_EMAIL = 'admin@fleet.chat';
-const ADMIN_PASSWORD_HASH = '$2b$10$Y0mUxAZGurbJYfhsSa6ZheEwllsvdEUZRlenO9hPKwwwYUQMqBTDq'; // FleetChat2025!
-
-// Admin middleware
-function requireAdminAuth(req, res, next) {
-  if (!req.session.adminId) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  next();
-}
-
-// Default route serves demo for preview
-app.get('/', (req, res) => {
-  res.redirect('/demo');
-});
-
-// Demo route - WORKING VERSION
-app.get('/demo', (req, res) => {
-  res.send(`<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>FleetChat Demo - Event Propagation Working</title>
+    <title>FleetChat Demo - WORKING VERSION</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
         .container { max-width: 1200px; margin: 0 auto; }
@@ -63,8 +26,8 @@ app.get('/demo', (req, res) => {
 <body>
     <div class="container">
         <div class="header">
-            <h1>FleetChat Demo - Event Propagation WORKING</h1>
-            <p>Click Route Assignment to test Samsara → WhatsApp communication</p>
+            <h1>FleetChat Demo - WORKING VERSION</h1>
+            <p>Test: Click Route Assignment to verify event propagation</p>
         </div>
         
         <div class="panels">
@@ -72,14 +35,14 @@ app.get('/demo', (req, res) => {
                 <h2>🚛 Samsara Fleet Events</h2>
                 <button class="btn" onclick="triggerEvent('route')">
                     <strong>🚚 Route Assignment</strong><br>
-                    <small>New delivery route assigned</small>
+                    <small>Click to test event propagation</small>
                 </button>
                 <button class="btn" onclick="triggerEvent('pickup')">
                     <strong>📋 Pickup Reminder</strong><br>
-                    <small>Pickup time approaching</small>
+                    <small>Test pickup workflow</small>
                 </button>
                 <div id="status" style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 4px;">
-                    <strong>Status:</strong> <span id="status-text">Ready for events</span>
+                    <strong>Status:</strong> <span id="status-text">Ready</span>
                 </div>
             </div>
             
@@ -87,7 +50,7 @@ app.get('/demo', (req, res) => {
                 <h2>💬 WhatsApp Driver Interface</h2>
                 <div class="chat" id="chat">
                     <div style="text-align: center; color: #6b7280; padding: 60px 0;">
-                        Click a Samsara event to see WhatsApp message
+                        Click a Samsara event to start
                     </div>
                 </div>
                 <div>
@@ -101,7 +64,7 @@ app.get('/demo', (req, res) => {
     </div>
 
     <script>
-        console.log('FleetChat Demo loaded - All functions working');
+        console.log('FleetChat Demo WORKING VERSION loaded');
         
         function triggerEvent(eventType) {
             console.log('Event triggered:', eventType);
@@ -109,7 +72,7 @@ app.get('/demo', (req, res) => {
             
             var events = {
                 route: {
-                    message: "NEW ROUTE ASSIGNED: ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt and estimated departure time.",
+                    message: "NEW ROUTE: ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt and departure time.",
                     responses: ["✅ Confirm Route", "🗺️ Need Navigation", "⏰ Delay Expected"]
                 },
                 pickup: {
@@ -124,10 +87,12 @@ app.get('/demo', (req, res) => {
                 return;
             }
             
+            // Show typing indicator
             setTimeout(function() {
                 showTyping();
             }, 500);
             
+            // Show message
             setTimeout(function() {
                 hideTyping();
                 addMessage(event.message, 'fleet');
@@ -141,7 +106,7 @@ app.get('/demo', (req, res) => {
             var typingDiv = document.createElement('div');
             typingDiv.id = 'typing';
             typingDiv.className = 'message driver-message';
-            typingDiv.innerHTML = '<div class="bubble driver-bubble">FleetChat typing...</div>';
+            typingDiv.innerHTML = '<div class="bubble driver-bubble">FleetChat is typing...</div>';
             chat.appendChild(typingDiv);
             chat.scrollTop = chat.scrollHeight;
         }
@@ -199,29 +164,8 @@ app.get('/demo', (req, res) => {
             }, 2500);
         }
         
-        console.log('All functions loaded. triggerEvent ready for testing.');
+        // Test on load
+        console.log('All functions loaded successfully. Ready for testing.');
     </script>
 </body>
-</html>`);
-});
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'live',
-    service: 'Fleet.Chat Website',
-    timestamp: new Date().toISOString()
-  });
-});
-
-// Handle remaining routes
-app.use((req, res) => {
-  if (req.path.startsWith('/admin') || req.path.startsWith('/api/admin') || req.path.startsWith('/demo') || req.path.startsWith('/api/demo')) {
-    return res.status(404).send('Not Found');
-  }
-  res.sendFile(path.join(__dirname, 'fleet-chat-dynamic.html'));
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Fleet.Chat demo server live on port ${PORT}`);
-});
+</html>
