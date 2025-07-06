@@ -608,28 +608,27 @@ app.get('/demo', (req, res) => {
         
         function displayDemoMessage(event) {
             const chatArea = document.getElementById('chatArea');
-            chatArea.innerHTML = `
-                <div class="space-y-4">
-                    <div class="bg-blue-500 text-white p-3 rounded-lg">
-                        <div>${event.message}</div>
-                        <div class="text-xs mt-2">${new Date().toLocaleTimeString()}</div>
-                    </div>
-                    <div class="space-y-2">
-                        ${event.options.map(opt => `<button onclick="handleResponse('${opt}')" class="w-full bg-green-100 hover:bg-green-200 text-green-800 p-2 rounded">${opt}</button>`).join('')}
-                    </div>
-                </div>
-            `;
+            let buttonsHTML = '';
+            event.options.forEach(function(opt) {
+                buttonsHTML += '<button onclick="handleResponse(\\''+opt+'\\')" class="w-full bg-green-100 hover:bg-green-200 text-green-800 p-2 rounded mb-2">'+opt+'</button>';
+            });
+            
+            chatArea.innerHTML = '<div class="space-y-4">' +
+                '<div class="bg-blue-500 text-white p-3 rounded-lg">' +
+                '<div>'+event.message+'</div>' +
+                '<div class="text-xs mt-2">'+new Date().toLocaleTimeString()+'</div>' +
+                '</div>' +
+                '<div class="space-y-2">' + buttonsHTML + '</div>' +
+                '</div>';
         }
         
         function handleResponse(response) {
             const chatArea = document.getElementById('chatArea');
-            chatArea.innerHTML += `
-                <div class="bg-gray-200 text-gray-800 p-3 rounded-lg mt-2">
-                    <div>Driver: ${response}</div>
-                    <div class="text-xs mt-2">${new Date().toLocaleTimeString()}</div>
-                </div>
-                <div class="text-center text-green-600 font-medium py-2">✅ Response sent to Samsara</div>
-            `;
+            chatArea.innerHTML += '<div class="bg-gray-200 text-gray-800 p-3 rounded-lg mt-2">' +
+                '<div>Driver: '+response+'</div>' +
+                '<div class="text-xs mt-2">'+new Date().toLocaleTimeString()+'</div>' +
+                '</div>' +
+                '<div class="text-center text-green-600 font-medium py-2">✅ Response sent to Samsara</div>';
         }
 
         async function sendEvent(eventType) {
