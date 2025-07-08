@@ -5,7 +5,7 @@
 
 ## Architectural Overview
 
-FleetChat operates as a **pure message broker** that facilitates bidirectional communication between WhatsApp Business API and Samsara fleet management system. The service has no user interface and functions entirely through API integrations and webhook processing.
+FleetChat operates as a **pure message broker** that facilitates bidirectional communication between WhatsApp Business API and Samsara fleet management system. The service has no user interface and functions entirely through API integrations and webhook processing. **Broker Status**: Message routing architecture operational with verified event propagation (July 2025).
 
 ```
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐

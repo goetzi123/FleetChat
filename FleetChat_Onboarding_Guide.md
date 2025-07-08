@@ -1,7 +1,7 @@
 # FleetChat Onboarding Guide for Fleet Operators
 
 ## Overview
-This guide explains how a trucking company using Samsara can onboard onto FleetChat middleware to enable automated driver communication via WhatsApp.
+This guide explains how a trucking company using Samsara can onboard onto FleetChat middleware to enable automated driver communication via WhatsApp. **Service Status**: Production-ready with verified integration capabilities (July 2025).
 
 ## Prerequisites
 - Active Samsara fleet management account

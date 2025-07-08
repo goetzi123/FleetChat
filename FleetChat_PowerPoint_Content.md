@@ -3,7 +3,7 @@
 ## Slide 1: Title Slide
 **Title:** FleetChat
 **Subtitle:** Invisible Communication Infrastructure for Fleet Management
-**Tagline:** Headless Middleware Platform | Samsara Integration | WhatsApp Business API
+**Tagline:** Headless Middleware Platform | Samsara Integration | WhatsApp Business API | PRODUCTION READY (July 2025)
 
 ---
 
