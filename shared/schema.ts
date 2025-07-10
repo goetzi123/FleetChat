@@ -56,6 +56,22 @@ export const UserRole = {
   ADMIN: "admin"
 } as const;
 
+// Language Codes
+export const LanguageCode = {
+  ENGLISH: "ENG",
+  SPANISH: "SPA",
+  FRENCH: "FRA",
+  GERMAN: "GER",
+  PORTUGUESE: "POR"
+} as const;
+
+// Message Template Types
+export const MessageTemplateType = {
+  TEXT: "text",
+  TEMPLATE: "template",
+  INTERACTIVE: "interactive"
+} as const;
+
 // Database Tables
 
 // Session storage table for authentication
@@ -323,6 +339,72 @@ export const systemConfig = pgTable("system_config", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Message template catalog - stores template definitions for each event type
+export const messageTemplates = pgTable("message_templates", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  eventType: varchar("event_type", { length: 100 }).notNull(), // route.assigned, geofence.enter, etc.
+  languageCode: varchar("language_code", { length: 3 }).notNull(), // ENG, SPA, FRA, etc.
+  templateType: varchar("template_type", { length: 20 }).notNull(), // text, template, interactive
+  
+  // Message content
+  header: varchar("header", { length: 500 }),
+  body: text("body").notNull(),
+  footer: varchar("footer", { length: 500 }),
+  
+  // Template metadata
+  category: varchar("category", { length: 50 }), // transport, safety, maintenance, etc.
+  priority: integer("priority").notNull().default(1), // 1=highest, 5=lowest
+  isActive: boolean("is_active").notNull().default(true),
+  
+  // Audit fields
+  createdBy: uuid("created_by").references(() => admins.id),
+  updatedBy: uuid("updated_by").references(() => admins.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  // Unique constraint: one template per event type per language
+  index("idx_template_event_lang").on(table.eventType, table.languageCode)
+]);
+
+// Response options catalog - stores predefined response buttons for each template
+export const responseOptions = pgTable("response_options", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  templateId: uuid("template_id").references(() => messageTemplates.id).notNull(),
+  
+  // Response details
+  buttonText: varchar("button_text", { length: 100 }).notNull(),
+  buttonPayload: varchar("button_payload", { length: 100 }).notNull(), // acknowledge_route, pickup_confirmed, etc.
+  buttonType: varchar("button_type", { length: 20 }).notNull().default("reply"), // reply, call, url
+  
+  // Response behavior
+  sortOrder: integer("sort_order").notNull().default(1),
+  isActive: boolean("is_active").notNull().default(true),
+  
+  // Conditional display (JSON conditions when to show this option)
+  displayConditions: jsonb("display_conditions"), // e.g., {"geofenceType": "pickup_location"}
+  
+  // Audit fields
+  createdBy: uuid("created_by").references(() => admins.id),
+  updatedBy: uuid("updated_by").references(() => admins.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Message template variables - defines dynamic variables that can be used in templates
+export const templateVariables = pgTable("template_variables", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  variableName: varchar("variable_name", { length: 100 }).notNull(), // {{pickup_location}}, {{delivery_time}}, etc.
+  eventType: varchar("event_type", { length: 100 }).notNull(),
+  dataPath: varchar("data_path", { length: 255 }).notNull(), // JSON path to extract from event data
+  defaultValue: varchar("default_value", { length: 255 }),
+  description: text("description"),
+  isRequired: boolean("is_required").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  // Unique constraint: one variable per name per event type
+  index("idx_variable_name_event").on(table.variableName, table.eventType)
+]);
+
 // Base types for compatibility
 export interface User {
   id: string;
@@ -537,6 +619,50 @@ export interface SystemConfig {
   updatedAt: Date;
 }
 
+// Message Template Interfaces
+export interface MessageTemplate {
+  id: string;
+  eventType: string;
+  languageCode: string;
+  templateType: string;
+  header?: string;
+  body: string;
+  footer?: string;
+  category?: string;
+  priority: number;
+  isActive: boolean;
+  createdBy?: string;
+  updatedBy?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ResponseOption {
+  id: string;
+  templateId: string;
+  buttonText: string;
+  buttonPayload: string;
+  buttonType: string;
+  sortOrder: number;
+  isActive: boolean;
+  displayConditions?: any; // JSON object
+  createdBy?: string;
+  updatedBy?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface TemplateVariable {
+  id: string;
+  variableName: string;
+  eventType: string;
+  dataPath: string;
+  defaultValue?: string;
+  description?: string;
+  isRequired: boolean;
+  createdAt: Date;
+}
+
 export interface BillingRecord {
   id: string;
   tenantId: string;
@@ -747,4 +873,22 @@ export const driverOnboardingSchema = z.object({
   phone: z.string().min(1, "Phone number is required"),
   samsaraDriverId: z.string().min(1, "Samsara driver ID is required"),
   hasConsented: z.boolean().default(false),
+});
+
+// Message Template Insert Schemas
+export const insertMessageTemplateSchema = createInsertSchema(messageTemplates).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertResponseOptionSchema = createInsertSchema(responseOptions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTemplateVariableSchema = createInsertSchema(templateVariables).omit({
+  id: true,
+  createdAt: true,
 });

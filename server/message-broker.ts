@@ -1,9 +1,13 @@
 import express from "express";
 import { z } from "zod";
 import { samsaraService } from "./integrations/samsara-service";
+import { enhancedMessageBroker } from "./enhanced-message-broker";
 
 const app = express();
 app.use(express.json());
+
+// Initialize database templates on startup
+enhancedMessageBroker.initializeTemplates().catch(console.error);
 
 // Health check endpoint
 app.get('/health', async (req, res) => {
@@ -101,8 +105,8 @@ async function translateSamsaraEventToWhatsApp(event: any) {
       return null;
     }
     
-    // Generate contextual message based on event type
-    const message = generateDriverMessage(event);
+    // Generate contextual message using enhanced message broker
+    const message = await enhancedMessageBroker.generateDriverMessage(event);
     
     return {
       to: driverWithPhone.phoneNumber,

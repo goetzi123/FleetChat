@@ -65,6 +65,10 @@ app.get('/demo', (req, res) => {
         <div class="header">
             <h1>FleetChat Demo - Event Propagation WORKING</h1>
             <p>Click Route Assignment to test Samsara → WhatsApp communication</p>
+            <div style="background: #f0f9ff; border: 1px solid #0ea5e9; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                <strong>✅ Database-Based Response Catalog Active</strong><br>
+                <small>Now using multi-language template system with English (ENG) support - 5 templates, 10 response options, 14 variables</small>
+            </div>
         </div>
         
         <div class="panels">
