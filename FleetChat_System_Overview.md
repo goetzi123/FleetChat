@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-FleetChat is a middleware service that bridges fleet management systems with driver communication platforms. Operating as a headless message broker, it translates Samsara fleet events into contextual WhatsApp messages for drivers and processes driver responses back into fleet management updates. The system requires no user interface, functioning purely as an intelligent routing and translation layer. **Current Status**: Production-ready with verified event propagation system (July 2025).
+FleetChat is a middleware service that bridges fleet management systems (Samsara and Geotab) with driver communication platforms. Operating as a headless message broker with dual-platform support, it translates fleet events into contextual WhatsApp messages for drivers and processes driver responses back into fleet management updates, regardless of the underlying fleet platform. The system requires no user interface, functioning purely as an intelligent routing and translation layer. **Current Status**: Production-ready with verified event propagation system (July 2025).
 
 ## System Architecture
 
@@ -12,22 +12,22 @@ FleetChat eliminates communication gaps between fleet dispatchers and drivers by
 ### Middleware Design
 The system operates as pure middleware between two primary endpoints:
 
-**Input**: Samsara TMS webhooks containing fleet events (route assignments, location updates, compliance alerts)  
-**Processing**: Event classification, driver identification, message template generation  
+**Input**: Fleet platform events (Samsara webhooks or Geotab data feeds) containing route assignments, location updates, compliance alerts  
+**Processing**: Platform-agnostic event classification, driver identification, unified message template generation  
 **Output**: WhatsApp Business API messages with interactive quick replies and response handling
 
-**Return Path**: WhatsApp driver responses are processed and translated back into Samsara data updates, maintaining bidirectional synchronization between fleet management and driver communications.
+**Return Path**: WhatsApp driver responses are processed and translated back into fleet platform data updates (Samsara or Geotab), maintaining bidirectional synchronization between fleet management and driver communications.
 
 ### Technical Stack
 - **Backend**: Express.js server with TypeScript
-- **Integration**: Samsara Fleet Management API and WhatsApp Business API
+- **Integration**: Samsara/Geotab Fleet Management APIs and WhatsApp Business API
 - **Storage**: In-memory data structures for session management
 - **Deployment**: Containerized Node.js application with webhook endpoints
 
 ## Key Features
 
 ### Event Translation Engine
-Converts Samsara fleet events into driver-friendly WhatsApp messages:
+Converts fleet platform events (Samsara/Geotab) into driver-friendly WhatsApp messages:
 - Route assignments become location-specific pickup instructions
 - Geofence events trigger arrival confirmations and next-step guidance
 - HOS compliance alerts provide clear action items for drivers
@@ -42,7 +42,7 @@ Handles all WhatsApp message types from drivers:
 
 ### Driver Privacy Protection
 Implements GDPR-compliant driver identification:
-- Maps Samsara driver IDs to WhatsApp phone numbers without exposing personal data
+- Maps fleet platform driver IDs to WhatsApp phone numbers without exposing personal data
 - Uses anonymized pseudo-IDs for internal tracking
 - Maintains separate driver consent records for communication preferences
 - Provides opt-out mechanisms for all automated messaging

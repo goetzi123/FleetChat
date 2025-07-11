@@ -77,6 +77,7 @@ FleetChat is a headless message broker service that facilitates seamless communi
 
 ### TMS Integration Partners
 - **Samsara** (Primary Fleet Management Platform)
+- **Geotab** (Secondary Fleet Management Platform)
 - Transporeon
 - Agheera
 - project44
@@ -266,6 +267,7 @@ Changelog:
 - July 8, 2025. Created comprehensive portal specifications - detailed admin portal specification for system administrators to manage pricing, tenants, analytics, billing, and system configuration; customer portal specification for fleet operators to configure Samsara integration, manage WhatsApp communication, monitor analytics, and handle billing
 - July 10, 2025. Implemented database-based response catalog system with multi-language support starting with English (ENG) - created message_templates, response_options, and template_variables tables with complete CRUD operations, variable substitution, conditional display logic, and seamless integration with existing demo system while preserving operational functionality
 - July 10, 2025. Completed comprehensive codebase refactor implementing modern TypeScript architecture with modular service layer patterns, comprehensive error handling, enhanced middleware stack, type-safe integrations, configuration management, and production-ready scalability improvements while preserving all existing functionality
+- July 11, 2025. Implemented comprehensive dual-platform abstraction layer supporting both Samsara and Geotab fleet management systems - created unified IFleetProvider interface, platform-specific providers (SamsaraFleetProvider, GeotabFleetProvider), FleetProviderFactory for instance management, FleetCommunicationService for orchestration, and complete documentation including enterprise onboarding guides and technical specifications enabling single-platform-per-tenant architecture
 ```
 
 ## User Preferences

@@ -91,6 +91,19 @@ export class WhatsAppApiError extends ExternalServiceError {
   }
 }
 
+export class GeotabApiError extends ExternalServiceError {
+  constructor(message: string, details?: any) {
+    super('Geotab API', message, details);
+    this.code = ERROR_CODES.GEOTAB_API_ERROR;
+  }
+}
+
+export class FleetProviderError extends AppError {
+  constructor(message: string, statusCode: number = HTTP_STATUS.BAD_REQUEST) {
+    super(message, statusCode, ERROR_CODES.FLEET_PROVIDER_ERROR, true);
+  }
+}
+
 export class StripeApiError extends ExternalServiceError {
   constructor(message: string, details?: any) {
     super('Stripe API', message, details);
