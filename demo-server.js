@@ -30,8 +30,8 @@ app.get('/health', (req, res) => {
 // API endpoint for demo statistics (optional future use)
 app.get('/api/demo/stats', (req, res) => {
   res.json({
-    eventsSupported: 6,
-    responseTypes: 18,
+    eventsSupported: 10,
+    responseTypes: 30,
     avgResponseTime: '2-3 seconds',
     driverAdoption: '95%+',
     automationRate: '70%'
