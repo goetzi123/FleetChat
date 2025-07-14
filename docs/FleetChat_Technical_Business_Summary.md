@@ -59,26 +59,6 @@ FleetChat represents a revolutionary approach to fleet communication, delivering
 
 FleetChat operates as a sophisticated multi-tenant platform designed to serve unlimited fleet operators with complete logical isolation and shared infrastructure optimization.
 
-#### Tenant Isolation Strategy
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      FleetChat Multi-Tenant Core                │
-├─────────────────────────────────────────────────────────────────┤
-│  Tenant A (Samsara)    │  Tenant B (Geotab)   │  Tenant C (Samsara) │
-│  ├─ Fleet Provider     │  ├─ Fleet Provider    │  ├─ Fleet Provider    │
-│  ├─ Driver Database    │  ├─ Driver Database   │  ├─ Driver Database   │
-│  ├─ Message Templates  │  ├─ Message Templates │  ├─ Message Templates │
-│  ├─ WhatsApp Numbers   │  ├─ WhatsApp Numbers  │  ├─ WhatsApp Numbers  │
-│  └─ Billing Records    │  └─ Billing Records   │  └─ Billing Records   │
-├─────────────────────────────────────────────────────────────────┤
-│                    Shared Infrastructure Layer                   │
-│  • Authentication & Authorization  • Message Broker             │
-│  • Database Connection Pooling     • WhatsApp API Management    │
-│  • Monitoring & Analytics          • Billing & Payment Processing │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 #### Core Multi-Tenancy Features
 
 **Complete Data Isolation**
@@ -94,18 +74,7 @@ FleetChat operates as a sophisticated multi-tenant platform designed to serve un
 - Centralized monitoring and health checks
 
 **Tenant Management**
-```typescript
-interface TenantConfiguration {
-  tenantId: string;
-  companyName: string;
-  platform: 'samsara' | 'geotab';
-  credentials: PlatformCredentials;
-  whatsappNumbers: string[];
-  messageTemplates: CustomTemplate[];
-  billingSettings: BillingConfiguration;
-  features: TenantFeatures;
-}
-```
+Each tenant maintains independent configuration for company details, platform selection (Samsara or Geotab), authentication credentials, dedicated WhatsApp numbers, custom message templates, and billing settings.
 
 ### Fleet Management Platform Abstraction
 
@@ -113,27 +82,7 @@ FleetChat's abstraction layer enables seamless integration with multiple fleet m
 
 #### Universal Fleet Provider Interface
 
-```typescript
-interface IFleetProvider {
-  platform: 'samsara' | 'geotab';
-  
-  // Unified Driver Management
-  getDrivers(): Promise<UnifiedDriver[]>;
-  getDriver(driverId: string): Promise<UnifiedDriver>;
-  
-  // Unified Vehicle Management  
-  getVehicles(): Promise<UnifiedVehicle[]>;
-  getCurrentLocation(vehicleId: string): Promise<UnifiedLocation>;
-  
-  // Unified Event Processing
-  subscribeToEvents(subscription: EventSubscription): Promise<string>;
-  normalizeEventType(platformEvent: string): UnifiedEventType;
-  
-  // Platform Health & Diagnostics
-  getHealthStatus(): Promise<ProviderHealthStatus>;
-  isAuthenticated(): boolean;
-}
-```
+The abstraction layer provides unified methods for driver management, vehicle operations, location services, event processing, and health monitoring across both Samsara and Geotab platforms.
 
 #### Platform-Specific Implementations
 
@@ -153,23 +102,7 @@ interface IFleetProvider {
 
 #### Event Normalization Engine
 
-```typescript
-// Platform-agnostic event processing
-const eventNormalization = {
-  // Samsara → Unified
-  'vehicle.engine.on': 'vehicle.started',
-  'geofence.entry': 'location.geofence.entered',
-  'harsh.braking': 'safety.harsh_braking',
-  
-  // Geotab → Unified  
-  'DeviceStatusInfo': 'vehicle.started',
-  'Trip': 'trip.completed',
-  'ExceptionEvent': 'safety.harsh_braking',
-  
-  // Unified processing for all platforms
-  processEvent: (event: PlatformEvent) => UnifiedEvent
-};
-```
+The system converts platform-specific events into unified event types, enabling consistent processing regardless of source platform. Samsara events like "vehicle.engine.on" and Geotab events like "DeviceStatusInfo" both normalize to "vehicle.started" for consistent workflow processing.
 
 ### Advanced Message Templating System
 
@@ -177,80 +110,11 @@ FleetChat's templated communication system delivers contextual, automated messag
 
 #### Database-Driven Template Engine
 
-```sql
--- Multi-language message template architecture
-CREATE TABLE message_templates (
-  id UUID PRIMARY KEY,
-  tenant_id UUID REFERENCES tenants(id),
-  template_key VARCHAR(100) NOT NULL,
-  language_code VARCHAR(5) NOT NULL,
-  message_type VARCHAR(50) NOT NULL,
-  subject VARCHAR(200),
-  content TEXT NOT NULL,
-  button_options JSONB,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Dynamic variable substitution
-CREATE TABLE template_variables (
-  id UUID PRIMARY KEY,
-  template_id UUID REFERENCES message_templates(id),
-  variable_name VARCHAR(100) NOT NULL,
-  data_source VARCHAR(100) NOT NULL,
-  data_path VARCHAR(200) NOT NULL,
-  format_type VARCHAR(50) DEFAULT 'string'
-);
-```
+The system uses database-stored message templates with multi-language support, enabling tenant-specific customization while maintaining consistency. Templates support dynamic variable substitution from driver, vehicle, route, and event data sources.
 
 #### Intelligent Message Generation
 
-```typescript
-interface MessageTemplate {
-  templateKey: string;
-  languageCode: string;
-  content: string;
-  variables: TemplateVariable[];
-  buttonOptions?: ButtonOption[];
-  conditions?: ConditionalLogic[];
-}
-
-interface TemplateVariable {
-  name: string;
-  dataSource: 'event' | 'driver' | 'vehicle' | 'transport';
-  dataPath: string;
-  formatType: 'string' | 'number' | 'date' | 'currency';
-  defaultValue?: string;
-}
-
-// Example: Route Assignment Template
-const routeAssignmentTemplate = {
-  templateKey: 'route_assignment',
-  languageCode: 'en',
-  content: `🚛 New Route Assignment
-  
-Driver: {{driver.name}}
-Vehicle: {{vehicle.name}}
-Pickup: {{route.pickup.address}}
-Delivery: {{route.delivery.address}}
-Scheduled: {{route.scheduledTime | date:'MM/dd/yyyy HH:mm'}}
-
-Please confirm receipt and estimated departure time.`,
-  
-  buttonOptions: [
-    { id: 'confirm', label: 'Confirm Route', action: 'confirm_route' },
-    { id: 'delay', label: 'Request Delay', action: 'request_delay' },
-    { id: 'issue', label: 'Report Issue', action: 'report_issue' }
-  ],
-  
-  variables: [
-    { name: 'driver.name', dataSource: 'driver', dataPath: 'name' },
-    { name: 'vehicle.name', dataSource: 'vehicle', dataPath: 'name' },
-    { name: 'route.pickup.address', dataSource: 'event', dataPath: 'route.stops[0].address' },
-    { name: 'route.delivery.address', dataSource: 'event', dataPath: 'route.stops[-1].address' },
-    { name: 'route.scheduledTime', dataSource: 'event', dataPath: 'route.startTime', formatType: 'date' }
-  ]
-};
-```
+Message templates support dynamic content with variables from multiple data sources (driver, vehicle, route, event data), interactive button options for driver responses, and conditional logic for contextual messaging. For example, route assignment messages automatically include driver name, vehicle details, pickup/delivery addresses, and scheduled times with confirmation buttons.
 
 #### Contextual Message Workflows
 
@@ -263,30 +127,7 @@ Please confirm receipt and estimated departure time.`,
 6. **Completion Status**: Final status update with next assignment preview
 
 **Safety Event Processing**
-```typescript
-const safetyEventTemplate = {
-  templateKey: 'harsh_braking_event',
-  urgency: 'high',
-  content: `⚠️ Safety Alert - Harsh Braking Event
-  
-Time: {{event.timestamp | date:'MM/dd/yyyy HH:mm'}}
-Location: {{event.location.address}}
-Vehicle: {{vehicle.name}}
-Speed: {{event.speed}} mph
-
-Are you okay? Please respond immediately.`,
-  
-  responseOptions: [
-    { id: 'safe', label: '✅ I\'m Safe', action: 'confirm_safety' },
-    { id: 'assistance', label: '🚨 Need Assistance', action: 'request_help' }
-  ],
-  
-  escalationRules: {
-    noResponseTimeout: 300000, // 5 minutes
-    escalationAction: 'notify_dispatch'
-  }
-};
-```
+Safety events trigger immediate driver wellness checks with timestamp, location, and vehicle details. Drivers can respond with safety confirmation or assistance requests, with automatic supervisor escalation if no response within 5 minutes.
 
 ### Bidirectional Communication Architecture
 
@@ -294,24 +135,7 @@ FleetChat processes both outbound fleet-to-driver communication and inbound driv
 
 #### Response Processing Engine
 
-```typescript
-interface ResponseProcessor {
-  classifyResponse(message: WhatsAppMessage): ResponseClassification;
-  processButtonResponse(buttonId: string, context: MessageContext): Promise<ActionResult>;
-  processTextResponse(text: string, context: MessageContext): Promise<ActionResult>;
-  processLocationShare(location: Location, context: MessageContext): Promise<ActionResult>;
-  processDocumentUpload(document: Document, context: MessageContext): Promise<ActionResult>;
-}
-
-// Intelligent response classification
-const responseClassification = {
-  buttonClick: /^btn_\w+$/,
-  statusUpdate: /^(arrived|loaded|unloaded|delayed|complete)$/i,
-  locationShare: message => message.location && message.location.latitude,
-  documentUpload: message => message.document || message.image,
-  freeText: message => message.text && !message.button_response
-};
-```
+The system intelligently classifies incoming WhatsApp messages as button clicks, status updates, location shares, document uploads, or free text responses. Each response type triggers appropriate actions in the fleet management system with contextual processing based on the original message and current transport state.
 
 #### Fleet Management System Updates
 
@@ -335,302 +159,105 @@ FleetChat's sophisticated templated communication system supports comprehensive 
 
 ### Core Transport Communication Workflows
 
-#### 1. Route Assignment & Management
-
-**Automated Route Notification**
-- Instant driver notification upon route assignment in fleet system
-- Complete route details with pickup/delivery addresses, timelines, and special instructions
-- Interactive confirmation system with estimated departure time collection
+**Route Assignment & Management**
+- Automated driver notifications with complete route details and interactive confirmation
+- Real-time updates for route changes with driver acknowledgment requirements
 - Automatic escalation for non-responsive drivers
 
-**Route Modification Handling**
-- Real-time updates for route changes, delays, or cancellations
-- Driver acknowledgment requirements for critical changes
-- Rerouting instructions with updated navigation details
-- Customer notification coordination through integrated systems
+**Load Management Operations**
+- Pickup and delivery coordination with facility-specific instructions
+- Digital documentation collection (BOL, POD, inspection reports)
+- Load status tracking with automated ETA updates
+- Exception handling for delivery issues
 
-**Example Workflow**:
-```
-Fleet System: Route assigned to Driver A, Vehicle 123
-↓
-FleetChat: Generates contextualized WhatsApp message
-↓ 
-Driver: Receives route details + interactive buttons
-↓
-Driver: Confirms route + provides ETA
-↓
-FleetChat: Updates fleet system with confirmation status
-```
-
-#### 2. Load Management Operations
-
-**Pickup Coordination**
-- Arrival notifications with facility-specific instructions
-- Load documentation collection (BOL, inspection reports)
-- Weight verification and load securement confirmation
-- Departure time logging with next destination ETA
-
-**Delivery Management**
-- Arrival notifications with customer-specific delivery requirements
-- Proof of delivery (POD) collection with digital signatures
-- Delivery confirmation with timestamp and location verification
-- Exception handling for delivery issues or customer unavailability
-
-**Load Status Tracking**
-- Periodic status update requests during transport
-- Load condition monitoring for temperature-sensitive cargo
-- Security confirmations for high-value loads
-- Automated ETA updates based on real-time location data
-
-#### 3. Safety & Compliance Monitoring
-
-**Safety Event Response**
-- Instant notification for harsh braking, acceleration, or cornering events
-- Driver wellness checks with immediate response requirements
-- Incident reporting workflow with photo and description collection
-- Automatic supervisor escalation for critical safety events
-
-**Hours of Service (HOS) Management**
-- Duty status reminders based on driving time limits
-- Rest break notifications with nearby facility recommendations
-- Log book verification requests for paper log operations
-- Violation prevention alerts with mandatory rest period enforcement
-
-**Vehicle Inspection Workflows**
-- Pre-trip and post-trip inspection reminders
-- Digital inspection form completion with photo documentation
-- Defect reporting with severity classification
-- Maintenance scheduling coordination for identified issues
+**Safety & Compliance Monitoring**
+- Instant safety event notifications with driver wellness checks
+- Hours of Service (HOS) management with automated reminders
+- Digital vehicle inspection workflows with photo documentation
+- Incident reporting with automatic supervisor escalation
 
 ### Industry-Specific Use Cases
 
-#### 1. Long-Haul Trucking
-
-**Cross-Country Route Management**
+**Long-Haul Trucking**
 - Multi-day trip coordination with fuel and rest stop planning
-- Weather alert notifications with route adjustment recommendations
-- Customer delivery window confirmations across time zones
-- Load transfer coordination at consolidation terminals
+- Weather alerts and route adjustments
+- Cross-timezone delivery window management
+- Driver support services and roadside assistance coordination
 
-**Driver Support Services**
-- Roadside assistance coordination for breakdowns
-- Fuel optimization recommendations based on current prices
-- Truck stop amenity information (showers, parking, restaurants)
-- Route-specific traffic and construction alerts
-
-#### 2. Local Delivery Operations
-
-**Multi-Stop Route Optimization**
-- Dynamic route adjustment based on traffic and delivery windows
-- Customer availability confirmation for time-sensitive deliveries
-- Package consolidation coordination for efficiency improvements
+**Local Delivery Operations**
+- Multi-stop route optimization with dynamic adjustments
+- Last-mile delivery coordination with customer notifications
+- Failed delivery documentation and rescheduling
 - Return merchandise pickup scheduling
 
-**Last-Mile Delivery Coordination**
-- Customer notification integration with delivery time windows
-- Special delivery instruction handling (gate codes, building access)
-- Failed delivery documentation and rescheduling workflows
-- Signature and photo collection for proof of delivery
-
-#### 3. Specialized Transport
-
-**Refrigerated Transport (Reefer)**
-- Temperature monitoring alerts with immediate response requirements
-- Cold chain documentation with timestamp and temperature logs
-- Equipment malfunction notifications with emergency protocols
-- Customer quality assurance coordination for sensitive products
-
-**Hazardous Materials (HazMat)**
-- Enhanced safety monitoring with specialized event response
-- Regulatory compliance documentation collection
-- Route restriction notifications and alternative planning
-- Emergency response coordination with specialized procedures
-
-**Heavy Haul & Oversized Loads**
-- Permit verification and route compliance monitoring
-- Escort vehicle coordination and communication
-- Bridge and overpass clearance confirmations
-- State-specific regulatory requirement management
+**Specialized Transport**
+- Refrigerated transport with temperature monitoring and cold chain documentation
+- Hazardous materials with enhanced safety monitoring and regulatory compliance
+- Heavy haul operations with permit verification and escort coordination
+- Oversized load management with clearance confirmations
 
 ### Advanced Workflow Scenarios
 
-#### 1. Multi-Modal Transportation
-
-**Intermodal Container Operations**
-- Rail yard arrival and departure coordination
-- Container inspection and damage reporting workflows
-- Chassis assignment and equipment verification
+**Multi-Modal Transportation**
+- Intermodal container operations with rail yard coordination
+- Cross-dock operations with dock door assignments and turnaround optimization
 - Port terminal communication and appointment management
 
-**Cross-Dock Operations**
-- Dock door assignment notifications
-- Loading/unloading sequence coordination
-- Inventory verification and discrepancy reporting
-- Turnaround time optimization through real-time updates
+**Fleet Maintenance Integration**
+- Preventive maintenance scheduling with mileage-based reminders
+- Emergency repair coordination with GPS location sharing
+- Maintenance completion verification and return-to-service authorization
 
-#### 2. Fleet Maintenance Integration
-
-**Preventive Maintenance Scheduling**
-- Mileage-based maintenance reminders
-- Service appointment scheduling and confirmation
-- Maintenance completion verification with photo documentation
-- Vehicle return-to-service authorization workflows
-
-**Emergency Repair Coordination**
-- Breakdown location sharing with GPS coordinates
-- Maintenance provider dispatch coordination
-- Repair authorization and cost approval workflows
-- Alternative vehicle assignment for critical loads
-
-#### 3. Customer Service Integration
-
-**Proactive Customer Communication**
-- Automated delivery time updates based on real-time location
-- Exception notification (delays, route changes, issues)
-- Customer preference management (delivery windows, contact methods)
-- Satisfaction survey deployment post-delivery
-
-**Appointment Management**
-- Delivery window scheduling and confirmation
-- Appointment modification handling
-- No-show documentation and rescheduling
-- Customer feedback collection and issue resolution
+**Customer Service Integration**
+- Proactive customer communication with automated delivery updates
+- Appointment management with scheduling and modification handling
+- Customer feedback collection and satisfaction surveys
 
 ### Emergency Response Workflows
 
-#### 1. Accident Management
+**Accident Management**
+- Automatic emergency service notification with driver status verification
+- Accident scene documentation and insurance claim initiation
+- Vehicle recovery coordination and load transfer arrangements
 
-**Immediate Response Protocol**
-- Automatic emergency service notification for severe events
-- Driver status verification with mandatory response requirements
-- Accident scene documentation with photo and video collection
-- Insurance claim initiation with preliminary information gathering
-
-**Post-Accident Procedures**
-- Medical attention coordination and status updates
-- Vehicle recovery and towing service dispatch
-- Load transfer arrangements for continued delivery
-- Regulatory reporting compliance (DOT, police reports)
-
-#### 2. Security Incidents
-
-**Cargo Theft Prevention**
-- High-risk area notifications with enhanced monitoring
-- Suspicious activity reporting with immediate escalation
-- Load verification at checkpoints and rest stops
-- Security escort coordination for valuable cargo
-
-**Personal Safety Protocols**
-- Panic button integration with immediate response
-- Safe haven location sharing during emergencies
-- Personal threat assessment and response coordination
-- Law enforcement communication and cooperation
+**Security Incidents**
+- Cargo theft prevention with high-risk area notifications
+- Personal safety protocols with panic button integration
+- Law enforcement communication and threat response coordination
 
 ### Analytics & Reporting Integration
 
-#### 1. Performance Monitoring
+**Performance Monitoring**
+- Driver performance analytics with response time tracking and safety correlation
+- Operational efficiency metrics including route optimization and workflow completion rates
+- Cost analysis with communication impact assessment
 
-**Driver Performance Analytics**
-- Communication response time tracking
-- Safety event correlation and trending
-- Efficiency metrics (on-time delivery, fuel consumption)
-- Customer satisfaction scoring based on delivery performance
-
-**Operational Efficiency Metrics**
-- Route optimization effectiveness measurement
-- Communication workflow completion rates
-- Exception handling time and resolution statistics
-- Cost per mile analysis with communication impact assessment
-
-#### 2. Compliance Reporting
-
-**Regulatory Compliance Tracking**
-- DOT inspection readiness verification
-- ELD compliance monitoring and reporting
-- Driver qualification file maintenance
-- Safety score impact analysis and improvement planning
-
-**Customer SLA Monitoring**
-- Delivery time compliance tracking
-- Communication requirement fulfillment
-- Service level agreement performance reporting
-- Customer retention correlation with communication effectiveness
+**Compliance Reporting**
+- Regulatory compliance tracking for DOT inspections and ELD monitoring
+- Customer SLA monitoring with delivery time compliance and service level reporting
+- Safety score analysis and improvement planning
 
 ### Platform-Specific Optimizations
 
-#### Samsara-Optimized Workflows
+**Samsara-Optimized Workflows**
+- Real-time event processing with instant geofence notifications and route deviation detection
+- Advanced route management with dynamic optimization and fuel-efficient routing
 
-**Real-Time Event Processing**
-- Instant geofence entry/exit notifications
-- Vehicle diagnostic alert immediate response
-- Route deviation detection and correction
-- Safety score improvement coaching
-
-**Advanced Route Management**
-- Dynamic route optimization based on traffic
-- Fuel-efficient routing recommendations
-- Customer delivery window optimization
-- Multi-stop sequence planning
-
-#### Geotab-Optimized Workflows
-
-**Comprehensive Diagnostics Integration**
-- Engine fault code interpretation and response
-- Maintenance need prediction and scheduling
-- Fuel efficiency coaching and recommendations
-- Vehicle health monitoring and preventive care
-
-**Enterprise Analytics Integration**
-- Fleet-wide performance benchmarking
-- Driver comparison and coaching opportunities
-- Cost center analysis and optimization
-- Environmental impact tracking and reporting
+**Geotab-Optimized Workflows**
+- Comprehensive diagnostics integration with fault code interpretation and maintenance prediction
+- Enterprise analytics with fleet-wide benchmarking and environmental impact tracking
 
 ### Integration Ecosystem
 
-#### Third-Party System Integrations
+**Third-Party System Integrations**
+- Transportation Management Systems (TMS) for load routing and freight matching
+- Enterprise Resource Planning (ERP) for inventory and financial system synchronization
+- Customer Relationship Management (CRM) for communication history and service escalation
 
-**Transportation Management Systems (TMS)**
-- Load tender acceptance and routing
-- Freight matching and assignment
-- Invoice generation and payment processing
-- Customer portal integration
-
-**Enterprise Resource Planning (ERP)**
-- Inventory management integration
-- Financial system synchronization
-- Human resources coordination
-- Supply chain visibility enhancement
-
-**Customer Relationship Management (CRM)**
-- Customer communication history tracking
-- Service issue escalation and resolution
-- Account management coordination
-- Sales opportunity identification
-
-### Future Use Case Expansion
-
-#### Emerging Technologies
-
-**Autonomous Vehicle Preparation**
-- Remote monitoring and intervention protocols
-- Passenger communication for autonomous passenger transport
-- Cargo verification for unmanned delivery systems
-- Emergency override and manual intervention procedures
-
-**IoT Sensor Integration**
-- Temperature, humidity, and environmental monitoring
-- Load securement and shifting detection
-- Tire pressure and vehicle health monitoring
-- Predictive maintenance based on sensor data
-
-**Artificial Intelligence Enhancement**
-- Predictive routing based on historical data
-- Intelligent message timing optimization
-- Automated response classification and routing
-- Personalized driver coaching and feedback
-
-This comprehensive use case framework demonstrates FleetChat's versatility across the transportation industry while maintaining consistent, reliable communication workflows that improve operational efficiency and driver satisfaction.
+**Future Use Case Expansion**
+- Autonomous vehicle preparation with remote monitoring and intervention protocols
+- IoT sensor integration for environmental monitoring and predictive maintenance
+- Artificial intelligence enhancement for predictive routing and personalized driver coaching
 
 ---
 
