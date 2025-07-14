@@ -329,6 +329,311 @@ const responseClassification = {
 
 ---
 
+## Supported Use Cases & Workflows
+
+FleetChat's sophisticated templated communication system supports comprehensive fleet operation workflows across multiple transportation sectors and operational scenarios.
+
+### Core Transport Communication Workflows
+
+#### 1. Route Assignment & Management
+
+**Automated Route Notification**
+- Instant driver notification upon route assignment in fleet system
+- Complete route details with pickup/delivery addresses, timelines, and special instructions
+- Interactive confirmation system with estimated departure time collection
+- Automatic escalation for non-responsive drivers
+
+**Route Modification Handling**
+- Real-time updates for route changes, delays, or cancellations
+- Driver acknowledgment requirements for critical changes
+- Rerouting instructions with updated navigation details
+- Customer notification coordination through integrated systems
+
+**Example Workflow**:
+```
+Fleet System: Route assigned to Driver A, Vehicle 123
+↓
+FleetChat: Generates contextualized WhatsApp message
+↓ 
+Driver: Receives route details + interactive buttons
+↓
+Driver: Confirms route + provides ETA
+↓
+FleetChat: Updates fleet system with confirmation status
+```
+
+#### 2. Load Management Operations
+
+**Pickup Coordination**
+- Arrival notifications with facility-specific instructions
+- Load documentation collection (BOL, inspection reports)
+- Weight verification and load securement confirmation
+- Departure time logging with next destination ETA
+
+**Delivery Management**
+- Arrival notifications with customer-specific delivery requirements
+- Proof of delivery (POD) collection with digital signatures
+- Delivery confirmation with timestamp and location verification
+- Exception handling for delivery issues or customer unavailability
+
+**Load Status Tracking**
+- Periodic status update requests during transport
+- Load condition monitoring for temperature-sensitive cargo
+- Security confirmations for high-value loads
+- Automated ETA updates based on real-time location data
+
+#### 3. Safety & Compliance Monitoring
+
+**Safety Event Response**
+- Instant notification for harsh braking, acceleration, or cornering events
+- Driver wellness checks with immediate response requirements
+- Incident reporting workflow with photo and description collection
+- Automatic supervisor escalation for critical safety events
+
+**Hours of Service (HOS) Management**
+- Duty status reminders based on driving time limits
+- Rest break notifications with nearby facility recommendations
+- Log book verification requests for paper log operations
+- Violation prevention alerts with mandatory rest period enforcement
+
+**Vehicle Inspection Workflows**
+- Pre-trip and post-trip inspection reminders
+- Digital inspection form completion with photo documentation
+- Defect reporting with severity classification
+- Maintenance scheduling coordination for identified issues
+
+### Industry-Specific Use Cases
+
+#### 1. Long-Haul Trucking
+
+**Cross-Country Route Management**
+- Multi-day trip coordination with fuel and rest stop planning
+- Weather alert notifications with route adjustment recommendations
+- Customer delivery window confirmations across time zones
+- Load transfer coordination at consolidation terminals
+
+**Driver Support Services**
+- Roadside assistance coordination for breakdowns
+- Fuel optimization recommendations based on current prices
+- Truck stop amenity information (showers, parking, restaurants)
+- Route-specific traffic and construction alerts
+
+#### 2. Local Delivery Operations
+
+**Multi-Stop Route Optimization**
+- Dynamic route adjustment based on traffic and delivery windows
+- Customer availability confirmation for time-sensitive deliveries
+- Package consolidation coordination for efficiency improvements
+- Return merchandise pickup scheduling
+
+**Last-Mile Delivery Coordination**
+- Customer notification integration with delivery time windows
+- Special delivery instruction handling (gate codes, building access)
+- Failed delivery documentation and rescheduling workflows
+- Signature and photo collection for proof of delivery
+
+#### 3. Specialized Transport
+
+**Refrigerated Transport (Reefer)**
+- Temperature monitoring alerts with immediate response requirements
+- Cold chain documentation with timestamp and temperature logs
+- Equipment malfunction notifications with emergency protocols
+- Customer quality assurance coordination for sensitive products
+
+**Hazardous Materials (HazMat)**
+- Enhanced safety monitoring with specialized event response
+- Regulatory compliance documentation collection
+- Route restriction notifications and alternative planning
+- Emergency response coordination with specialized procedures
+
+**Heavy Haul & Oversized Loads**
+- Permit verification and route compliance monitoring
+- Escort vehicle coordination and communication
+- Bridge and overpass clearance confirmations
+- State-specific regulatory requirement management
+
+### Advanced Workflow Scenarios
+
+#### 1. Multi-Modal Transportation
+
+**Intermodal Container Operations**
+- Rail yard arrival and departure coordination
+- Container inspection and damage reporting workflows
+- Chassis assignment and equipment verification
+- Port terminal communication and appointment management
+
+**Cross-Dock Operations**
+- Dock door assignment notifications
+- Loading/unloading sequence coordination
+- Inventory verification and discrepancy reporting
+- Turnaround time optimization through real-time updates
+
+#### 2. Fleet Maintenance Integration
+
+**Preventive Maintenance Scheduling**
+- Mileage-based maintenance reminders
+- Service appointment scheduling and confirmation
+- Maintenance completion verification with photo documentation
+- Vehicle return-to-service authorization workflows
+
+**Emergency Repair Coordination**
+- Breakdown location sharing with GPS coordinates
+- Maintenance provider dispatch coordination
+- Repair authorization and cost approval workflows
+- Alternative vehicle assignment for critical loads
+
+#### 3. Customer Service Integration
+
+**Proactive Customer Communication**
+- Automated delivery time updates based on real-time location
+- Exception notification (delays, route changes, issues)
+- Customer preference management (delivery windows, contact methods)
+- Satisfaction survey deployment post-delivery
+
+**Appointment Management**
+- Delivery window scheduling and confirmation
+- Appointment modification handling
+- No-show documentation and rescheduling
+- Customer feedback collection and issue resolution
+
+### Emergency Response Workflows
+
+#### 1. Accident Management
+
+**Immediate Response Protocol**
+- Automatic emergency service notification for severe events
+- Driver status verification with mandatory response requirements
+- Accident scene documentation with photo and video collection
+- Insurance claim initiation with preliminary information gathering
+
+**Post-Accident Procedures**
+- Medical attention coordination and status updates
+- Vehicle recovery and towing service dispatch
+- Load transfer arrangements for continued delivery
+- Regulatory reporting compliance (DOT, police reports)
+
+#### 2. Security Incidents
+
+**Cargo Theft Prevention**
+- High-risk area notifications with enhanced monitoring
+- Suspicious activity reporting with immediate escalation
+- Load verification at checkpoints and rest stops
+- Security escort coordination for valuable cargo
+
+**Personal Safety Protocols**
+- Panic button integration with immediate response
+- Safe haven location sharing during emergencies
+- Personal threat assessment and response coordination
+- Law enforcement communication and cooperation
+
+### Analytics & Reporting Integration
+
+#### 1. Performance Monitoring
+
+**Driver Performance Analytics**
+- Communication response time tracking
+- Safety event correlation and trending
+- Efficiency metrics (on-time delivery, fuel consumption)
+- Customer satisfaction scoring based on delivery performance
+
+**Operational Efficiency Metrics**
+- Route optimization effectiveness measurement
+- Communication workflow completion rates
+- Exception handling time and resolution statistics
+- Cost per mile analysis with communication impact assessment
+
+#### 2. Compliance Reporting
+
+**Regulatory Compliance Tracking**
+- DOT inspection readiness verification
+- ELD compliance monitoring and reporting
+- Driver qualification file maintenance
+- Safety score impact analysis and improvement planning
+
+**Customer SLA Monitoring**
+- Delivery time compliance tracking
+- Communication requirement fulfillment
+- Service level agreement performance reporting
+- Customer retention correlation with communication effectiveness
+
+### Platform-Specific Optimizations
+
+#### Samsara-Optimized Workflows
+
+**Real-Time Event Processing**
+- Instant geofence entry/exit notifications
+- Vehicle diagnostic alert immediate response
+- Route deviation detection and correction
+- Safety score improvement coaching
+
+**Advanced Route Management**
+- Dynamic route optimization based on traffic
+- Fuel-efficient routing recommendations
+- Customer delivery window optimization
+- Multi-stop sequence planning
+
+#### Geotab-Optimized Workflows
+
+**Comprehensive Diagnostics Integration**
+- Engine fault code interpretation and response
+- Maintenance need prediction and scheduling
+- Fuel efficiency coaching and recommendations
+- Vehicle health monitoring and preventive care
+
+**Enterprise Analytics Integration**
+- Fleet-wide performance benchmarking
+- Driver comparison and coaching opportunities
+- Cost center analysis and optimization
+- Environmental impact tracking and reporting
+
+### Integration Ecosystem
+
+#### Third-Party System Integrations
+
+**Transportation Management Systems (TMS)**
+- Load tender acceptance and routing
+- Freight matching and assignment
+- Invoice generation and payment processing
+- Customer portal integration
+
+**Enterprise Resource Planning (ERP)**
+- Inventory management integration
+- Financial system synchronization
+- Human resources coordination
+- Supply chain visibility enhancement
+
+**Customer Relationship Management (CRM)**
+- Customer communication history tracking
+- Service issue escalation and resolution
+- Account management coordination
+- Sales opportunity identification
+
+### Future Use Case Expansion
+
+#### Emerging Technologies
+
+**Autonomous Vehicle Preparation**
+- Remote monitoring and intervention protocols
+- Passenger communication for autonomous passenger transport
+- Cargo verification for unmanned delivery systems
+- Emergency override and manual intervention procedures
+
+**IoT Sensor Integration**
+- Temperature, humidity, and environmental monitoring
+- Load securement and shifting detection
+- Tire pressure and vehicle health monitoring
+- Predictive maintenance based on sensor data
+
+**Artificial Intelligence Enhancement**
+- Predictive routing based on historical data
+- Intelligent message timing optimization
+- Automated response classification and routing
+- Personalized driver coaching and feedback
+
+This comprehensive use case framework demonstrates FleetChat's versatility across the transportation industry while maintaining consistent, reliable communication workflows that improve operational efficiency and driver satisfaction.
+
+---
+
 ## Business Model & Revenue Streams
 
 ### Primary Revenue Model
