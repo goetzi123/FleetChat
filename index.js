@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 
@@ -35,10 +36,12 @@ app.get('/', (req, res) => {
 
 // Fleet.Chat website with integrated demo
 app.get('/fleet', (req, res) => {
-  const fs = require('fs');
-  const path = require('path');
   const filePath = path.join(__dirname, 'fleet.chat', 'index.html');
-  res.sendFile(filePath);
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).send('Fleet.Chat website not found');
+  }
 });
 
 // Serve static files from fleet.chat directory
