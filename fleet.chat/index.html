@@ -750,6 +750,7 @@
                 <button class="tab-button" data-tab="why">Why</button>
                 <button class="tab-button" data-tab="how">How</button>
                 <button class="tab-button" data-tab="pricing">Pricing</button>
+                <button class="tab-button" data-tab="demo">Demo</button>
             </div>
             
             <!-- Tab Content -->
@@ -926,6 +927,106 @@
                         </p>
                     </div>
                 </div>
+                
+                <!-- Demo Tab -->
+                <div id="demo-tab" class="tab-panel">
+                    <h2 class="section-title">FleetChat Demo - Live Event Propagation</h2>
+                    <p class="section-subtitle">Experience real-time communication between Samsara fleet events and WhatsApp driver interface</p>
+                    
+                    <div style="background: #f0f9ff; border: 1px solid #0ea5e9; padding: 15px; border-radius: 8px; margin-bottom: 2rem; text-align: center;">
+                        <strong>✅ Comprehensive Samsara Use Cases Active</strong><br>
+                        <small>Supporting 10 core transport workflows with 30+ interactive response types</small>
+                    </div>
+                    
+                    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                        <!-- Samsara Fleet Events Panel -->
+                        <div style="flex: 1; min-width: 300px; background: white; border-radius: 12px; padding: 1.5rem; border-left: 4px solid #1e40af; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);">
+                            <h3 style="color: #1e40af; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                🚛 Samsara Fleet Events
+                            </h3>
+                            
+                            <div style="display: grid; gap: 0.75rem;">
+                                <button class="demo-event-btn" onclick="triggerEvent('route')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>🚚 Route Assignment</strong><br>
+                                    <small style="color: #6b7280;">New delivery route assigned</small>
+                                </button>
+                                
+                                <button class="demo-event-btn" onclick="triggerEvent('pickup')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>📋 Pickup Reminder</strong><br>
+                                    <small style="color: #6b7280;">Pickup time approaching</small>
+                                </button>
+                                
+                                <button class="demo-event-btn" onclick="triggerEvent('delivery')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>📦 Delivery Notification</strong><br>
+                                    <small style="color: #6b7280;">Arrived at delivery location</small>
+                                </button>
+                                
+                                <button class="demo-event-btn" onclick="triggerEvent('safety')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>⚠️ Safety Event</strong><br>
+                                    <small style="color: #6b7280;">Harsh braking detected</small>
+                                </button>
+                                
+                                <button class="demo-event-btn" onclick="triggerEvent('inspection')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>🔍 Vehicle Inspection</strong><br>
+                                    <small style="color: #6b7280;">Pre-trip inspection required</small>
+                                </button>
+                                
+                                <button class="demo-event-btn" onclick="triggerEvent('maintenance')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>🔧 Maintenance Alert</strong><br>
+                                    <small style="color: #6b7280;">Vehicle needs service</small>
+                                </button>
+                                
+                                <button class="demo-event-btn" onclick="triggerEvent('geofence')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>📍 Geofence Entry</strong><br>
+                                    <small style="color: #6b7280;">Entered customer location</small>
+                                </button>
+                                
+                                <button class="demo-event-btn" onclick="triggerEvent('hos')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>⏰ Hours of Service</strong><br>
+                                    <small style="color: #6b7280;">Break time reminder</small>
+                                </button>
+                                
+                                <button class="demo-event-btn" onclick="triggerEvent('emergency')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>🚨 Emergency Response</strong><br>
+                                    <small style="color: #6b7280;">Emergency situation detected</small>
+                                </button>
+                                
+                                <button class="demo-event-btn" onclick="triggerEvent('load_status')" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f8f9fa; cursor: pointer; text-align: left; transition: all 0.2s;">
+                                    <strong>📊 Load Status</strong><br>
+                                    <small style="color: #6b7280;">Load condition check</small>
+                                </button>
+                            </div>
+                            
+                            <div id="demo-status" style="margin-top: 1rem; padding: 12px; background: #f0f0f0; border-radius: 6px;">
+                                <strong>Status:</strong> <span id="demo-status-text">Ready for events</span>
+                            </div>
+                        </div>
+                        
+                        <!-- WhatsApp Driver Interface Panel -->
+                        <div style="flex: 1; min-width: 300px; background: white; border-radius: 12px; padding: 1.5rem; border-left: 4px solid #059669; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);">
+                            <h3 style="color: #059669; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                💬 WhatsApp Driver Interface
+                            </h3>
+                            
+                            <div id="demo-chat" style="height: 400px; border: 1px solid #e5e7eb; padding: 1rem; background: #f9fafb; overflow-y: auto; margin-bottom: 1rem; border-radius: 8px;">
+                                <div style="text-align: center; color: #6b7280; padding: 80px 0;">
+                                    Click any Samsara event to see real-time WhatsApp communication
+                                </div>
+                            </div>
+                            
+                            <div id="demo-response-area" style="display: none;">
+                                <div style="background: #f0f9ff; border: 1px solid #0ea5e9; padding: 10px; border-radius: 6px; margin-bottom: 10px;">
+                                    <small><strong>Driver Response Options:</strong></small>
+                                </div>
+                                <div id="demo-response-buttons"></div>
+                            </div>
+                            
+                            <button onclick="clearDemo()" style="width: 100%; padding: 10px; background: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px;">
+                                Clear Chat
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1029,6 +1130,185 @@
                     document.getElementById(targetTab + '-tab').classList.add('active');
                 });
             });
+        });
+
+        // Demo functionality
+        function triggerEvent(eventType) {
+            console.log('FleetChat Demo - Triggering event:', eventType);
+            
+            const eventMap = {
+                'route': {
+                    title: 'Route Assignment',
+                    message: 'Hi John! 📍 New route assigned: Pickup from Warehouse A at 2:00 PM, deliver to Customer B by 5:00 PM. Route includes 3 stops. Total distance: 45 miles. Please confirm receipt.',
+                    responses: ['✅ Route Confirmed', '📞 Need to Call Dispatch', '⏰ Time Adjustment Needed']
+                },
+                'pickup': {
+                    title: 'Pickup Reminder',
+                    message: 'Reminder: Pickup scheduled in 30 minutes at Warehouse A. 📋 Documentation required: Bill of Lading, Driver License verification. Contact: Mike Johnson (555-0123)',
+                    responses: ['✅ On My Way', '⏰ Running Late (15 min)', '🚧 Traffic Issue', '📞 Need Assistance']
+                },
+                'delivery': {
+                    title: 'Delivery Notification',
+                    message: 'Arrived at Customer B delivery location. 📦 Ready to unload. Please confirm delivery authorization and provide any special instructions.',
+                    responses: ['✅ Ready to Unload', '🏢 At Customer Office', '📋 Need POD Instructions', '🚛 Dock Assignment Needed']
+                },
+                'safety': {
+                    title: 'Safety Event',
+                    message: '⚠️ Safety Alert: Harsh braking detected at 2:15 PM on Highway 101. Please confirm you are safe and provide incident details if necessary.',
+                    responses: ['✅ All Good - Traffic Stop', '⚠️ Minor Incident', '🚗 Vehicle Issue', '📞 Need Assistance']
+                },
+                'inspection': {
+                    title: 'Vehicle Inspection',
+                    message: '🔍 Pre-trip inspection required before departure. Please complete vehicle safety checklist: tires, brakes, lights, mirrors, and load securement.',
+                    responses: ['✅ Inspection Complete', '⚠️ Found Issues', '🔧 Maintenance Needed', '📋 Help with Checklist']
+                },
+                'maintenance': {
+                    title: 'Maintenance Alert',
+                    message: '🔧 Vehicle maintenance due: Engine service required within 500 miles. Current mileage: 89,500. Please schedule service appointment.',
+                    responses: ['✅ Will Schedule Today', '⏰ After Current Route', '🚛 Need Replacement Vehicle', '📞 Call Maintenance']
+                },
+                'geofence': {
+                    title: 'Geofence Entry',
+                    message: '📍 You have entered Customer B location. Please proceed to dock 7 for unloading. Contact warehouse supervisor John at ext. 245 upon arrival.',
+                    responses: ['✅ Proceeding to Dock 7', '🚛 Looking for Dock', '📞 Calling John', '⏰ Waiting for Instructions']
+                },
+                'hos': {
+                    title: 'Hours of Service',
+                    message: '⏰ Hours of Service reminder: You have 2 hours remaining on duty. Break required in 1 hour 30 minutes. Nearest rest areas: Mile Marker 45 (15 min), Truck Stop Plaza (25 min).',
+                    responses: ['✅ Heading to Rest Area', '🚛 Will Stop at Truck Plaza', '⏰ Finishing Current Delivery', '📋 Need HOS Extension']
+                },
+                'emergency': {
+                    title: 'Emergency Response',
+                    message: '🚨 Emergency situation detected. GPS shows stopped position on Highway 101. Please respond immediately to confirm your status and location.',
+                    responses: ['✅ All Good - Planned Stop', '⚠️ Minor Vehicle Issue', '🚨 Need Emergency Help', '🚛 Breakdown - Need Tow']
+                },
+                'load_status': {
+                    title: 'Load Status',
+                    message: '📊 Load status check required. Please confirm: 1) Cargo secure 2) Temperature normal 3) No damage visible. Take photos if any issues detected.',
+                    responses: ['✅ Load Secure & Good', '📸 Sending Photos', '⚠️ Temperature Issue', '🔧 Securement Problem']
+                }
+            };
+
+            const event = eventMap[eventType];
+            if (!event) return;
+
+            // Update status
+            document.getElementById('demo-status-text').textContent = `Processing ${event.title}...`;
+            
+            // Add message to chat
+            addWhatsAppMessage(event.message, 'fleet');
+            
+            // Show response options after a delay
+            setTimeout(() => {
+                showResponseOptions(event.responses, eventType);
+                document.getElementById('demo-status-text').textContent = 'Waiting for driver response';
+            }, 1000);
+        }
+
+        function addWhatsAppMessage(message, sender) {
+            const chat = document.getElementById('demo-chat');
+            const messageDiv = document.createElement('div');
+            messageDiv.style.marginBottom = '15px';
+            
+            if (sender === 'fleet') {
+                messageDiv.innerHTML = `
+                    <div style="text-align: right;">
+                        <div style="display: inline-block; max-width: 80%; padding: 12px; border-radius: 12px; background: #1e40af; color: white;">
+                            ${message}
+                        </div>
+                        <div style="font-size: 0.75rem; color: #6b7280; margin-top: 4px;">Fleet.Chat System</div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div style="text-align: left;">
+                        <div style="display: inline-block; max-width: 80%; padding: 12px; border-radius: 12px; background: white; border: 1px solid #d1d5db;">
+                            ${message}
+                        </div>
+                        <div style="font-size: 0.75rem; color: #6b7280; margin-top: 4px;">Driver Response</div>
+                    </div>
+                `;
+            }
+            
+            chat.appendChild(messageDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function showResponseOptions(responses, eventType) {
+            const responseArea = document.getElementById('demo-response-area');
+            const responseButtons = document.getElementById('demo-response-buttons');
+            
+            responseButtons.innerHTML = '';
+            responses.forEach(response => {
+                const button = document.createElement('button');
+                button.innerHTML = response;
+                button.style.cssText = 'width: 100%; padding: 8px; margin-bottom: 4px; background: #059669; color: white; border: none; border-radius: 4px; cursor: pointer; text-align: left;';
+                button.onmouseover = () => button.style.background = '#047857';
+                button.onmouseout = () => button.style.background = '#059669';
+                button.onclick = () => sendDriverResponse(response, eventType);
+                responseButtons.appendChild(button);
+            });
+            
+            responseArea.style.display = 'block';
+        }
+
+        function sendDriverResponse(response, eventType) {
+            // Add driver response to chat
+            addWhatsAppMessage(response, 'driver');
+            
+            // Hide response options
+            document.getElementById('demo-response-area').style.display = 'none';
+            
+            // Show processing status
+            setTimeout(() => {
+                const statusUpdate = getStatusUpdate(eventType, response);
+                updateSamsaraStatus(statusUpdate);
+                document.getElementById('demo-status-text').textContent = 'Event completed - Ready for next event';
+            }, 500);
+        }
+
+        function getStatusUpdate(eventType, response) {
+            const updates = {
+                'route': 'Transport status updated: Route confirmed, ETA calculated',
+                'pickup': 'Transport status updated: Driver en route to pickup location',
+                'delivery': 'Transport status updated: Delivery in progress',
+                'safety': 'Transport status updated: Safety event resolved',
+                'inspection': 'Transport status updated: Pre-trip inspection logged',
+                'maintenance': 'Transport status updated: Maintenance scheduled',
+                'geofence': 'Transport status updated: Arrived at customer location',
+                'hos': 'Transport status updated: HOS break scheduled',
+                'emergency': 'Transport status updated: Emergency status resolved',
+                'load_status': 'Transport status updated: Load condition verified'
+            };
+            return updates[eventType] || 'Transport status updated';
+        }
+
+        function updateSamsaraStatus(message) {
+            addWhatsAppMessage(`✅ ${message}`, 'fleet');
+        }
+
+        function clearDemo() {
+            const chat = document.getElementById('demo-chat');
+            chat.innerHTML = `
+                <div style="text-align: center; color: #6b7280; padding: 80px 0;">
+                    Click any Samsara event to see real-time WhatsApp communication
+                </div>
+            `;
+            document.getElementById('demo-response-area').style.display = 'none';
+            document.getElementById('demo-status-text').textContent = 'Ready for events';
+        }
+
+        // Add demo button hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .demo-event-btn:hover {
+                    background: #e9ecef !important;
+                    transform: translateY(-1px);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+            `;
+            document.head.appendChild(style);
         });
 
         // Smooth scrolling for anchor links

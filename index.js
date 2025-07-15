@@ -28,10 +28,21 @@ function requireAdminAuth(req, res, next) {
   next();
 }
 
-// Default route serves demo for preview
+// Default route serves Fleet.Chat website with integrated demo
 app.get('/', (req, res) => {
-  res.redirect('/demo');
+  res.redirect('/fleet');
 });
+
+// Fleet.Chat website with integrated demo
+app.get('/fleet', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  const filePath = path.join(__dirname, 'fleet.chat', 'index.html');
+  res.sendFile(filePath);
+});
+
+// Serve static files from fleet.chat directory
+app.use('/fleet.chat', express.static(path.join(__dirname, 'fleet.chat')));
 
 // Demo route - WORKING VERSION
 app.get('/demo', (req, res) => {
