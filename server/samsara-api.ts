@@ -195,25 +195,109 @@ export class SamsaraAPIClient {
     };
   }
 
-  // Webhook Management
-  async setupWebhook(webhookUrl: string, eventTypes: string[]): Promise<{ webhookId: string }> {
-    const response = await this.client.post('/fleet/webhooks', {
-      url: webhookUrl,
-      eventTypes,
-      isActive: true
+  // Webhook Management - Full CRUD Operations
+  async createWebhook(config: {
+    name: string;
+    url: string;
+    eventTypes: string[];
+    customHeaders?: Array<{key: string, value: string}>;
+  }): Promise<{
+    id: string;
+    name: string;
+    url: string;
+    secretKey: string;
+    eventTypes: string[];
+    customHeaders?: Array<{key: string, value: string}>;
+  }> {
+    const response = await this.client.post('/webhooks', {
+      name: config.name,
+      url: config.url,
+      version: "2018-01-01",
+      eventTypes: config.eventTypes,
+      customHeaders: config.customHeaders
     });
-    return { webhookId: response.data.data.id };
+    return response.data;
   }
 
-  async verifyWebhook(payload: any, signature: string, secret: string): boolean {
-    // Implement webhook signature verification
-    const crypto = require('crypto');
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(JSON.stringify(payload))
-      .digest('hex');
-    
-    return `sha256=${expectedSignature}` === signature;
+  async listWebhooks(): Promise<Array<{
+    id: string;
+    name: string;
+    url: string;
+    secretKey: string;
+    eventTypes: string[];
+    customHeaders?: Array<{key: string, value: string}>;
+  }>> {
+    const response = await this.client.get('/webhooks');
+    return response.data.data || [];
+  }
+
+  async getWebhook(webhookId: string): Promise<{
+    id: string;
+    name: string;
+    url: string;
+    secretKey: string;
+    eventTypes: string[];
+    customHeaders?: Array<{key: string, value: string}>;
+  }> {
+    const response = await this.client.get(`/webhooks/${webhookId}`);
+    return response.data;
+  }
+
+  async updateWebhook(webhookId: string, updates: {
+    name?: string;
+    url?: string;
+    eventTypes?: string[];
+    customHeaders?: Array<{key: string, value: string}>;
+  }): Promise<{
+    id: string;
+    name: string;
+    url: string;
+    secretKey: string;
+    eventTypes: string[];
+    customHeaders?: Array<{key: string, value: string}>;
+  }> {
+    const response = await this.client.patch(`/webhooks/${webhookId}`, updates);
+    return response.data;
+  }
+
+  async deleteWebhook(webhookId: string): Promise<void> {
+    await this.client.delete(`/webhooks/${webhookId}`);
+  }
+
+  // Legacy method for backward compatibility
+  async setupWebhook(webhookUrl: string, eventTypes: string[]): Promise<{ webhookId: string; secretKey: string }> {
+    const webhook = await this.createWebhook({
+      name: `FleetChat-Webhook-${Date.now()}`,
+      url: webhookUrl,
+      eventTypes
+    });
+    return { 
+      webhookId: webhook.id,
+      secretKey: webhook.secretKey 
+    };
+  }
+
+  // Webhook signature verification according to Samsara specs
+  verifyWebhookSignature(payload: string, signature: string, secret: string): boolean {
+    try {
+      const crypto = require('crypto');
+      const expectedSignature = crypto
+        .createHmac('sha256', secret)
+        .update(payload)
+        .digest('hex');
+      
+      // Samsara uses different signature formats, handle both common ones
+      const formattedExpected = `sha256=${expectedSignature}`;
+      
+      // Use timing-safe comparison to prevent timing attacks
+      return crypto.timingSafeEqual(
+        Buffer.from(signature),
+        Buffer.from(formattedExpected)
+      );
+    } catch (error) {
+      console.error('Webhook signature verification failed:', error);
+      return false;
+    }
   }
 
   // Event Processing

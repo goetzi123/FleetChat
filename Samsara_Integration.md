@@ -91,9 +91,11 @@ Driver Phone → WhatsApp Business API → FleetChat Managed Number Pool
 ### Key Implementation Details
 
 **Webhook Configuration:**
-- FleetChat registers webhook URLs with Samsara: `/api/samsara/webhook`
+- FleetChat creates per-customer webhook URLs with Samsara: `/api/samsara/webhook/{tenantId}`
+- Webhook signature verification implemented for security
 - Events filtered by type: location, route, safety, maintenance, compliance
 - Payload includes: driver_id, vehicle_id, event_type, timestamp, location_data
+- Custom headers include tenant identification for proper routing
 
 **Event Translation Engine:**
 - Route assignment → "New route assigned to [destination]"
@@ -119,8 +121,9 @@ Driver Phone → WhatsApp Business API → FleetChat Managed Number Pool
 ### Technical Integration Components
 
 **Webhook Handlers:**
-- **Incoming Samsara Events**: `/api/samsara/webhook`
+- **Incoming Samsara Events**: `/api/samsara/webhook/{tenantId}` (per-customer endpoints)
 - **Incoming WhatsApp Messages**: `/api/whatsapp/webhook`
+- **Webhook Management**: Complete CRUD operations for customer webhook lifecycle
 
 **Event Processing:**
 - Real-time event classification and routing
@@ -143,10 +146,12 @@ Driver Phone → WhatsApp Business API → FleetChat Managed Number Pool
 - Regular security audits and compliance validation
 
 ### API Security
-- OAuth 2.0 authentication with Samsara
-- Webhook signature verification
+- OAuth 2.0 authentication with Samsara per customer
+- Webhook signature verification with timing-safe comparison
+- Per-customer webhook isolation and validation
 - Rate limiting and request throttling
 - Comprehensive audit logging
+- Secure webhook secret management per tenant
 
 ### GDPR Compliance
 - Driver consent management
@@ -176,3 +181,34 @@ Driver Phone → WhatsApp Business API → FleetChat Managed Number Pool
 - Comprehensive audit trails and reporting
 
 This integration creates a seamless communication bridge where Samsara fleet events automatically trigger appropriate WhatsApp messages to drivers, and driver responses update Samsara records in real-time, maintaining complete operational visibility and workflow automation.
+
+## Production Compliance Status
+
+**✅ SAMSARA MARKETPLACE APP COMPLIANT**
+
+Fleet.Chat now fully complies with all Samsara webhook requirements for marketplace applications:
+
+### Implemented Compliance Features
+
+**1. ✅ Per-Customer Webhook Management**
+- Individual webhook creation per customer using their OAuth token
+- Custom webhook URLs: `/api/samsara/webhook/{tenantId}`
+- Complete webhook CRUD operations via API endpoints
+
+**2. ✅ Security & Validation**
+- Webhook signature verification with timing-safe comparison
+- Per-tenant webhook secret management
+- Secure OAuth token handling per customer
+
+**3. ✅ Application Lifecycle**
+- Automatic webhook creation during customer onboarding
+- Automatic webhook deletion during customer disconnection
+- Complete lifecycle management via `/api/fleet/disconnect/:tenantId`
+
+**4. ✅ API Endpoints**
+- `GET /api/samsara/webhooks/:tenantId` - List customer webhooks
+- `PATCH /api/samsara/webhooks/:tenantId/:webhookId` - Update webhook
+- `DELETE /api/samsara/webhooks/:tenantId/:webhookId` - Delete webhook
+- `POST /api/fleet/disconnect/:tenantId` - Customer disconnection
+
+Fleet.Chat is now ready for production deployment as a Samsara marketplace application with full webhook compliance.

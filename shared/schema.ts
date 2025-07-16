@@ -96,7 +96,10 @@ export const tenants = pgTable("tenants", {
   // Samsara Configuration
   samsaraApiToken: text("samsara_api_token"), // encrypted
   samsaraGroupId: varchar("samsara_group_id", { length: 255 }),
+  samsaraWebhookId: varchar("samsara_webhook_id", { length: 255 }),
   samsaraWebhookSecret: text("samsara_webhook_secret"), // encrypted
+  samsaraWebhookUrl: varchar("samsara_webhook_url", { length: 500 }),
+  webhookEventTypes: jsonb("webhook_event_types").$type<string[]>().default('["DriverCreated","DriverUpdated","LocationUpdate","RouteStarted","RouteCompleted"]'),
   
   // WhatsApp Configuration (managed by FleetChat)
   whatsappPhoneNumber: varchar("whatsapp_phone_number", { length: 20 }),

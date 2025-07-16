@@ -11,6 +11,69 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_fo
   apiVersion: "2023-10-16",
 });
 
+// Application Lifecycle Management for Samsara Webhook Compliance
+async function createCustomerWebhook(tenantId: string, oauthToken: string, companyName: string): Promise<void> {
+  try {
+    const samsaraClient = new SamsaraAPIClient(oauthToken);
+    const webhookUrl = `${process.env.BASE_URL || 'https://fleet-chat.replit.app'}/api/samsara/webhook/${tenantId}`;
+    
+    const webhook = await samsaraClient.createWebhook({
+      name: `FleetChat-${companyName}-${tenantId}`,
+      url: webhookUrl,
+      eventTypes: [
+        "DriverCreated", 
+        "DriverUpdated", 
+        "VehicleLocationUpdate", 
+        "RouteStarted", 
+        "RouteCompleted",
+        "GeofenceEntered",
+        "GeofenceExited",
+        "DocumentUploaded"
+      ],
+      customHeaders: [
+        { key: "x-FleetChat-Tenant-ID", value: tenantId }
+      ]
+    });
+
+    // Update tenant with webhook details
+    await fleetChatStorage.updateTenant(tenantId, {
+      samsaraWebhookId: webhook.id,
+      samsaraWebhookSecret: webhook.secretKey,
+      samsaraWebhookUrl: webhookUrl
+    });
+
+    console.log(`Created webhook ${webhook.id} for tenant ${tenantId}`);
+  } catch (error) {
+    console.error(`Failed to create webhook for tenant ${tenantId}:`, error);
+    throw error;
+  }
+}
+
+async function deleteCustomerWebhook(tenantId: string): Promise<void> {
+  try {
+    const tenant = await fleetChatStorage.getTenantById(tenantId);
+    if (!tenant?.samsaraWebhookId || !tenant.samsaraApiToken) {
+      console.warn(`No webhook to delete for tenant ${tenantId}`);
+      return;
+    }
+
+    const samsaraClient = new SamsaraAPIClient(tenant.samsaraApiToken);
+    await samsaraClient.deleteWebhook(tenant.samsaraWebhookId);
+
+    // Clear webhook details from tenant
+    await fleetChatStorage.updateTenant(tenantId, {
+      samsaraWebhookId: null,
+      samsaraWebhookSecret: null,
+      samsaraWebhookUrl: null
+    });
+
+    console.log(`Deleted webhook ${tenant.samsaraWebhookId} for tenant ${tenantId}`);
+  } catch (error) {
+    console.error(`Failed to delete webhook for tenant ${tenantId}:`, error);
+    throw error;
+  }
+}
+
 export async function registerFleetChatRoutes(app: Express): Promise<Server> {
   // Health check endpoint
   app.get("/api/health", async (req, res) => {
@@ -71,16 +134,9 @@ export async function registerFleetChatRoutes(app: Express): Promise<Server> {
         whatsappBusinessAccountId: whatsappAssignment.businessAccountId
       });
 
-      // Setup Samsara webhooks
+      // Setup per-customer Samsara webhook
       try {
-        const webhookUrl = `${req.protocol}://${req.hostname}/api/samsara/webhook`;
-        await samsaraClient.setupWebhook(webhookUrl, [
-          'vehicle.location.updated',
-          'route.started',
-          'route.completed',
-          'geofence.entered',
-          'document.uploaded'
-        ]);
+        await createCustomerWebhook(tenant.id, setupData.samsaraApiToken, setupData.companyName);
       } catch (error) {
         console.warn('Webhook setup failed, will retry later:', error);
       }
@@ -219,34 +275,39 @@ export async function registerFleetChatRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Samsara webhook endpoint
-  app.post("/api/samsara/webhook", async (req, res) => {
+  // Per-customer Samsara webhook endpoint with signature verification
+  app.post("/api/samsara/webhook/:tenantId", async (req, res) => {
     try {
       const samsaraEvent = req.body;
+      const tenantId = req.params.tenantId;
+      const signature = req.headers['x-samsara-signature'] as string;
       
-      // Process the event and determine which tenant it belongs to
-      const { vehicleId, driverId } = samsaraEvent.data || {};
-      
-      if (!vehicleId && !driverId) {
-        return res.status(400).json({ error: "Invalid event data" });
-      }
-
-      // Find tenant by Samsara driver/vehicle
-      let tenant = null;
-      if (driverId) {
-        const user = await fleetChatStorage.getUserBySamsaraDriverId(driverId);
-        if (user) {
-          tenant = await fleetChatStorage.getTenantById(user.tenantId);
-        }
-      }
-
+      // Get tenant and verify webhook ownership
+      const tenant = await fleetChatStorage.getTenantById(tenantId);
       if (!tenant) {
-        console.warn(`No tenant found for Samsara event with driverId: ${driverId}, vehicleId: ${vehicleId}`);
-        return res.status(200).json({ message: "Event ignored - no matching tenant" });
+        return res.status(404).json({ error: "Tenant not found" });
+      }
+
+      if (!tenant.samsaraWebhookSecret) {
+        return res.status(400).json({ error: "Webhook not configured for tenant" });
+      }
+
+      // Verify webhook signature for security
+      const samsaraClient = new SamsaraAPIClient(tenant.samsaraApiToken!, tenant.samsaraGroupId || undefined);
+      const rawBody = JSON.stringify(req.body);
+      
+      if (signature && !samsaraClient.verifyWebhookSignature(rawBody, signature, tenant.samsaraWebhookSecret)) {
+        console.warn(`Invalid webhook signature for tenant ${tenantId}`);
+        return res.status(401).json({ error: "Invalid webhook signature" });
+      }
+
+      // Validate event data
+      const { vehicleId, driverId } = samsaraEvent.data || {};
+      if (!vehicleId && !driverId) {
+        return res.status(400).json({ error: "Invalid event data - missing vehicle or driver ID" });
       }
 
       // Process the event and send WhatsApp message
-      const samsaraClient = new SamsaraAPIClient(tenant.samsaraApiToken!, tenant.samsaraGroupId || undefined);
       const processedEvent = samsaraClient.processWebhookEvent(samsaraEvent);
 
       if (processedEvent.transportAction && driverId) {
@@ -343,6 +404,110 @@ export async function registerFleetChatRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error('Dashboard data error:', error);
       res.status(500).json({ error: "Failed to load dashboard data" });
+    }
+  });
+
+  // Webhook Management Endpoints for Samsara Compliance
+
+  // List tenant's webhooks
+  app.get("/api/samsara/webhooks/:tenantId", async (req, res) => {
+    try {
+      const { tenantId } = req.params;
+      const tenant = await fleetChatStorage.getTenantById(tenantId);
+      
+      if (!tenant?.samsaraApiToken) {
+        return res.status(404).json({ error: "Tenant not found or Samsara not configured" });
+      }
+
+      const samsaraClient = new SamsaraAPIClient(tenant.samsaraApiToken);
+      const webhooks = await samsaraClient.listWebhooks();
+
+      res.json(webhooks);
+    } catch (error: any) {
+      console.error('Failed to list webhooks:', error);
+      res.status(500).json({ error: "Failed to list webhooks" });
+    }
+  });
+
+  // Update webhook configuration
+  app.patch("/api/samsara/webhooks/:tenantId/:webhookId", async (req, res) => {
+    try {
+      const { tenantId, webhookId } = req.params;
+      const updates = req.body;
+      
+      const tenant = await fleetChatStorage.getTenantById(tenantId);
+      if (!tenant?.samsaraApiToken) {
+        return res.status(404).json({ error: "Tenant not found or Samsara not configured" });
+      }
+
+      const samsaraClient = new SamsaraAPIClient(tenant.samsaraApiToken);
+      const updatedWebhook = await samsaraClient.updateWebhook(webhookId, updates);
+
+      // Update tenant record if this is their webhook
+      if (tenant.samsaraWebhookId === webhookId) {
+        await fleetChatStorage.updateTenant(tenantId, {
+          webhookEventTypes: updatedWebhook.eventTypes
+        });
+      }
+
+      res.json(updatedWebhook);
+    } catch (error: any) {
+      console.error('Failed to update webhook:', error);
+      res.status(500).json({ error: "Failed to update webhook" });
+    }
+  });
+
+  // Delete webhook (customer disconnection)
+  app.delete("/api/samsara/webhooks/:tenantId/:webhookId", async (req, res) => {
+    try {
+      const { tenantId, webhookId } = req.params;
+      
+      const tenant = await fleetChatStorage.getTenantById(tenantId);
+      if (!tenant?.samsaraApiToken) {
+        return res.status(404).json({ error: "Tenant not found or Samsara not configured" });
+      }
+
+      const samsaraClient = new SamsaraAPIClient(tenant.samsaraApiToken);
+      await samsaraClient.deleteWebhook(webhookId);
+
+      // Clear webhook details if this was the tenant's webhook
+      if (tenant.samsaraWebhookId === webhookId) {
+        await fleetChatStorage.updateTenant(tenantId, {
+          samsaraWebhookId: null,
+          samsaraWebhookSecret: null,
+          samsaraWebhookUrl: null
+        });
+      }
+
+      res.json({ success: true, message: "Webhook deleted successfully" });
+    } catch (error: any) {
+      console.error('Failed to delete webhook:', error);
+      res.status(500).json({ error: "Failed to delete webhook" });
+    }
+  });
+
+  // Customer disconnection endpoint (application lifecycle)
+  app.post("/api/fleet/disconnect/:tenantId", async (req, res) => {
+    try {
+      const { tenantId } = req.params;
+      
+      // Delete customer webhook
+      await deleteCustomerWebhook(tenantId);
+      
+      // Deactivate tenant
+      await fleetChatStorage.updateTenant(tenantId, {
+        isActive: false,
+        samsaraApiToken: null,
+        samsaraGroupId: null
+      });
+
+      res.json({ 
+        success: true, 
+        message: "Customer disconnected and webhook removed successfully" 
+      });
+    } catch (error: any) {
+      console.error('Failed to disconnect customer:', error);
+      res.status(500).json({ error: "Failed to disconnect customer" });
     }
   });
 
