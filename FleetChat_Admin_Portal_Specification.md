@@ -51,9 +51,10 @@ The admin portal operates on dedicated admin tables:
 - **Integration Status**: Samsara API health and WhatsApp phone number assignments
 
 #### Tenant Operations
-- **Tenant Creation**: Onboard new fleet operators with guided setup
+- **Tenant Creation**: Onboard new fleet operators with guided setup and automatic webhook creation
 - **Configuration Management**: Edit tenant settings and integration parameters
-- **Service Suspension**: Temporarily disable tenants for billing or support issues
+- **Webhook Management**: Monitor per-customer webhook health and configuration
+- **Service Suspension**: Temporarily disable tenants with automatic webhook cleanup
 - **Data Export**: Extract tenant data for analysis or migration
 - **Support Tickets**: Track and manage tenant support requests
 

@@ -75,7 +75,7 @@ class FleetChatService {
     api_token: "encrypted_token",
     group_id: "samsara_group_123",
     webhook_secret: "encrypted_secret",
-    webhook_url: "https://fleetchat.com/webhook/samsara/abc_trucking_001"
+    webhook_url: "https://fleet-chat.replit.app/api/samsara/webhook/abc_trucking_001"
   },
   
   // WhatsApp Business Configuration
@@ -100,9 +100,9 @@ class FleetChatService {
 
 #### Webhook Routing
 ```javascript
-// Tenant-aware webhook processing
-app.post('/webhook/samsara/:tenant_id', async (req, res) => {
-  const tenantId = req.params.tenant_id;
+// Tenant-aware webhook processing with signature verification
+app.post('/api/samsara/webhook/:tenantId', async (req, res) => {
+  const tenantId = req.params.tenantId;
   const samsaraEvent = req.body;
   
   // Validate tenant authentication
@@ -116,7 +116,7 @@ app.post('/webhook/samsara/:tenant_id', async (req, res) => {
   res.status(200).send('OK');
 });
 
-app.post('/webhook/whatsapp', async (req, res) => {
+app.post('/api/whatsapp/webhook', async (req, res) => {
   const whatsappMessage = req.body;
   
   // Identify tenant from WhatsApp phone number

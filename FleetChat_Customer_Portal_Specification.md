@@ -33,7 +33,7 @@ The FleetChat Customer Portal is a streamlined interface designed for fleet oper
 **Samsara API Configuration**
 - Samsara API token input with validation
 - Samsara group ID specification
-- Webhook endpoint configuration
+- Automatic per-customer webhook creation with signature verification
 - API connection testing and verification
 
 **Driver Discovery**

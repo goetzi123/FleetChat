@@ -57,11 +57,12 @@ export class SamsaraAPIClient {
 - **Vehicle Operations**: List vehicles, get vehicle details, track locations
 - **Route Management**: Create routes, update status, complete deliveries
 - **Document Handling**: Upload PODs, delivery confirmations, signatures
-- **Webhook Processing**: Real-time event handling and verification
+- **Webhook Management**: Complete CRUD operations with signature verification
+- **Lifecycle Management**: Automatic webhook creation/deletion per customer
 
 ### 2. Webhook Event Processing
 
-**Event Handler Endpoint: `/api/samsara/webhook`**
+**Per-Customer Event Handler Endpoints: `/api/samsara/webhook/{tenantId}`**
 
 **Supported Event Types:**
 ```typescript
@@ -194,9 +195,16 @@ app.post('/api/transports', async (req, res) => {
   res.json(transport);
 });
 
-// Webhook endpoints route events to correct tenant
-app.post('/api/samsara/webhook', async (req, res) => {
-  const tenantId = await identifyTenantFromWebhook(req);
+// Per-customer webhook endpoints with signature verification
+app.post('/api/samsara/webhook/:tenantId', async (req, res) => {
+  const { tenantId } = req.params;
+  const tenant = await storage.getTenantById(tenantId);
+  
+  // Verify webhook signature using tenant's secret
+  if (!verifyWebhookSignature(req.body, req.headers['x-samsara-signature'], tenant.samsaraWebhookSecret)) {
+    return res.status(401).send('Unauthorized');
+  }
+  
   await processEventForTenant(tenantId, req.body);
   res.status(200).send('OK');
 });
@@ -204,30 +212,40 @@ app.post('/api/samsara/webhook', async (req, res) => {
 
 ### 2. Multi-Tenant Webhook Processing
 
-**Tenant Identification from Webhooks:**
+**Per-Customer Webhook Architecture:**
 ```typescript
-async function identifyTenantFromWebhook(req: Request): Promise<string> {
-  // Method 1: Samsara webhook contains group_id that maps to tenant
-  const groupId = req.body.groupId;
-  if (groupId) {
-    const tenant = await db.select()
-      .from(tenants)
-      .where(eq(tenants.samsaraGroupId, groupId))
-      .limit(1);
-    return tenant[0]?.id;
-  }
+// Samsara webhook compliance with signature verification
+function verifyWebhookSignature(payload: string, signature: string, secret: string): boolean {
+  const expectedSignature = crypto
+    .createHmac('sha256', secret)
+    .update(payload)
+    .digest('hex');
   
-  // Method 2: WhatsApp webhook phone number maps to tenant
-  const phoneNumber = req.body.entry?.[0]?.changes?.[0]?.value?.metadata?.phone_number_id;
-  if (phoneNumber) {
-    const tenant = await db.select()
-      .from(tenants)
-      .where(eq(tenants.whatsappPhoneNumber, phoneNumber))
-      .limit(1);
-    return tenant[0]?.id;
-  }
+  // Timing-safe comparison to prevent timing attacks
+  return crypto.timingSafeEqual(
+    Buffer.from(signature, 'hex'),
+    Buffer.from(expectedSignature, 'hex')
+  );
+}
+
+// Application lifecycle management for Samsara compliance
+async function createCustomerWebhook(tenantId: string, oauthToken: string, companyName: string): Promise<void> {
+  const samsaraClient = new SamsaraAPIClient(oauthToken);
+  const webhookUrl = `${process.env.BASE_URL}/api/samsara/webhook/${tenantId}`;
   
-  throw new Error('Cannot identify tenant from webhook');
+  const webhook = await samsaraClient.createWebhook({
+    name: `FleetChat-${companyName}-${tenantId}`,
+    url: webhookUrl,
+    eventTypes: ["DriverCreated", "VehicleLocationUpdate", "RouteStarted", ...],
+    customHeaders: [{ key: "x-FleetChat-Tenant-ID", value: tenantId }]
+  });
+  
+  // Store webhook details for signature verification
+  await storage.updateTenant(tenantId, {
+    samsaraWebhookId: webhook.id,
+    samsaraWebhookSecret: webhook.secretKey,
+    samsaraWebhookUrl: webhookUrl
+  });
 }
 ```
 

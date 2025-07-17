@@ -80,9 +80,11 @@ Implements GDPR-compliant driver identification:
 
 ### Headless Service Architecture
 FleetChat operates without user interfaces, providing only API endpoints:
-- `POST /webhook/samsara` - Receives fleet management events
-- `POST /webhook/whatsapp` - Processes driver message responses
-- `GET /health` - Service monitoring and configuration validation
+- `POST /api/samsara/webhook/{tenantId}` - Per-customer fleet event processing
+- `POST /api/whatsapp/webhook` - Processes driver message responses
+- `GET /api/health` - Service monitoring and configuration validation
+- `GET /api/samsara/webhooks/{tenantId}` - List customer webhooks
+- `PATCH/DELETE /api/samsara/webhooks/{tenantId}/{webhookId}` - Webhook management
 
 ### Multi-Tenant Support
 The system supports multiple logistics companies with isolated data:
