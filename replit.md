@@ -2,27 +2,27 @@
 
 ## Overview
 
-FleetChat is a headless message broker service that facilitates seamless communication between Samsara fleet management systems and WhatsApp Business API. The service operates as pure communication middleware, translating Samsara fleet events into contextual WhatsApp messages without duplicating or interfering with fleet management functionality.
+FleetChat is a communication protocol service that exclusively relays templated messages between Samsara fleet management systems and WhatsApp Business API. The service operates as pure message relay middleware, translating Samsara fleet events into WhatsApp messages without replicating any Samsara functionality.
 
 ## System Architecture
 
-### Headless Message Broker Architecture
-- **Event Translation Engine**: Converts Samsara fleet events into contextual WhatsApp messages
-- **Response Processing System**: Processes driver WhatsApp responses without modifying Samsara operations
-- **Phone Number Resolution**: Maps Samsara driver IDs to WhatsApp numbers for direct communication
-- **Webhook Processors**: Receives Samsara webhook events and sends WhatsApp messages
-- **Message Templates**: Contextual driver communication templates for various transport scenarios
+### Communication Protocol Architecture
+- **Message Relay Engine**: Translates Samsara events into templated WhatsApp messages only
+- **Response Relay System**: Forwards driver WhatsApp responses to Samsara without processing
+- **Phone Number Mapping**: Maps Samsara driver IDs to WhatsApp numbers for message routing
+- **Webhook Relay**: Receives Samsara events and relays as WhatsApp messages
+- **Message Templates**: Predefined templates for Samsara-to-driver communication only
 
 ### Integration Points
-- **Samsara TMS**: Primary fleet management system (driver data, routes, events)
-- **WhatsApp Business API**: Driver communication channel
-- **No User Interface**: Pure API service with webhook endpoints only
+- **Samsara TMS**: Source system for events and driver identification (read-only)
+- **WhatsApp Business API**: Message delivery channel only
+- **No User Interface**: Pure message relay service with webhook endpoints only
 
-### Message Broker Layer
-- **Bidirectional Communication**: Samsara events → WhatsApp messages, Driver responses → Samsara updates
-- **Intelligent Translation**: Context-aware message generation based on transport events
-- **Document Processing**: WhatsApp attachments automatically uploaded to Samsara transport records
-- **Status Synchronization**: Real-time status updates between driver responses and fleet management
+### Message Relay Layer
+- **Unidirectional Communication**: Samsara events → WhatsApp messages, Driver responses → Samsara relay
+- **Template Translation**: Predefined message templates based on Samsara event types
+- **Document Relay**: WhatsApp attachments forwarded to Samsara without local processing
+- **Response Forwarding**: Driver responses relayed to Samsara without interpretation
 
 ## Key Components
 
@@ -62,13 +62,13 @@ FleetChat is a headless message broker service that facilitates seamless communi
 - Context-aware transport terminology
 - Message routing and delivery tracking
 
-## Message Broker Flow
+## Message Relay Flow
 
-1. **Event Processing**: Samsara Event → Driver Phone Lookup → WhatsApp Message Generation → Driver Notification
-2. **Response Handling**: WhatsApp Response → Driver Identification → Response Logging → Communication Audit
-3. **Document Relay**: WhatsApp Document Upload → Forward to Samsara (no local storage)
-4. **Communication Tracking**: Message Status Updates → Delivery Confirmation → Audit Trail
-5. **Pure Middleware**: Samsara → FleetChat → WhatsApp (No data duplication, no fleet management)
+1. **Samsara to Driver**: Samsara Event → Driver Phone Lookup → Template Message → WhatsApp Delivery
+2. **Driver to Samsara**: WhatsApp Response → Driver Identification → Direct Relay to Samsara
+3. **Document Relay**: WhatsApp Document → Immediate Forward to Samsara (no local storage)
+4. **Message Delivery**: Delivery Confirmation → Samsara Notification
+5. **Communication Protocol Only**: Samsara ↔ FleetChat ↔ WhatsApp (No data processing, no feature replication)
 
 ## External Dependencies
 
@@ -85,16 +85,16 @@ FleetChat is a headless message broker service that facilitates seamless communi
 - D-Soft (bluecargo)
 
 ### Core Services
-- WhatsApp Business API messaging service
-- Message template management
-- Driver phone number mapping
-- Communication audit logging
+- WhatsApp Business API message relay
+- Message template application (predefined only)
+- Driver phone number mapping (Samsara ID to WhatsApp only)
+- Message delivery confirmation
 
 ### Compliance & Security
-- Secure API credential storage
+- Authorization tokens for message relay only
 - Webhook signature verification
-- Encrypted token management
-- Minimal data retention policy
+- Driver phone numbers (only if not available from Samsara)
+- Payment details (for message delivery service only)
 
 ## Multi-Tenant Architecture
 
@@ -276,6 +276,7 @@ Changelog:
 - July 18, 2025. Implemented direct WhatsApp onboarding architecture by removing Twilio SMS integration entirely - eliminated GDPR compliance requirements, simplified driver onboarding to direct WhatsApp template message invitations, updated database schema to remove consent fields, modified fleet-chat-routes.ts to support direct WhatsApp acceptance/rejection responses, and created streamlined 5-phase tenant onboarding process without SMS dependencies reducing complexity and operational costs significantly
 - July 18, 2025. Completed comprehensive codebase refactoring to remove all GDPR references and Twilio implementations - deprecated FleetChat_Twilio_Integration_Specification.md, updated database storage to use whatsappActive instead of hasConsented, removed consent management from FleetChat_Complete_Tenant_Onboarding_Process.md, updated privacy notices to remove GDPR compliance claims, and ensured all documentation reflects simplified direct WhatsApp onboarding architecture
 - July 18, 2025. Ensured comprehensive documentation consistency by removing all Samsara functionality duplication from FleetChat - eliminated route creation, transport management, and fleet operations from codebase and documentation to establish FleetChat as pure communication middleware that only maintains driver phone numbers, Samsara API credentials, and payment details without duplicating fleet management data
+- July 18, 2025. Implemented strict system boundaries compliance specification - established FleetChat as communication protocol service ONLY with absolute prohibition on replicating any Samsara functionality including vehicle tracking, telematics, route optimization, fleet management, compliance monitoring, or analytics, ensuring FleetChat operates exclusively as message relay between Samsara and WhatsApp without feature duplication
 ```
 
 ## User Preferences
