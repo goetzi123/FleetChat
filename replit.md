@@ -2,27 +2,27 @@
 
 ## Overview
 
-FleetChat is a communication protocol service that exclusively relays templated messages between Samsara fleet management systems and WhatsApp Business API. The service operates as pure message relay middleware, translating Samsara fleet events into WhatsApp messages without replicating any Samsara functionality.
+FleetChat is a communication protocol service that exclusively relays templated messages between fleet management systems (Samsara, Geotab, etc.) and WhatsApp Business API. The service operates as pure message relay middleware, translating fleet events into WhatsApp messages without replicating any fleet management functionality.
 
 ## System Architecture
 
 ### Communication Protocol Architecture
-- **Message Relay Engine**: Translates Samsara events into templated WhatsApp messages only
-- **Response Relay System**: Forwards driver WhatsApp responses to Samsara without processing
-- **Phone Number Mapping**: Maps Samsara driver IDs to WhatsApp numbers for message routing
-- **Webhook Relay**: Receives Samsara events and relays as WhatsApp messages
-- **Message Templates**: Predefined templates for Samsara-to-driver communication only
+- **Message Relay Engine**: Translates fleet system events into templated WhatsApp messages only
+- **Response Relay System**: Forwards driver WhatsApp responses to fleet systems without processing
+- **Phone Number Mapping**: Maps fleet system driver IDs to WhatsApp numbers for message routing
+- **Webhook Relay**: Receives fleet system events and relays as WhatsApp messages
+- **Message Templates**: Predefined templates for fleet-system-to-driver communication only
 
 ### Integration Points
-- **Samsara TMS**: Source system for events and driver identification (read-only)
+- **Fleet Management Systems**: Source systems for events and driver identification (read-only)
 - **WhatsApp Business API**: Message delivery channel only
 - **No User Interface**: Pure message relay service with webhook endpoints only
 
 ### Message Relay Layer
-- **Unidirectional Communication**: Samsara events → WhatsApp messages, Driver responses → Samsara relay
-- **Template Translation**: Predefined message templates based on Samsara event types
-- **Document Relay**: WhatsApp attachments forwarded to Samsara without local processing
-- **Response Forwarding**: Driver responses relayed to Samsara without interpretation
+- **Unidirectional Communication**: Fleet events → WhatsApp messages, Driver responses → Fleet system relay
+- **Template Translation**: Predefined message templates based on fleet event types
+- **Document Relay**: WhatsApp attachments forwarded to fleet systems without local processing
+- **Response Forwarding**: Driver responses relayed to fleet systems without interpretation
 
 ## Key Components
 
@@ -64,11 +64,11 @@ FleetChat is a communication protocol service that exclusively relays templated 
 
 ## Message Relay Flow
 
-1. **Samsara to Driver**: Samsara Event → Driver Phone Lookup → Template Message → WhatsApp Delivery
-2. **Driver to Samsara**: WhatsApp Response → Driver Identification → Direct Relay to Samsara
-3. **Document Relay**: WhatsApp Document → Immediate Forward to Samsara (no local storage)
-4. **Message Delivery**: Delivery Confirmation → Samsara Notification
-5. **Communication Protocol Only**: Samsara ↔ FleetChat ↔ WhatsApp (No data processing, no feature replication)
+1. **Fleet to Driver**: Fleet Event → Driver Phone Lookup → Template Message → WhatsApp Delivery
+2. **Driver to Fleet**: WhatsApp Response → Driver Identification → Direct Relay to Fleet System
+3. **Document Relay**: WhatsApp Document → Immediate Forward to Fleet System (no local storage)
+4. **Message Delivery**: Delivery Confirmation → Fleet System Notification
+5. **Communication Protocol Only**: Fleet System ↔ FleetChat ↔ WhatsApp (No data processing, no feature replication)
 
 ## External Dependencies
 
@@ -87,13 +87,13 @@ FleetChat is a communication protocol service that exclusively relays templated 
 ### Core Services
 - WhatsApp Business API message relay
 - Message template application (predefined only)
-- Driver phone number mapping (Samsara ID to WhatsApp only)
+- Driver phone number mapping (Fleet System ID to WhatsApp only)
 - Message delivery confirmation
 
 ### Compliance & Security
 - Authorization tokens for message relay only
 - Webhook signature verification
-- Driver phone numbers (only if not available from Samsara)
+- Driver phone numbers (only if not available from fleet systems)
 - Payment details (for message delivery service only)
 
 ## Multi-Tenant Architecture
@@ -104,7 +104,7 @@ FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking
 **Tenant Isolation:**
 - Each fleet operator is a separate tenant with isolated credentials
 - Dedicated WhatsApp phone numbers per fleet (tenant)
-- Separate Samsara API configurations per tenant
+- Separate fleet system API configurations per tenant
 - Independent driver phone number mappings (no personal data storage)
 - Isolated communication logs and webhook processing
 
@@ -131,30 +131,30 @@ FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking
 
 ### Production Fleet.Chat System Complete
 - **Production-Ready Architecture**: Simplified PostgreSQL schema with driver phone mapping and credentials storage
-- **Samsara API Integration**: Read-only client with webhook processing (no route creation)
+- **Fleet System API Integration**: Read-only clients with webhook processing (no route creation)
 - **WhatsApp Business API Management**: Bulk phone number provisioning with managed service infrastructure
-- **Fleet Onboarding System**: Two-step setup process with Samsara credentials and payment integration
+- **Fleet Onboarding System**: Two-step setup process with fleet system credentials and payment integration
 - **Stripe Payment Integration**: Automated driver-based billing with monthly invoicing
 - **Communication Middleware**: Pure message broker with event translation and response logging
 
 ### Production Components Built
-1. **Simplified Database Schema**: PostgreSQL schema with driver phone mapping, Samsara credentials, and billing records only
-2. **Samsara API Client**: Read-only integration for driver data and webhook event processing (no fleet management duplication)
+1. **Simplified Database Schema**: PostgreSQL schema with driver phone mapping, fleet system credentials, and billing records only
+2. **Fleet System API Clients**: Read-only integration for driver data and webhook event processing (no fleet management duplication)
 3. **WhatsApp Management Service**: Phone number provisioning, message templates, and communication logging
-4. **Fleet Onboarding UI**: Two-step setup with Samsara API credentials and payment configuration
+4. **Fleet Onboarding UI**: Two-step setup with fleet system API credentials and payment configuration
 5. **Communication Audit**: Message tracking and delivery status monitoring
 6. **Message Translation Engine**: Event-to-WhatsApp message conversion with template system
 7. **Automated Billing System**: Driver-based pricing with Stripe integration and usage tracking
 8. **Admin Management System**: Admin dashboard with usage monitoring and pricing configuration
 
 ### Production API Endpoints
-- `POST /api/fleet/setup` - Complete fleet onboarding with Samsara and WhatsApp configuration
-- `GET /api/samsara/drivers/:tenantId` - Discover and list Samsara drivers
+- `POST /api/fleet/setup` - Complete fleet onboarding with fleet system and WhatsApp configuration
+- `GET /api/{fleet-system}/drivers/:tenantId` - Discover and list fleet system drivers
 - `POST /api/fleet/drivers/onboard` - Onboard selected drivers to WhatsApp
 - `POST /api/fleet/billing/setup` - Configure Stripe payment integration
-- `POST /api/samsara/webhook` - Process real-time Samsara fleet events
+- `POST /api/{fleet-system}/webhook` - Process real-time fleet system events
 - `POST /api/whatsapp/webhook` - Handle incoming WhatsApp messages from drivers
-- `GET /api/dashboard/:tenantId` - Fleet dashboard data and statistics
+- `GET /api/dashboard/:tenantId` - Communication dashboard data and statistics
 - `GET /api/health` - Service health with WhatsApp pool statistics
 
 ### User Interface Components

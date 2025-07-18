@@ -4,14 +4,14 @@
 
 ## Executive Summary
 
-FleetChat is strictly limited to operating as a **communication protocol service only**. This document establishes mandatory boundaries to prevent any duplication or replication of Samsara fleet management functionality, ensuring FleetChat operates exclusively as a message relay system.
+FleetChat is strictly limited to operating as a **communication protocol service only**. This document establishes mandatory boundaries to prevent any duplication or replication of ANY fleet management system functionality (Samsara, Geotab, or others), ensuring FleetChat operates exclusively as a message relay system.
 
 ## Strict System Boundaries
 
 ### 1. Communication Protocol Limitation
 
 **PERMITTED FUNCTION:**
-- FleetChat serves **exclusively** as a message relay between Samsara and drivers via WhatsApp
+- FleetChat serves **exclusively** as a message relay between ANY fleet management system (Samsara, Geotab, etc.) and drivers via WhatsApp
 
 **ABSOLUTE RESTRICTIONS:**
 - ❌ No fleet management capabilities
@@ -23,7 +23,7 @@ FleetChat is strictly limited to operating as a **communication protocol service
 
 ### 2. No Feature Duplication Policy
 
-FleetChat **SHALL NOT** replicate, clone, or provide alternatives to any Samsara functionality including:
+FleetChat **SHALL NOT** replicate, clone, or provide alternatives to ANY fleet management system functionality including:
 
 #### Prohibited Fleet Management Features:
 - ❌ **Vehicle Tracking**: No GPS monitoring, location history, or movement analytics
@@ -46,12 +46,12 @@ FleetChat **SHALL NOT** replicate, clone, or provide alternatives to any Samsara
 FleetChat is **ONLY** permitted to handle the following data, and **ONLY** if not available from Samsara:
 
 #### 3.1 Driver Phone Numbers
-- **Purpose**: Map Samsara driver IDs to WhatsApp phone numbers for message routing
+- **Purpose**: Map fleet system driver IDs to WhatsApp phone numbers for message routing
 - **Scope**: Phone number mapping table only (no driver profiles or personal data)
-- **Limitation**: If Samsara provides phone numbers via API, FleetChat must use those instead
+- **Limitation**: If fleet system provides phone numbers via API, FleetChat must use those instead
 
 #### 3.2 Authorization Tokens
-- **Purpose**: Store Samsara API tokens and WhatsApp credentials for message relay
+- **Purpose**: Store fleet system API tokens and WhatsApp credentials for message relay
 - **Scope**: Authentication credentials only for message delivery service
 - **Limitation**: Tokens used exclusively for message routing, not data access
 
@@ -62,21 +62,21 @@ FleetChat is **ONLY** permitted to handle the following data, and **ONLY** if no
 
 ### 4. Message Flow Restrictions
 
-#### 4.1 Samsara-to-Driver Messages
+#### 4.1 Fleet-System-to-Driver Messages
 ```
 PERMITTED FLOW:
-Samsara Event → FleetChat Template Application → WhatsApp Message → Driver
+Fleet System Event → FleetChat Template Application → WhatsApp Message → Driver
 
 RESTRICTIONS:
 - FleetChat applies predefined templates only
-- No modification or interpretation of Samsara data
+- No modification or interpretation of fleet system data
 - No storage of message content beyond delivery confirmation
 ```
 
-#### 4.2 Driver-to-Samsara Messages
+#### 4.2 Driver-to-Fleet-System Messages
 ```
 PERMITTED FLOW:
-Driver WhatsApp Response → FleetChat Relay → Direct Forward to Samsara
+Driver WhatsApp Response → FleetChat Relay → Direct Forward to Fleet System
 
 RESTRICTIONS:
 - No processing or interpretation of driver responses
@@ -86,13 +86,13 @@ RESTRICTIONS:
 
 ### 5. API and Interface Restrictions
 
-#### 5.1 Samsara API Usage
+#### 5.1 Fleet System API Usage
 - **Read-Only Access**: FleetChat may only read event data for message relay
-- **No Write Operations**: Prohibited from creating, modifying, or deleting Samsara data
-- **No API Cloning**: Cannot replicate or mirror Samsara API functionality
+- **No Write Operations**: Prohibited from creating, modifying, or deleting fleet system data
+- **No API Cloning**: Cannot replicate or mirror ANY fleet system API functionality
 
 #### 5.2 User Interface Prohibition
-- **No Fleet Management UI**: Cannot provide interfaces that duplicate Samsara functionality
+- **No Fleet Management UI**: Cannot provide interfaces that duplicate ANY fleet system functionality
 - **No Dashboards**: Cannot display fleet metrics, analytics, or operational data
 - **Setup Interface Only**: Limited to communication service configuration only
 
@@ -102,11 +102,11 @@ RESTRICTIONS:
 ```sql
 -- PERMITTED TABLES ONLY:
 driver_mapping {
-  samsara_driver_id → whatsapp_number mapping only
+  fleet_system_driver_id → whatsapp_number mapping only
 }
 
 tenants {
-  samsara_api_tokens, whatsapp_credentials, billing_info only
+  fleet_system_api_tokens, whatsapp_credentials, billing_info only
 }
 
 message_delivery_log {
@@ -133,7 +133,7 @@ Regular audits to ensure:
 - Strict adherence to message relay limitations
 
 #### 7.2 Legal Compliance
-- **Non-Competition**: FleetChat cannot compete with or undermine Samsara services
+- **Non-Competition**: FleetChat cannot compete with or undermine ANY fleet management services
 - **Data Minimization**: Only store data absolutely necessary for message relay
 - **Service Boundaries**: Clear separation between communication and fleet management
 
@@ -162,7 +162,7 @@ class MessageRelayService {
 #### 8.2 API Endpoint Restrictions
 ```
 PERMITTED ENDPOINTS:
-✅ POST /webhook/samsara/{tenantId} - Receive events for relay
+✅ POST /webhook/{fleet-system}/{tenantId} - Receive events for relay
 ✅ POST /webhook/whatsapp/{tenantId} - Receive responses for relay
 ✅ POST /setup/tenant - Configure communication service
 
@@ -177,7 +177,7 @@ PROHIBITED ENDPOINTS:
 
 #### 9.1 FleetChat Service Scope
 **FleetChat IS:**
-- A communication protocol for Samsara-driver messaging
+- A communication protocol for fleet-system-to-driver messaging
 - A WhatsApp message relay service
 - A template application system for standardized messaging
 - A driver phone number mapping service
@@ -193,14 +193,14 @@ PROHIBITED ENDPOINTS:
 #### 9.2 Value Proposition Boundaries
 **PERMITTED VALUE CLAIMS:**
 - "Improve driver communication through WhatsApp"
-- "Streamline Samsara event notifications to drivers"
+- "Streamline fleet system event notifications to drivers"
 - "Reduce phone calls through automated messaging"
 
 **PROHIBITED VALUE CLAIMS:**
 - ❌ "Fleet management capabilities"
 - ❌ "Vehicle tracking and monitoring"
 - ❌ "Route optimization and planning"
-- ❌ "Alternative to Samsara features"
+- ❌ "Alternative to ANY fleet system features"
 
 ### 10. System Architecture Diagram
 
@@ -208,10 +208,10 @@ PROHIBITED ENDPOINTS:
 STRICT BOUNDARY ENFORCEMENT:
 
 ┌─────────────┐    ┌──────────────┐    ┌─────────────┐
-│   SAMSARA   │───▶│  FLEETCHAT   │───▶│  WHATSAPP   │
-│ (Complete   │    │ (Message     │    │ (Driver     │
-│  Fleet      │    │  Relay       │    │  Interface) │
-│  Management)│    │  Only)       │    │             │
+│FLEET SYSTEM │───▶│  FLEETCHAT   │───▶│  WHATSAPP   │
+│ (Samsara,   │    │ (Message     │    │ (Driver     │
+│  Geotab,    │    │  Relay       │    │  Interface) │
+│  etc.)      │    │  Only)       │    │             │
 └─────────────┘    └──────────────┘    └─────────────┘
                            │
                            ▼
@@ -243,8 +243,8 @@ Any implementation of prohibited functionality constitutes a boundary violation 
 
 FleetChat operates under strict limitations as a **communication protocol service only**. These boundaries ensure:
 
-1. **No Competition** with Samsara fleet management capabilities
-2. **No Duplication** of existing Samsara functionality  
+1. **No Competition** with ANY fleet management system capabilities
+2. **No Duplication** of existing fleet system functionality  
 3. **Clear Value Distinction** between communication and fleet management
 4. **Legal Compliance** with service boundary agreements
 5. **Technical Clarity** for development and operational teams
