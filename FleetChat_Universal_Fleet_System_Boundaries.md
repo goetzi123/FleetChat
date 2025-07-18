@@ -16,13 +16,13 @@ This document establishes that FleetChat's strict communication protocol boundar
 ### 1. Communication Protocol Service ONLY
 
 **FleetChat's EXCLUSIVE Function:**
-FleetChat serves **ONLY** as a message relay between ANY fleet management system and drivers via WhatsApp
+FleetChat serves **ONLY** as a bidirectional message relay between ANY fleet management system and drivers via WhatsApp
 
-**Applies to ALL Fleet Systems:**
-- ✅ Samsara → FleetChat → WhatsApp
-- ✅ Geotab → FleetChat → WhatsApp  
-- ✅ Transporeon → FleetChat → WhatsApp
-- ✅ Any Fleet System → FleetChat → WhatsApp
+**Bidirectional Communication Applies to ALL Fleet Systems:**
+- ✅ Samsara ↔ FleetChat ↔ WhatsApp (Full bidirectional communication)
+- ✅ Geotab ↔ FleetChat ↔ WhatsApp (Full bidirectional communication)
+- ✅ Transporeon ↔ FleetChat ↔ WhatsApp (Full bidirectional communication)
+- ✅ Any Fleet System ↔ FleetChat ↔ WhatsApp (Full bidirectional communication)
 
 ### 2. Universal Prohibition on Feature Duplication
 
@@ -50,20 +50,41 @@ FleetChat serves **ONLY** as a message relay between ANY fleet management system
 - ❌ No operational data from any fleet system
 - ❌ No telematics data from any fleet system
 
-### 4. Universal Message Flow
+### 4. Universal Bidirectional Message Flow
 
-**Standard Flow for ALL Fleet Systems:**
+**Complete Bidirectional Communication for ALL Fleet Systems:**
+
+#### 4.1 TMS-to-Driver Flow
 ```
-ANY Fleet System Event → FleetChat Template → WhatsApp Message → Driver
-Driver WhatsApp Response → FleetChat Processing → Fleet System API Update
+Fleet Management System → FleetChat Event Processing → Template Application → WhatsApp Message → Driver
 ```
 
-**Bidirectional Communication Operations:**
-- Fleet system events trigger WhatsApp messages to drivers
-- Driver responses processed and written back to fleet system APIs
-- Status updates from drivers update fleet system records
-- Document uploads from WhatsApp forwarded to fleet system
-- Location sharing from drivers submitted to fleet system
+**TMS-to-Driver Operations:**
+- Route assignments sent as WhatsApp messages
+- Pickup/delivery notifications relayed to drivers
+- Safety alerts and emergency communications
+- Document requests transmitted via WhatsApp
+- ETA updates and geofence notifications
+
+#### 4.2 Driver-to-TMS Flow
+```
+Driver WhatsApp Response → FleetChat Processing → Fleet System API Update → TMS Database
+```
+
+**Driver-to-TMS Operations:**
+- Driver status updates written back to TMS (arrived, loaded, completed)
+- Location sharing submitted to fleet system tracking
+- Document uploads forwarded from WhatsApp to TMS document management
+- Driver responses to queries logged in TMS systems
+- Emergency communications escalated to fleet management
+
+#### 4.3 Full Bidirectional Integration
+**Real-time Communication Loop:**
+- Fleet system events immediately trigger driver notifications
+- Driver responses immediately update fleet system records
+- Status changes in TMS reflected in ongoing WhatsApp conversations
+- Document flow operates seamlessly in both directions
+- Emergency communications provide instant bidirectional escalation
 
 **Restrictions Apply to ALL Systems:**
 - No creation of new routes or fleet management workflows
@@ -117,25 +138,39 @@ FleetChat maintains a centralized repository of driver phone numbers that serves
 - No personal information beyond what's necessary for message routing
 - No duplication of driver management functionality from fleet systems
 
-### 7. Universal Integration Architecture
+### 7. Universal Bidirectional Integration Architecture
 
-**Same Architecture for ALL Fleet Systems:**
+**Bidirectional Architecture for ALL Fleet Systems:**
 ```
 ┌─────────────────┐    ┌──────────────┐    ┌─────────────┐
-│   FLEET SYSTEM  │───▶│  FLEETCHAT   │───▶│  WHATSAPP   │
-│   (Samsara,     │    │  (Message    │    │  (Driver    │
-│   Geotab,       │    │   Relay      │    │  Interface) │
-│   Transporeon,  │    │   Only)      │    │             │
+│   FLEET SYSTEM  │◄──▶│  FLEETCHAT   │◄──▶│  WHATSAPP   │
+│   (Samsara,     │    │ (Bidirectional│    │  (Driver    │
+│   Geotab,       │    │ Communication │    │  Interface) │
+│   Transporeon,  │    │  Protocol)    │    │             │
 │   etc.)         │    │              │    │             │
 └─────────────────┘    └──────────────┘    └─────────────┘
+         │                       │                       │
+         │                       │                       │
+         ▼                       ▼                       ▼
+    TMS Database          Message Processing        Driver Mobile
+    Status Updates        Template Engine          WhatsApp App
+    Document Storage      Response Parsing         Real-time Chat
+    Event Logging         API Integration          Document Sharing
 ```
+
+**Bidirectional Data Flow:**
+- **Left Arrow (←)**: Driver responses flow from WhatsApp → FleetChat → TMS
+- **Right Arrow (→)**: TMS events flow from Fleet System → FleetChat → WhatsApp
+- **Double Arrow (↔)**: Full bidirectional communication maintains real-time sync
 
 ### 8. Universal Value Proposition
 
 **Permitted Claims for ALL Fleet Systems:**
-- "Integrate [Fleet System] with WhatsApp driver communication"
-- "Relay [Fleet System] events to drivers via WhatsApp"
-- "Streamline driver notifications from [Fleet System]"
+- "Integrate [Fleet System] with bidirectional WhatsApp driver communication"
+- "Enable real-time two-way communication between [Fleet System] and drivers"
+- "Relay [Fleet System] events to drivers and driver responses back to [Fleet System]"
+- "Streamline bidirectional driver notifications and status updates"
+- "Bridge [Fleet System] and drivers with full two-way WhatsApp integration"
 
 **Prohibited Claims for ALL Fleet Systems:**
 - ❌ "Fleet management capabilities"
@@ -157,9 +192,9 @@ Clear separation between communication relay and fleet management for ALL system
 ### 10. Universal Implementation Guidelines
 
 **Architecture Principles for ALL Fleet Systems:**
-- Read-only access to fleet system APIs for event data and driver identification
-- Message template application without data modification or interpretation
-- Direct relay of driver responses to fleet systems without processing
+- Read/write access to fleet system APIs for bidirectional communication
+- Message template application for TMS-to-driver communication
+- Driver response processing and writing back to fleet system APIs
 - Phone number repository management as the only stored driver data
 - Multi-tenant isolation ensuring complete data separation between fleet operators
 
@@ -206,11 +241,19 @@ Clear separation between communication relay and fleet management for ALL system
 
 ## Conclusion
 
-FleetChat's strict boundaries as a **communication protocol service** apply universally to ALL fleet management systems. Whether integrating with Samsara, Geotab, Transporeon, or any future fleet system, FleetChat maintains the same limitations:
+FleetChat's strict boundaries as a **bidirectional communication protocol service** apply universally to ALL fleet management systems. Whether integrating with Samsara, Geotab, Transporeon, or any future fleet system, FleetChat maintains the same capabilities and limitations:
 
-1. **Message relay ONLY** - No fleet management capabilities
-2. **No feature duplication** - No competition with fleet systems
-3. **Minimal data storage** - Only phone mapping and credentials
-4. **Clear service boundaries** - Communication separate from fleet management
+### Universal Capabilities:
+1. **Bidirectional Message Relay** - Full two-way communication between TMS and drivers
+2. **Driver Response Processing** - Parse and write driver responses back to TMS systems
+3. **Driver Phone Number Mapping** - Essential for communication routing
+4. **Template-based Messaging** - Standardized TMS-to-driver communication
+5. **Real-time Status Updates** - Driver status changes immediately update TMS records
 
-This universal approach ensures consistent service boundaries, legal compliance, and clear value proposition across all fleet system integrations.
+### Universal Restrictions:
+1. **No Fleet Management Functionality** - No route creation, vehicle tracking, or operational management
+2. **No Business Logic Duplication** - No replication of TMS-specific functionality
+3. **Communication Processing Only** - Limited to message relay and response handling
+4. **No Analytics or Reporting** - Beyond basic communication logging
+
+This ensures FleetChat provides consistent, compliant **bidirectional communication middleware** while respecting the boundaries and competitive position of every fleet management system.
