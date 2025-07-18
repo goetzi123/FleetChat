@@ -2,15 +2,15 @@
 
 ## Overview
 
-FleetChat is a headless message broker service that facilitates seamless communication between Samsara fleet management systems and WhatsApp Business API. The service operates without a user interface, functioning purely as an intelligent message routing and translation layer between TMS platforms and driver communication channels.
+FleetChat is a headless message broker service that facilitates seamless communication between Samsara fleet management systems and WhatsApp Business API. The service operates as pure communication middleware, translating Samsara fleet events into contextual WhatsApp messages without duplicating or interfering with fleet management functionality.
 
 ## System Architecture
 
 ### Headless Message Broker Architecture
 - **Event Translation Engine**: Converts Samsara fleet events into contextual WhatsApp messages
-- **Response Processing System**: Processes driver WhatsApp responses and updates Samsara records
-- **Phone Number Resolution**: Maps Samsara driver IDs to WhatsApp numbers with GDPR compliance
-- **Webhook Processors**: Bidirectional webhook handling for Samsara and WhatsApp integrations
+- **Response Processing System**: Processes driver WhatsApp responses without modifying Samsara operations
+- **Phone Number Resolution**: Maps Samsara driver IDs to WhatsApp numbers for direct communication
+- **Webhook Processors**: Receives Samsara webhook events and sends WhatsApp messages
 - **Message Templates**: Contextual driver communication templates for various transport scenarios
 
 ### Integration Points
@@ -171,10 +171,10 @@ FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking
 ### Core Integration Components
 
 #### 1. Samsara API Client (`server/integrations/samsara.ts`)
-- **Fleet Management**: Vehicle and driver data synchronization
-- **Route Management**: Create, update, and track transport routes
+- **Fleet Data Access**: Read-only access to vehicle and driver data
+- **Route Data Reading**: Fetch route information from Samsara (read-only)
 - **Event Processing**: Real-time webhook event handling
-- **Document Integration**: POD and delivery document management
+- **Document Synchronization**: Process document uploads between WhatsApp and Samsara
 
 #### 2. Event Processing System
 - **Webhook Handler**: `/api/samsara/webhook` endpoint for real-time events
@@ -186,16 +186,17 @@ FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking
   - Document upload notifications
   - Maintenance alerts and fault codes
 
-#### 3. Bidirectional Data Flow
-- **FleetChat → Samsara**: Transport creation triggers route creation in Samsara
-- **Samsara → FleetChat**: Real-time events update transport status and location data
-- **Periodic Sync**: Automated status synchronization every 5 minutes
+#### 3. Communication Flow (Pure Middleware)
+- **Samsara → FleetChat**: Real-time events trigger WhatsApp communication
+- **WhatsApp → FleetChat**: Driver responses processed and logged
+- **FleetChat → Samsara**: Optional status updates (read-only integration preferred)
+- **No Route Creation**: FleetChat does not create, modify, or manage routes in Samsara
 
-#### 4. Fleet Management Features
-- **Vehicle Tracking**: Real-time GPS location and status monitoring
-- **Driver Management**: Duty status tracking and vehicle assignment
-- **Route Optimization**: Integration with Samsara's routing capabilities
-- **Compliance Monitoring**: ELD data and HOS compliance tracking
+#### 4. Data Integration Features
+- **Event Translation**: Convert Samsara events into contextual WhatsApp messages
+- **Response Processing**: Parse driver WhatsApp responses into structured data
+- **Status Monitoring**: Track communication status without modifying fleet operations
+- **Document Routing**: Handle document uploads between WhatsApp and Samsara
 
 ### Samsara Integration Service (`server/integrations/samsara-service.ts`)
 - **Configuration Management**: Environment-based API credentials

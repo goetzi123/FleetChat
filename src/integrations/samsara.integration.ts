@@ -173,17 +173,8 @@ export class SamsaraIntegration {
     return data;
   }
 
-  // Route Management
-  async createRoute(routeData: Omit<SamsaraRoute, 'id'>): Promise<SamsaraRoute> {
-    const data = await this.makeRequest<SamsaraRoute>({
-      method: 'POST',
-      url: '/fleet/routes',
-      data: routeData,
-    });
-
-    return data;
-  }
-
+  // Route Data Access (Read-Only)
+  // FleetChat only reads route data from Samsara, does not create/modify routes
   async getRoute(routeId: string): Promise<SamsaraRoute> {
     const data = await this.makeRequest<SamsaraRoute>({
       method: 'GET',
@@ -193,21 +184,13 @@ export class SamsaraIntegration {
     return data;
   }
 
-  async updateRoute(routeId: string, updates: Partial<SamsaraRoute>): Promise<SamsaraRoute> {
-    const data = await this.makeRequest<SamsaraRoute>({
-      method: 'PATCH',
-      url: `/fleet/routes/${routeId}`,
-      data: updates,
+  async getRoutes(): Promise<SamsaraRoute[]> {
+    const data = await this.makeRequest<{ data: SamsaraRoute[] }>({
+      method: 'GET',
+      url: '/fleet/routes',
     });
 
-    return data;
-  }
-
-  async deleteRoute(routeId: string): Promise<void> {
-    await this.makeRequest<void>({
-      method: 'DELETE',
-      url: `/fleet/routes/${routeId}`,
-    });
+    return data.data || [];
   }
 
   // Location Services

@@ -107,22 +107,8 @@ export class SamsaraAPIClient {
     }
   }
 
-  // Route Management
-  async createRoute(routeData: {
-    name: string;
-    vehicleId: string;
-    driverId?: string;
-    waypoints: Omit<SamsaraWaypoint, 'id'>[];
-  }): Promise<SamsaraRoute> {
-    const response = await this.client.post('/fleet/routes', {
-      name: routeData.name,
-      vehicleId: routeData.vehicleId,
-      driverId: routeData.driverId,
-      waypoints: routeData.waypoints
-    });
-    return response.data.data;
-  }
-
+  // Route Data Access (Read-Only)
+  // FleetChat only reads route data from Samsara, does not create/modify routes
   async getRoute(routeId: string): Promise<SamsaraRoute | null> {
     try {
       const response = await this.client.get(`/fleet/routes/${routeId}`);
@@ -133,16 +119,9 @@ export class SamsaraAPIClient {
     }
   }
 
-  async updateRoute(routeId: string, updates: Partial<SamsaraRoute>): Promise<SamsaraRoute> {
-    const response = await this.client.patch(`/fleet/routes/${routeId}`, updates);
-    return response.data.data;
-  }
-
-  async completeRoute(routeId: string): Promise<void> {
-    await this.client.patch(`/fleet/routes/${routeId}`, {
-      status: 'completed',
-      endTime: new Date().toISOString()
-    });
+  async getRoutes(): Promise<SamsaraRoute[]> {
+    const response = await this.client.get('/fleet/routes');
+    return response.data.data || [];
   }
 
   // Location Tracking

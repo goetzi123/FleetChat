@@ -585,47 +585,9 @@ router.post("/api/samsara/webhook", async (req, res) => {
   }
 });
 
-// Create route in Samsara when transport is created
-router.post("/api/samsara/routes", async (req, res) => {
-  try {
-    const { transportId, vehicleId, driverId } = req.body;
-    
-    const transport = await storage.getTransportById(transportId);
-    if (!transport) {
-      return res.status(404).json({ error: "Transport not found" });
-    }
-    
-    // Map FleetChat transport to Samsara route format
-    const samsaraRouteData = mapFleetChatToSamsaraRoute({
-      ...transport,
-      samsaraVehicleId: vehicleId,
-      samsaraDriverId: driverId
-    });
-    
-    // Update transport with Samsara IDs
-    await storage.updateTransport(transportId, {
-      samsaraVehicleId: vehicleId,
-      samsaraDriverId: driverId
-    });
-    
-    // Log integration attempt
-    await storage.createTmsIntegration({
-      transportId,
-      platform: "samsara",
-      operation: "create_route",
-      payload: JSON.stringify(samsaraRouteData),
-      success: true
-    });
-    
-    res.json({ 
-      message: "Route mapped to Samsara",
-      routeData: samsaraRouteData,
-      transportId
-    });
-  } catch (error) {
-    res.status(500).json({ error: error instanceof Error ? error.message : "Failed to create Samsara route" });
-  }
-});
+// REMOVED: FleetChat should not create routes in Samsara
+// Routes are created by fleet managers in Samsara, not by FleetChat
+// FleetChat only receives and processes webhook events from existing Samsara routes
 
 // Get Samsara vehicles
 router.get("/api/samsara/vehicles", async (req, res) => {

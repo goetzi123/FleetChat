@@ -272,35 +272,14 @@ export class SamsaraAPIClient {
     return this.makeRequest(`/fleet/drivers/${driverId}/duty-status`);
   }
 
-  // Route & Dispatch Operations (from /fleet/dispatch/routes)
-  async createRoute(routeData: any) {
-    return this.makeRequest('/fleet/dispatch/routes', {
-      method: 'POST',
-      body: JSON.stringify(routeData)
-    });
-  }
-
+  // Route Data Access (Read-Only)
+  // FleetChat only reads route data from Samsara, does not create/modify routes
   async getRoute(routeId: string) {
     return this.makeRequest(`/fleet/dispatch/routes/${routeId}`);
   }
 
-  async updateRoute(routeId: string, updates: any) {
-    return this.makeRequest(`/fleet/dispatch/routes/${routeId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(updates)
-    });
-  }
-
-  async startRoute(routeId: string) {
-    return this.makeRequest(`/fleet/dispatch/routes/${routeId}/start`, {
-      method: 'POST'
-    });
-  }
-
-  async completeRoute(routeId: string) {
-    return this.makeRequest(`/fleet/dispatch/routes/${routeId}/complete`, {
-      method: 'POST'
-    });
+  async getRoutes() {
+    return this.makeRequest('/fleet/dispatch/routes');
   }
 
   // Trip Operations
@@ -332,19 +311,8 @@ export class SamsaraAPIClient {
     return this.makeRequest('/fleet/geofences');
   }
 
-  async createGeofence(geofenceData: any) {
-    return this.makeRequest('/fleet/geofences', {
-      method: 'POST',
-      body: JSON.stringify(geofenceData)
-    });
-  }
-
-  async updateGeofence(geofenceId: string, updates: any) {
-    return this.makeRequest(`/fleet/geofences/${geofenceId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(updates)
-    });
-  }
+  // REMOVED: FleetChat should not create or modify geofences
+  // Geofences are managed in Samsara by fleet managers
 
   // Safety & Dash Cam Operations
   async getVehicleSafetyScore(vehicleId: string, startTime?: string, endTime?: string) {
@@ -562,25 +530,6 @@ export function mapSamsaraEventToFleetChat(samsaraEvent: any) {
   }
 }
 
-export function mapFleetChatToSamsaraRoute(transport: any) {
-  return {
-    name: `FleetChat Transport ${transport.id}`,
-    startLocation: {
-      latitude: transport.pickupLat,
-      longitude: transport.pickupLng,
-      address: transport.pickupAddress || transport.pickupLocation
-    },
-    endLocation: {
-      latitude: transport.deliveryLat,
-      longitude: transport.deliveryLng,
-      address: transport.deliveryAddress || transport.deliveryLocation
-    },
-    vehicleId: transport.samsaraVehicleId,
-    driverId: transport.samsaraDriverId,
-    metadata: {
-      fleetChatTransportId: transport.id,
-      workflowType: transport.workflowType,
-      loadReference: transport.loadReference
-    }
-  };
-}
+// REMOVED: mapFleetChatToSamsaraRoute function
+// FleetChat should not create or modify routes in Samsara
+// FleetChat only processes incoming webhook events from Samsara routes
