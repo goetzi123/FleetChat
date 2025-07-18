@@ -55,27 +55,36 @@ FleetChat serves **ONLY** as a message relay between ANY fleet management system
 **Standard Flow for ALL Fleet Systems:**
 ```
 ANY Fleet System Event → FleetChat Template → WhatsApp Message → Driver
-Driver WhatsApp Response → FleetChat Relay → ANY Fleet System (no processing)
+Driver WhatsApp Response → FleetChat Processing → Fleet System API Update
 ```
 
+**Bidirectional Communication Operations:**
+- Fleet system events trigger WhatsApp messages to drivers
+- Driver responses processed and written back to fleet system APIs
+- Status updates from drivers update fleet system records
+- Document uploads from WhatsApp forwarded to fleet system
+- Location sharing from drivers submitted to fleet system
+
 **Restrictions Apply to ALL Systems:**
-- No interpretation of fleet system data
-- No modification of fleet system events
-- No processing of driver responses
-- No storage beyond delivery confirmation
+- No creation of new routes or fleet management workflows
+- No modification of fleet system business logic
+- No analytics or reporting beyond communication logs
+- No driver management beyond communication preferences
 
 ### 5. Universal API Restrictions
 
 **Permitted for ALL Fleet Systems:**
-- ✅ Read-only access to driver data for phone number mapping
+- ✅ Read access to driver data for phone number mapping
+- ✅ Read access to fleet events for message relay
+- ✅ Write access for driver response updates (status, location, documents)
 - ✅ Webhook endpoints for event notifications
-- ✅ Message relay functionality only
+- ✅ Bidirectional message relay functionality
 
 **Prohibited for ALL Fleet Systems:**
-- ❌ No write operations to any fleet system
-- ❌ No data creation in any fleet system
-- ❌ No modification of any fleet system data
-- ❌ No deletion from any fleet system
+- ❌ No route creation or fleet management operations
+- ❌ No modification of fleet system business logic
+- ❌ No vehicle management or tracking capabilities
+- ❌ No analytics or reporting beyond communication logs
 
 ### 6. Universal Phone Number Repository
 
@@ -163,9 +172,9 @@ Clear separation between communication relay and fleet management for ALL system
 
 **Data Flow Restrictions:**
 - Fleet system events trigger template message application only
-- Driver responses forwarded directly without interpretation or storage
+- Driver responses processed and written back to fleet system APIs
 - Phone number repository updated only for communication preferences
-- No business logic implementation beyond message routing
+- No business logic implementation beyond communication processing
 - No data analysis, aggregation, or fleet management decision-making
 
 ### 11. Universal API Endpoints

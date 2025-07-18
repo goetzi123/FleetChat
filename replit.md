@@ -65,10 +65,10 @@ FleetChat is a communication protocol service that exclusively relays templated 
 ## Message Relay Flow
 
 1. **Fleet to Driver**: Fleet Event → Driver Phone Lookup → Template Message → WhatsApp Delivery
-2. **Driver to Fleet**: WhatsApp Response → Driver Identification → Direct Relay to Fleet System
-3. **Document Relay**: WhatsApp Document → Immediate Forward to Fleet System (no local storage)
-4. **Message Delivery**: Delivery Confirmation → Fleet System Notification
-5. **Communication Protocol Only**: Fleet System ↔ FleetChat ↔ WhatsApp (No data processing, no feature replication)
+2. **Driver to Fleet**: WhatsApp Response → Response Processing → Fleet System API Update
+3. **Document Relay**: WhatsApp Document → Processing → Fleet System Document API Upload
+4. **Status Updates**: Driver Status → FleetChat Processing → Fleet System Status API Update
+5. **Bidirectional Communication**: Fleet System ↔ FleetChat ↔ WhatsApp (Communication processing, no fleet management duplication)
 
 ## External Dependencies
 
@@ -277,6 +277,7 @@ Changelog:
 - July 18, 2025. Completed comprehensive codebase refactoring to remove all GDPR references and Twilio implementations - deprecated FleetChat_Twilio_Integration_Specification.md, updated database storage to use whatsappActive instead of hasConsented, removed consent management from FleetChat_Complete_Tenant_Onboarding_Process.md, updated privacy notices to remove GDPR compliance claims, and ensured all documentation reflects simplified direct WhatsApp onboarding architecture
 - July 18, 2025. Ensured comprehensive documentation consistency by removing all Samsara functionality duplication from FleetChat - eliminated route creation, transport management, and fleet operations from codebase and documentation to establish FleetChat as pure communication middleware that only maintains driver phone numbers, Samsara API credentials, and payment details without duplicating fleet management data
 - July 18, 2025. Implemented strict system boundaries compliance specification - established FleetChat as communication protocol service ONLY with absolute prohibition on replicating any Samsara functionality including vehicle tracking, telematics, route optimization, fleet management, compliance monitoring, or analytics, ensuring FleetChat operates exclusively as message relay between Samsara and WhatsApp without feature duplication
+- July 18, 2025. Corrected FleetChat architecture to support bidirectional communication - driver responses ARE processed and written back to fleet management systems (Samsara, Geotab, etc.) via API updates while maintaining strict boundaries against fleet management functionality duplication
 ```
 
 ## User Preferences

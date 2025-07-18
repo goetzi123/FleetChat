@@ -31,9 +31,16 @@ FleetChat **SHALL NOT** replicate, clone, or provide alternatives to ANY fleet m
 - ❌ **Route Management**: No route creation, optimization, or modification capabilities
 - ❌ **Fleet Operations**: No vehicle assignment, scheduling, or fleet coordination
 - ❌ **Compliance Monitoring**: No HOS tracking, safety monitoring, or regulatory compliance
-- ❌ **Business Analytics**: No dashboards, reports, or analytics that duplicate Samsara insights
+- ❌ **Business Analytics**: No dashboards, reports, or analytics that duplicate fleet system insights
 - ❌ **Driver Management**: No driver profiles, performance tracking, or behavior analysis
 - ❌ **Document Management**: No document storage, organization, or management systems
+
+#### Permitted Communication Operations:
+- ✅ **Driver Response Processing**: Parse and relay driver responses to fleet systems
+- ✅ **Status Updates**: Write driver status updates back to fleet system APIs
+- ✅ **Document Relay**: Forward WhatsApp documents to fleet system document endpoints
+- ✅ **Location Sharing**: Submit driver location updates to fleet system APIs
+- ✅ **Communication Logging**: Track message delivery and response confirmation
 
 #### Prohibited Data Processing:
 - ❌ **Fleet Data Storage**: No storage of vehicle, route, or operational data from Samsara
@@ -76,20 +83,30 @@ RESTRICTIONS:
 #### 4.2 Driver-to-Fleet-System Messages
 ```
 PERMITTED FLOW:
-Driver WhatsApp Response → FleetChat Relay → Direct Forward to Fleet System
+Driver WhatsApp Response → FleetChat Processing → Fleet System API Update
+
+PERMITTED OPERATIONS:
+- Process driver responses (status updates, location sharing, document uploads)
+- Parse structured responses (button clicks, quick replies, text messages)
+- Write driver responses back to fleet system via API
+- Update transport/route status based on driver input
+- Forward documents from WhatsApp to fleet system
+- Log communication for delivery confirmation
 
 RESTRICTIONS:
-- No processing or interpretation of driver responses
-- No storage of response content
-- No decision-making based on driver input
+- No creation of new routes or fleet management workflows
+- No modification of fleet system business logic
+- No analytics or reporting beyond communication logs
+- No driver management beyond communication preferences
 ```
 
 ### 5. API and Interface Restrictions
 
 #### 5.1 Fleet System API Usage
-- **Read-Only Access**: FleetChat may only read event data for message relay
-- **No Write Operations**: Prohibited from creating, modifying, or deleting fleet system data
-- **No API Cloning**: Cannot replicate or mirror ANY fleet system API functionality
+- **Read Access**: FleetChat reads event data for message relay to drivers
+- **Write Access**: FleetChat writes driver responses back to fleet system (status updates, documents, location)
+- **Limited Write Operations**: Only driver communication responses, no fleet management operations
+- **No API Cloning**: Cannot replicate or mirror fleet system management functionality
 
 #### 5.2 User Interface Prohibition
 - **No Fleet Management UI**: Cannot provide interfaces that duplicate ANY fleet system functionality
