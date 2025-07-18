@@ -1,8 +1,20 @@
-# FleetChat Twilio Integration Specification
+# FleetChat Twilio Integration Specification [DEPRECATED]
 
-## Overview
+## ⚠️ DEPRECATED NOTICE
 
-FleetChat requires Twilio SMS integration for driver onboarding, consent management, and emergency communication. Twilio serves as the primary SMS gateway for driver invitations, WhatsApp setup verification, and fallback communication when WhatsApp is unavailable.
+This document is deprecated as of July 18, 2025. FleetChat has been updated to remove Twilio SMS integration entirely in favor of direct WhatsApp onboarding. This document is preserved for historical reference only.
+
+**Current Implementation**: FleetChat now uses direct WhatsApp template messages for driver onboarding, eliminating the need for SMS integration, GDPR compliance, and Twilio dependencies.
+
+**See Instead**: 
+- `FleetChat_Simplified_Architecture_Summary.md` for current architecture
+- `FleetChat_Complete_Tenant_Onboarding_Process.md` for updated onboarding process
+
+---
+
+## Overview [DEPRECATED]
+
+FleetChat previously required Twilio SMS integration for driver onboarding, consent management, and emergency communication. Twilio served as the primary SMS gateway for driver invitations, WhatsApp setup verification, and fallback communication when WhatsApp is unavailable.
 
 ## Integration Requirements
 

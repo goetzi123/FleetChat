@@ -158,7 +158,7 @@ export class DatabaseStorage implements IFleetChatStorage {
         eq(users.tenantId, tenantId),
         eq(users.role, 'driver'),
         eq(users.isActive, true),
-        eq(users.hasConsented, true)
+        eq(users.whatsappActive, true)
       )
     );
   }

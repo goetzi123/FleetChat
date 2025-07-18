@@ -115,10 +115,10 @@ The system supports multiple logistics companies with isolated data:
 4. **FleetChat Processing**: Validates image, uploads to Samsara transport record
 5. **Confirmation**: "POD received and approved. Transport completed."
 
-## Compliance and Security
+## Security and Data Protection
 
 ### Data Protection
-- GDPR-compliant driver phone number handling with explicit consent
+- Secure driver phone number handling with appropriate safeguards
 - Encrypted communication channels for all API integrations
 - Audit logging for all message routing and data processing activities
 - Secure webhook validation to prevent unauthorized access

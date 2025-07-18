@@ -235,10 +235,10 @@ export default function FleetChatPublicSite() {
             <Card>
               <CardContent className="p-6">
                 <Globe className="w-12 h-12 text-teal-600 mb-4" />
-                <h3 className="text-lg font-semibold mb-2">GDPR Compliant</h3>
+                <h3 className="text-lg font-semibold mb-2">Privacy-Focused</h3>
                 <p className="text-gray-600">
-                  Privacy-first architecture with driver consent management 
-                  and secure data handling across all communications.
+                  Secure architecture with direct WhatsApp onboarding
+                  and encrypted data handling across all communications.
                 </p>
               </CardContent>
             </Card>

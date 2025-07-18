@@ -289,23 +289,23 @@ The enhanced integration maintains bidirectional data flow:
 
 ---
 
-## GDPR Compliance
+## Privacy & Security
 
-### Driver Anonymization
-- Driver identities protected through pseudonymization
-- Phone numbers stored with user consent
-- WhatsApp numbers linked only with explicit driver agreement
-- Data minimization principles applied throughout
+### Driver Data Protection
+- Driver identities protected through secure data handling practices
+- Phone numbers stored with appropriate security measures
+- WhatsApp numbers used only for operational communication
+- Data minimization principles applied throughout system design
 
-### Data Processing Justification
-- **Legitimate Interest**: Operational efficiency and safety communication
-- **Consent**: Explicit driver agreement for WhatsApp communication
-- **Contractual Necessity**: Transport workflow completion requirements
+### Data Processing Principles
+- **Operational Necessity**: Communication required for transport workflow completion
+- **Business Efficiency**: Real-time coordination improves safety and operational outcomes
+- **Secure Storage**: All driver data encrypted at rest and in transit
 
 ### Privacy Controls
-- Right to erasure implemented for driver data
-- Consent management for communication preferences
-- Audit trails for all data access and modifications
+- Driver data managed with appropriate security measures
+- Communication preferences respected in system design
+- Audit trails for all data access and system operationstions
 
 ---
 

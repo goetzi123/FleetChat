@@ -223,7 +223,7 @@ async validateAndCollectPhoneNumbers(
       whatsappCompatible,
       role: 'driver',
       isActive: true,
-      hasConsented: false // Will be updated after SMS invitation
+      whatsappActive: false // Will be updated after WhatsApp invitation acceptance
     });
     
     results.push({
@@ -276,41 +276,56 @@ async assignWhatsAppBusinessNumber(tenantId: string): Promise<WhatsAppAssignment
 }
 ```
 
-## Phase 3: SMS Invitations & Driver Consent
+## Phase 3: Direct WhatsApp Onboarding
 
-### 3.1 SMS Invitation System
+### 3.1 WhatsApp Template Message Invitations
 ```typescript
-async sendDriverInvitations(tenantId: string): Promise<InvitationResult> {
+async sendWhatsAppInvitations(tenantId: string): Promise<InvitationResult> {
   const tenant = await storage.getTenantById(tenantId);
   const drivers = await storage.getUsersByTenant(tenantId);
+  const whatsappClient = new WhatsAppBusinessClient(tenant.whatsappPhoneNumberId);
   const invitationResults = [];
   
   for (const driver of drivers) {
-    if (!driver.phone || driver.hasConsented) continue;
-    
-    const invitationLink = generateInvitationLink(tenantId, driver.id);
-    const smsMessage = `
-${tenant.companyName} Fleet Communication Setup
-
-You're invited to join our WhatsApp communication system for:
-• Route updates and notifications
-• Document requests and uploads  
-• Real-time transport coordination
-
-Complete setup: ${invitationLink}
-
-Questions? Contact: ${tenant.contactEmail}
-`;
+    if (!driver.phone || driver.whatsappActive) continue;
     
     try {
-      await sendSMS(driver.phone, smsMessage);
+      // Send WhatsApp template message for onboarding
+      const templateResult = await whatsappClient.sendTemplateMessage({
+        to: driver.phone,
+        template: {
+          name: "driver_onboarding",
+          language: { code: "en" },
+          components: [
+            {
+              type: "body",
+              parameters: [
+                { type: "text", text: tenant.companyName },
+                { type: "text", text: driver.name }
+              ]
+            },
+            {
+              type: "button",
+              sub_type: "quick_reply",
+              index: "0",
+              parameters: [{ type: "payload", payload: `accept_${driver.id}` }]
+            },
+            {
+              type: "button",
+              sub_type: "quick_reply",
+              index: "1",
+              parameters: [{ type: "payload", payload: `decline_${driver.id}` }]
+            }
+          ]
+        }
+      });
       
       await storage.createInvitation({
         tenantId,
         driverId: driver.id,
-        invitationType: 'sms',
+        invitationType: 'whatsapp',
         phoneNumber: driver.phone,
-        invitationLink,
+        whatsappMessageId: templateResult.messageId,
         status: 'sent',
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
       });
@@ -319,7 +334,8 @@ Questions? Contact: ${tenant.contactEmail}
         driverId: driver.id,
         name: driver.name,
         phone: driver.phone,
-        status: 'sent'
+        status: 'sent',
+        messageId: templateResult.messageId
       });
     } catch (error) {
       invitationResults.push({
@@ -341,45 +357,49 @@ Questions? Contact: ${tenant.contactEmail}
 }
 ```
 
-### 3.2 Driver Consent & Verification Process
+### 3.2 Direct WhatsApp Acceptance Process
 ```typescript
-// Driver clicks invitation link and completes consent
-async processDriverConsent(tenantId: string, driverId: string, consentData: {
-  privacyPolicyAccepted: boolean;
-  communicationConsent: boolean;
-  whatsappNumber: string;
-}): Promise<ConsentResult> {
+// Driver responds to WhatsApp invitation directly
+async processWhatsAppAcceptance(tenantId: string, driverId: string, responsePayload: string): Promise<AcceptanceResult> {
   
-  if (!consentData.privacyPolicyAccepted || !consentData.communicationConsent) {
-    throw new Error('Privacy policy and communication consent required');
+  if (!responsePayload.startsWith('accept_')) {
+    throw new Error('Invalid acceptance response');
   }
   
-  // Verify WhatsApp number
-  const whatsappVerified = await verifyWhatsAppNumber(consentData.whatsappNumber);
-  
-  if (!whatsappVerified) {
-    throw new Error('WhatsApp number verification failed');
-  }
-  
-  // Update driver record
+  // Update driver record - immediate activation
   await storage.updateUser(driverId, {
-    hasConsented: true,
-    consentDate: new Date(),
-    privacyPolicyAccepted: true,
-    communicationConsent: true,
-    whatsappNumber: consentData.whatsappNumber,
-    whatsappVerified: true,
-    status: 'active'
+    whatsappActive: true,
+    activatedAt: new Date(),
+    isActive: true
   });
   
-  // Send welcome message
+  // Send welcome message immediately
   await sendWelcomeMessage(tenantId, driverId);
   
   return {
     driverId,
-    consentCompleted: true,
-    whatsappVerified: true,
+    accepted: true,
+    whatsappActive: true,
     welcomeMessageSent: true
+  };
+}
+
+// Handle WhatsApp rejection
+async processWhatsAppRejection(tenantId: string, driverId: string, responsePayload: string): Promise<RejectionResult> {
+  
+  if (!responsePayload.startsWith('decline_')) {
+    throw new Error('Invalid rejection response');
+  }
+  
+  await storage.updateUser(driverId, {
+    whatsappActive: false,
+    isActive: false
+  });
+  
+  return {
+    driverId,
+    rejected: true,
+    status: 'inactive'
   };
 }
 ```
@@ -398,7 +418,7 @@ interface PricingTierSelection {
 
 async calculatePricingForTenant(tenantId: string): Promise<PricingCalculation> {
   const drivers = await storage.getUsersByTenant(tenantId);
-  const activeDrivers = drivers.filter(d => d.hasConsented && d.isActive);
+  const activeDrivers = drivers.filter(d => d.whatsappActive && d.isActive);
   
   const pricingTiers = await getPricingTiers();
   const recommendations = [];
@@ -516,7 +536,7 @@ async validateTenantSetup(tenantId: string): Promise<ValidationResult> {
     // Driver Management
     driversDiscovered: drivers.length > 0,
     driversWithPhone: drivers.filter(d => d.phone).length,
-    driversConsented: drivers.filter(d => d.hasConsented).length,
+    driversActive: drivers.filter(d => d.whatsappActive).length,
     
     // WhatsApp Integration
     whatsappNumberAssigned: Boolean(tenant.whatsappPhoneNumber),
@@ -545,7 +565,7 @@ async validateTenantSetup(tenantId: string): Promise<ValidationResult> {
     validationChecks.samsaraApiConnected &&
     validationChecks.samsaraWebhookCreated &&
     validationChecks.samsaraDriverAccess &&
-    validationChecks.driversConsented > 0 &&
+    validationChecks.driversActive > 0 &&
     validationChecks.whatsappConfigured &&
     validationChecks.stripeCustomerCreated;
   
@@ -554,7 +574,7 @@ async validateTenantSetup(tenantId: string): Promise<ValidationResult> {
     validationChecks,
     summary: {
       totalDrivers: drivers.length,
-      activeDrivers: drivers.filter(d => d.hasConsented && d.isActive).length,
+      activeDrivers: drivers.filter(d => d.whatsappActive && d.isActive).length,
       setupComplete: validationChecks.readyForProduction
     }
   };

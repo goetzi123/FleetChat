@@ -234,15 +234,15 @@ export default function Tracking() {
         </div>
       )}
 
-      {/* GDPR Notice */}
+      {/* Privacy Notice */}
       <div className="mt-8 p-4 bg-muted rounded-lg">
         <div className="flex items-start space-x-3">
           <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
           <div>
-            <h4 className="font-semibold text-sm">GDPR Compliant Tracking</h4>
+            <h4 className="font-semibold text-sm">Privacy-Focused Tracking</h4>
             <p className="text-sm text-muted-foreground mt-1">
-              All location data is anonymized and encrypted. Driver identities are protected through pseudonymization.
-              Location tracking requires explicit consent and can be disabled at any time.
+              All location data is encrypted during transmission and storage. Driver identities are protected through secure data handling practices.
+              Location tracking is used only for operational efficiency and transport coordination.
             </p>
           </div>
         </div>

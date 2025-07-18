@@ -370,11 +370,11 @@ CREATE TABLE communication_analytics (
 - **Access Control**: Role-based access with session management
 - **Audit Logging**: Complete activity tracking for compliance
 
-### GDPR Compliance
-- **Driver Consent**: Explicit consent for WhatsApp communication
-- **Data Retention**: Configurable retention policies
-- **Right to Erasure**: Driver data deletion capabilities
-- **Data Portability**: Export capabilities for driver data
+### Privacy & Security
+- **Driver Communication**: Direct WhatsApp onboarding without complex consent flows
+- **Data Retention**: Configurable retention policies for operational efficiency
+- **Data Management**: Driver data management capabilities
+- **Data Export**: Export capabilities for operational data
 
 ### Security Measures
 - **Input Validation**: Strict validation for all user inputs

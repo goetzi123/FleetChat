@@ -319,7 +319,7 @@ interface DriverSelection {
 **Driver Validation Process:**
 - Phone number format verification
 - WhatsApp Business API compatibility check
-- GDPR consent workflow implementation
+- Direct WhatsApp onboarding implementation
 - Driver profile creation in Fleet.Chat database
 
 **Step 3: Billing Configuration**

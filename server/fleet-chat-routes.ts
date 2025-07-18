@@ -74,6 +74,86 @@ async function deleteCustomerWebhook(tenantId: string): Promise<void> {
   }
 }
 
+// WhatsApp invitation template message for direct onboarding
+async function sendWhatsAppInvitation(tenantId: string, userId: string, phoneNumber: string): Promise<void> {
+  const tenant = await fleetChatStorage.getTenantById(tenantId);
+  if (!tenant?.whatsappPhoneNumberId) {
+    throw new Error('WhatsApp not configured for tenant');
+  }
+  
+  const user = await fleetChatStorage.getUserById(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Send direct WhatsApp template message for driver onboarding
+  await fleetChatWhatsApp.sendTemplateMessage({
+    to: phoneNumber,
+    template: {
+      name: "driver_onboarding",
+      language: { code: "en" },
+      components: [
+        {
+          type: "body",
+          parameters: [
+            { type: "text", text: tenant.companyName },
+            { type: "text", text: user.name }
+          ]
+        },
+        {
+          type: "button",
+          sub_type: "quick_reply",
+          index: "0",
+          parameters: [{ type: "payload", payload: `accept_${userId}` }]
+        },
+        {
+          type: "button",
+          sub_type: "quick_reply",
+          index: "1",
+          parameters: [{ type: "payload", payload: `decline_${userId}` }]
+        }
+      ]
+    }
+  });
+}
+
+// Handle WhatsApp driver responses for direct onboarding
+async function processWhatsAppDriverResponse(tenantId: string, phoneNumber: string, payload: string): Promise<void> {
+  const drivers = await fleetChatStorage.getUsersByTenant(tenantId);
+  const driver = drivers.find(d => d.phone === phoneNumber || d.whatsappNumber === phoneNumber);
+  
+  if (!driver) {
+    console.error(`Driver not found for phone ${phoneNumber} in tenant ${tenantId}`);
+    return;
+  }
+
+  if (payload.startsWith('accept_')) {
+    // Driver accepted WhatsApp communication
+    await fleetChatStorage.updateUser(driver.id, {
+      whatsappActive: true,
+      whatsappNumber: phoneNumber,
+      activatedAt: new Date(),
+      isActive: true
+    });
+    
+    // Send welcome message
+    await fleetChatWhatsApp.sendMessage({
+      to: phoneNumber,
+      text: `Welcome to ${(await fleetChatStorage.getTenantById(tenantId))?.companyName} FleetChat! 🚛\n\nYou'll receive updates about:\n• Route assignments\n• Pickup/delivery coordination\n• Document requests\n• Emergency notifications\n\nReply with questions anytime.`
+    });
+    
+    console.log(`Driver ${driver.name} activated WhatsApp communication`);
+  } else if (payload.startsWith('decline_')) {
+    // Driver declined WhatsApp communication
+    await fleetChatStorage.updateUser(driver.id, {
+      whatsappActive: false,
+      isActive: false
+    });
+    
+    console.log(`Driver ${driver.name} declined WhatsApp communication`);
+  }
+}
+
 export async function registerFleetChatRoutes(app: Express): Promise<Server> {
   // Health check endpoint
   app.get("/api/health", async (req, res) => {
@@ -203,13 +283,18 @@ export async function registerFleetChatRoutes(app: Express): Promise<Server> {
             role: "driver",
             samsaraDriverId: driverId,
             isActive: samsaraDriver.isActive,
-            hasConsented: false // Will be updated when driver accepts invitation
+            whatsappActive: false, // Will be updated when driver accepts WhatsApp invitation
+            phoneSource: samsaraDriver.phone ? 'samsara' : 'manual'
           });
 
-          // Send SMS invitation (simulated for now)
+          // Send WhatsApp invitation template message
           if (samsaraDriver.phone) {
-            console.log(`SMS invitation sent to ${samsaraDriver.name} at ${samsaraDriver.phone}`);
-            // In production: send actual SMS with WhatsApp opt-in link
+            try {
+              await sendWhatsAppInvitation(tenantId, user.id, samsaraDriver.phone);
+              console.log(`WhatsApp invitation sent to ${samsaraDriver.name} at ${samsaraDriver.phone}`);
+            } catch (error) {
+              console.error(`Failed to send WhatsApp invitation to ${samsaraDriver.name}:`, error);
+            }
           }
 
           onboardedCount++;
@@ -332,7 +417,7 @@ export async function registerFleetChatRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // WhatsApp webhook endpoint
+  // WhatsApp webhook endpoint for direct driver onboarding
   app.post("/api/whatsapp/webhook", async (req, res) => {
     try {
       const whatsappData = req.body;
@@ -342,16 +427,57 @@ export async function registerFleetChatRoutes(app: Express): Promise<Server> {
       //   return res.status(403).json({ error: "Unauthorized" });
       // }
 
-      const whatsappApi = fleetChatWhatsApp.getWhatsAppAPI("dummy_tenant"); // Get from phone number
-      if (!whatsappApi) {
-        return res.status(400).json({ error: "No WhatsApp API found" });
-      }
-
-      const processedMessages = whatsappApi.processWebhookMessage(whatsappData);
+      // Process WhatsApp webhook messages
+      const processedMessages = [];
       
-      for (const message of processedMessages) {
-        if (message.type === 'message' && message.from) {
-          await processDriverWhatsAppMessage(message);
+      if (whatsappData.entry && whatsappData.entry.length > 0) {
+        for (const entry of whatsappData.entry) {
+          if (entry.changes && entry.changes.length > 0) {
+            for (const change of entry.changes) {
+              if (change.field === 'messages' && change.value.messages) {
+                for (const message of change.value.messages) {
+                  // Handle button responses for driver onboarding
+                  if (message.type === 'button' && message.button?.payload) {
+                    const phoneNumber = message.from;
+                    const payload = message.button.payload;
+                    
+                    // Find tenant by phone number
+                    const tenants = await fleetChatStorage.getAllTenants();
+                    for (const tenant of tenants) {
+                      if (tenant.whatsappPhoneNumber) {
+                        await processWhatsAppDriverResponse(tenant.id, phoneNumber, payload);
+                        processedMessages.push({ type: 'button', from: phoneNumber, payload });
+                        break;
+                      }
+                    }
+                  }
+                  
+                  // Handle text messages from drivers
+                  if (message.type === 'text' && message.text?.body) {
+                    const phoneNumber = message.from;
+                    const messageText = message.text.body;
+                    
+                    // Find tenant and driver by phone number
+                    const tenants = await fleetChatStorage.getAllTenants();
+                    for (const tenant of tenants) {
+                      const drivers = await fleetChatStorage.getUsersByTenant(tenant.id);
+                      const driver = drivers.find(d => 
+                        d.whatsappActive && 
+                        (d.phone === phoneNumber || d.whatsappNumber === phoneNumber)
+                      );
+                      
+                      if (driver) {
+                        // Process driver text message (existing transport communication)
+                        await processDriverWhatsAppMessage(tenant.id, driver.id, messageText);
+                        processedMessages.push({ type: 'text', from: phoneNumber, text: messageText });
+                        break;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
 

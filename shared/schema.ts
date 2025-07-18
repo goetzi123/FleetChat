@@ -114,7 +114,7 @@ export const tenants = pgTable("tenants", {
   
   // Service Settings
   messageTemplates: jsonb("message_templates").default('{}'),
-  complianceSettings: jsonb("compliance_settings").default('{"gdprEnabled":true,"dataRetentionDays":365,"driverConsentRequired":true}'),
+  complianceSettings: jsonb("compliance_settings").default('{"gdprEnabled":false,"dataRetentionDays":365,"driverConsentRequired":false}'),
   
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -128,13 +128,12 @@ export const users = pgTable("users", {
   name: varchar("name", { length: 255 }).notNull(),
   phone: varchar("phone", { length: 20 }),
   role: varchar("role", { length: 50 }).notNull(),
-  isAnonymous: boolean("is_anonymous").default(false),
-  pseudoId: varchar("pseudo_id", { length: 100 }), // For driver anonymity
   whatsappNumber: varchar("whatsapp_number", { length: 20 }), // WhatsApp Business API phone number
+  whatsappActive: boolean("whatsapp_active").default(false), // WhatsApp communication enabled
   samsaraDriverId: varchar("samsara_driver_id", { length: 255 }), // Link to Samsara driver
-  hasConsented: boolean("has_consented").default(false), // GDPR consent
-  consentedAt: timestamp("consented_at"),
+  phoneSource: varchar("phone_source", { length: 50 }).default("samsara"), // 'samsara' | 'manual' | 'verified'
   isActive: boolean("is_active").default(true),
+  activatedAt: timestamp("activated_at"), // WhatsApp activation timestamp
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

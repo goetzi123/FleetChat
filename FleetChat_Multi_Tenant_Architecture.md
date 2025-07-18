@@ -231,7 +231,7 @@ function tenantIsolationMiddleware(req, res, next) {
 }
 ```
 
-### GDPR Compliance Per Tenant
+### Privacy & Security Per Tenant
 - Individual data processing agreements
 - Tenant-specific data retention policies
 - Per-tenant data export capabilities
