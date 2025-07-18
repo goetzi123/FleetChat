@@ -9,39 +9,40 @@ FleetChat operates as a Software-as-a-Service (SaaS) platform designed to serve 
 Each trucking company using FleetChat is a separate **tenant** with:
 - Unique tenant identifier (e.g., `tenant_abc_trucking_001`)
 - Dedicated WhatsApp Business phone number
-- Isolated Samsara API configuration
-- Separate driver database and communication logs
+- Isolated Samsara API credentials
+- Separate driver phone number mappings and communication logs
 - Independent billing and usage tracking
 
 ### Data Isolation Model
 
 #### Database-Level Separation
 ```sql
--- All tables include tenant_id for strict isolation
-transports {
+-- Simplified schema with minimal data storage
+driver_mapping {
   id: varchar
   tenant_id: varchar  -- Foreign key to tenants table
-  samsara_driver_id: varchar
-  status: varchar
-  -- Additional transport fields
-}
-
-drivers {
-  id: varchar
-  tenant_id: varchar  -- Ensures driver data isolation
-  samsara_driver_id: varchar
+  samsara_driver_id: varchar  -- Reference to Samsara driver
   whatsapp_number: varchar (encrypted)
-  consent_status: varchar
-  -- Additional driver fields
+  whatsapp_active: boolean
+  -- No personal data stored locally
 }
 
-message_logs {
+communication_logs {
   id: varchar
   tenant_id: varchar  -- Message isolation per tenant
-  driver_id: varchar
+  driver_mapping_id: varchar
+  samsara_route_id: varchar  -- Reference only, no route data
   direction: enum(inbound, outbound)
-  content: text (encrypted)
+  content: text
   timestamp: datetime
+}
+
+tenants {
+  id: varchar
+  company_name: varchar
+  samsara_api_token: text (encrypted)
+  stripe_customer_id: varchar
+  -- Only credentials and billing data
 }
 ```
 

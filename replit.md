@@ -64,11 +64,11 @@ FleetChat is a headless message broker service that facilitates seamless communi
 
 ## Message Broker Flow
 
-1. **Fleet Event Processing**: Samsara Event → Driver Phone Resolution → WhatsApp Message Generation → Driver Notification
-2. **Driver Response Handling**: WhatsApp Response → Driver Identification → Response Classification → Samsara Update
-3. **Document Processing**: WhatsApp Document Upload → File Processing → Samsara Transport Record Update
-4. **Status Synchronization**: Driver Status Update → Transport Status Change → Real-time Fleet Visibility
-5. **Bidirectional Communication**: Samsara ↔ FleetChat ↔ WhatsApp (No human interface required)
+1. **Event Processing**: Samsara Event → Driver Phone Lookup → WhatsApp Message Generation → Driver Notification
+2. **Response Handling**: WhatsApp Response → Driver Identification → Response Logging → Communication Audit
+3. **Document Relay**: WhatsApp Document Upload → Forward to Samsara (no local storage)
+4. **Communication Tracking**: Message Status Updates → Delivery Confirmation → Audit Trail
+5. **Pure Middleware**: Samsara → FleetChat → WhatsApp (No data duplication, no fleet management)
 
 ## External Dependencies
 
@@ -85,17 +85,16 @@ FleetChat is a headless message broker service that facilitates seamless communi
 - D-Soft (bluecargo)
 
 ### Core Services
-- SMS Gateway for initial contact
 - WhatsApp Business API messaging service
-- Geolocation services for tracking
-- QR code generation libraries
-- File storage for document management
+- Message template management
+- Driver phone number mapping
+- Communication audit logging
 
 ### Compliance & Security
-- GDPR compliance framework
-- Data anonymization for tracking
-- Secure chat infrastructure
-- Privacy-first architecture
+- Secure API credential storage
+- Webhook signature verification
+- Encrypted token management
+- Minimal data retention policy
 
 ## Multi-Tenant Architecture
 
@@ -103,11 +102,11 @@ FleetChat is a headless message broker service that facilitates seamless communi
 FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking companies with complete logical separation:
 
 **Tenant Isolation:**
-- Each fleet operator is a separate tenant with isolated data
+- Each fleet operator is a separate tenant with isolated credentials
 - Dedicated WhatsApp phone numbers per fleet (tenant)
 - Separate Samsara API configurations per tenant
-- Independent driver databases with GDPR compliance
-- Isolated message queues and webhook processing
+- Independent driver phone number mappings (no personal data storage)
+- Isolated communication logs and webhook processing
 
 **Shared Infrastructure:**
 - Single FleetChat middleware instance serves all tenants
@@ -118,9 +117,9 @@ FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking
 
 ### Scalability Considerations
 - WhatsApp Business API rate limiting handling
-- Document storage optimization
+- Communication log management
 - Real-time WhatsApp messaging service scaling
-- Geolocation data processing efficiency
+- Multi-tenant webhook processing efficiency
 
 ### Integration Deployment
 - API-first approach for TMS connectors
@@ -131,23 +130,22 @@ FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking
 ## Current Implementation Status
 
 ### Production Fleet.Chat System Complete
-- **Production-Ready Architecture**: Full PostgreSQL database with multi-tenant isolation
-- **Samsara API Integration**: Complete client with driver management, route creation, and webhook processing
+- **Production-Ready Architecture**: Simplified PostgreSQL schema with driver phone mapping and credentials storage
+- **Samsara API Integration**: Read-only client with webhook processing (no route creation)
 - **WhatsApp Business API Management**: Bulk phone number provisioning with managed service infrastructure
-- **Fleet Onboarding System**: Three-step setup process with Samsara connection and payment integration
+- **Fleet Onboarding System**: Two-step setup process with Samsara credentials and payment integration
 - **Stripe Payment Integration**: Automated driver-based billing with monthly invoicing
-- **Fleet Dashboard**: Comprehensive management interface for fleet operators
-- **High-Performance Message Broker**: Bidirectional communication with intelligent event processing
+- **Communication Middleware**: Pure message broker with event translation and response logging
 
 ### Production Components Built
-1. **Database Schema**: Complete PostgreSQL schema with tenant isolation, users, transports, billing records, admin system
-2. **Samsara API Client**: Full integration including drivers, vehicles, routes, locations, documents, webhooks
-3. **WhatsApp Management Service**: Bulk phone provisioning, message templates, media handling, webhook processing
-4. **Fleet Onboarding UI**: Multi-step setup with Samsara configuration, driver discovery, and payment setup
-5. **Fleet Dashboard**: Real-time monitoring with transport tracking, driver management, and billing overview
-6. **Message Translation Engine**: Context-aware WhatsApp message generation for transport workflows
+1. **Simplified Database Schema**: PostgreSQL schema with driver phone mapping, Samsara credentials, and billing records only
+2. **Samsara API Client**: Read-only integration for driver data and webhook event processing (no fleet management duplication)
+3. **WhatsApp Management Service**: Phone number provisioning, message templates, and communication logging
+4. **Fleet Onboarding UI**: Two-step setup with Samsara API credentials and payment configuration
+5. **Communication Audit**: Message tracking and delivery status monitoring
+6. **Message Translation Engine**: Event-to-WhatsApp message conversion with template system
 7. **Automated Billing System**: Driver-based pricing with Stripe integration and usage tracking
-8. **Admin Management System**: Complete admin dashboard with usage monitoring, pricing configuration, and system oversight
+8. **Admin Management System**: Admin dashboard with usage monitoring and pricing configuration
 
 ### Production API Endpoints
 - `POST /api/fleet/setup` - Complete fleet onboarding with Samsara and WhatsApp configuration
@@ -277,6 +275,7 @@ Changelog:
 - July 17, 2025. Completed comprehensive documentation review and updates to reflect Samsara webhook compliance implementation - updated all technical documentation, system overview, multi-tenant architecture guides, portal specifications, and created complete API endpoints documentation ensuring all documentation accurately reflects the production-ready per-customer webhook architecture with signature verification and lifecycle management
 - July 18, 2025. Implemented direct WhatsApp onboarding architecture by removing Twilio SMS integration entirely - eliminated GDPR compliance requirements, simplified driver onboarding to direct WhatsApp template message invitations, updated database schema to remove consent fields, modified fleet-chat-routes.ts to support direct WhatsApp acceptance/rejection responses, and created streamlined 5-phase tenant onboarding process without SMS dependencies reducing complexity and operational costs significantly
 - July 18, 2025. Completed comprehensive codebase refactoring to remove all GDPR references and Twilio implementations - deprecated FleetChat_Twilio_Integration_Specification.md, updated database storage to use whatsappActive instead of hasConsented, removed consent management from FleetChat_Complete_Tenant_Onboarding_Process.md, updated privacy notices to remove GDPR compliance claims, and ensured all documentation reflects simplified direct WhatsApp onboarding architecture
+- July 18, 2025. Ensured comprehensive documentation consistency by removing all Samsara functionality duplication from FleetChat - eliminated route creation, transport management, and fleet operations from codebase and documentation to establish FleetChat as pure communication middleware that only maintains driver phone numbers, Samsara API credentials, and payment details without duplicating fleet management data
 ```
 
 ## User Preferences

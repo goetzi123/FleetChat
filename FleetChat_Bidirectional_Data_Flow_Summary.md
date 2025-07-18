@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-FleetChat operates as an intelligent bidirectional bridge between Samsara fleet management systems and driver WhatsApp communications. When drivers respond to WhatsApp messages, their responses are automatically processed and synchronized back into Samsara records, maintaining real-time fleet visibility and operational continuity. This document details the complete data flow from Samsara webhook extraction through WhatsApp driver interaction and back to Samsara record updates.
+FleetChat operates as pure communication middleware between Samsara fleet management systems and driver WhatsApp communications. The system translates Samsara events into contextual WhatsApp messages and logs driver responses for audit purposes without duplicating fleet management functionality. This document details the communication flow from Samsara webhook processing through WhatsApp driver interaction and response logging.
 
 ## Data Flow Architecture Overview
 
@@ -11,9 +11,9 @@ FleetChat operates as an intelligent bidirectional bridge between Samsara fleet 
 Samsara Event → Webhook Processing → Driver Identification → WhatsApp Message Generation → Driver Notification
 ```
 
-### 2. WhatsApp → FleetChat → Samsara (Inbound Response Flow)
+### 2. WhatsApp → FleetChat (Inbound Response Flow)
 ```
-Driver WhatsApp Response → Message Classification → Transport Status Update → Samsara API Synchronization → Fleet Record Update
+Driver WhatsApp Response → Message Classification → Response Logging → Communication Audit Trail
 ```
 
 ## Complete Data Flow Process
@@ -37,8 +37,8 @@ if (processedEvent.transportAction && driverId) {
 
 **Driver-to-WhatsApp Mapping:**
 - Samsara driver IDs are mapped to WhatsApp phone numbers via FleetChat database
-- GDPR-compliant phone number resolution ensures secure communication
-- Each tenant maintains isolated driver communication records
+- Minimal driver phone number storage (no personal data duplication)
+- Each tenant maintains isolated driver communication mappings
 
 ### Phase 2: WhatsApp Message Generation and Delivery
 

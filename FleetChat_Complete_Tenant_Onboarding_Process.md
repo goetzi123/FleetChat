@@ -2,16 +2,16 @@
 
 ## Overview
 
-FleetChat's tenant onboarding process is designed to configure a complete fleet communication system in 2-3 days through a streamlined three-phase approach. Each new trucking company (tenant) is guided through Samsara integration, driver phone number management, WhatsApp setup, and billing configuration with automated validation and compliance checks throughout the process.
+FleetChat's tenant onboarding process is designed to configure communication middleware in 1-2 days through a simplified two-phase approach. Each new trucking company (tenant) is guided through Samsara API credentials setup, driver phone number mapping, and billing configuration without duplicating fleet management functionality.
 
 ## Pre-Onboarding Requirements
 
 ### Fleet Operator Prerequisites
-- **Samsara Fleet Management Account** - Active Samsara subscription with API access
-- **Fleet Administrator Access** - Single designated admin with full Samsara permissions
-- **Driver Phone Numbers** - Known phone numbers for drivers (may not be in Samsara)
+- **Samsara Fleet Management Account** - Active Samsara subscription with read-only API access
+- **Fleet Administrator Access** - Single designated admin with API token generation permissions
+- **Driver Phone Numbers** - Phone numbers for drivers to map to WhatsApp
 - **Payment Method** - Credit card for automated monthly billing
-- **Company Information** - Legal business name and contact details
+- **Company Information** - Basic business name and contact details
 
 ### FleetChat System Prerequisites
 - **WhatsApp Business Phone Pool** - Available phone numbers for assignment
@@ -59,7 +59,7 @@ interface SamsaraConfig {
    - `fleet:drivers:appSettings:read` - Phone number access
    - `fleet:vehicles:read` - Vehicle data access
    - `fleet:routes:read` - Route data access
-   - `fleet:routes:write` - Route creation/updates
+   - `fleet:webhooks:write` - Webhook creation for event notifications
    - `fleet:documents:read` - Document access
    - `fleet:documents:write` - Document uploads
 3. **Connection Test** - Perform test API calls to verify connectivity
