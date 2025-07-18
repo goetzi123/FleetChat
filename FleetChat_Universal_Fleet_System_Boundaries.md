@@ -77,41 +77,36 @@ Driver WhatsApp Response → FleetChat Relay → ANY Fleet System (no processing
 - ❌ No modification of any fleet system data
 - ❌ No deletion from any fleet system
 
-### 6. Universal Database Schema
+### 6. Universal Phone Number Repository
 
-**Same Schema Applies to ALL Fleet Systems:**
-```sql
--- Universal driver mapping table
-driver_mapping {
-  id: varchar
-  tenant_id: varchar
-  fleet_system: enum('samsara', 'geotab', 'transporeon', 'other')
-  fleet_driver_id: varchar  -- Driver ID from ANY fleet system
-  whatsapp_number: varchar
-  whatsapp_active: boolean
-}
+**FleetChat Driver Phone Number Management:**
+FleetChat maintains a centralized repository of driver phone numbers that serves as the critical bridge between fleet management systems and WhatsApp communication. This repository is essential for FleetChat's core function as a communication protocol service.
 
--- Universal tenant configuration
-tenants {
-  id: varchar
-  company_name: varchar
-  fleet_system: enum('samsara', 'geotab', 'transporeon', 'other')
-  fleet_api_token: text (encrypted)
-  fleet_webhook_id: varchar
-  stripe_customer_id: varchar
-}
+**Phone Number Repository Purpose:**
+- Maps fleet system driver identifiers to WhatsApp-capable phone numbers
+- Enables message routing from any fleet system to specific drivers
+- Supports multi-tenant isolation with per-fleet-operator driver mapping
+- Maintains WhatsApp activation status for each driver
+- Provides fallback phone number storage when fleet systems don't expose driver contact information
 
--- Universal communication logging
-communication_logs {
-  id: varchar
-  tenant_id: varchar
-  fleet_system: enum('samsara', 'geotab', 'transporeon', 'other')
-  fleet_route_id: varchar  -- Reference only, no route data
-  direction: enum('inbound', 'outbound')
-  message_status: varchar
-  timestamp: datetime
-}
-```
+**Repository Structure:**
+- Driver identification mapping (fleet system ID to phone number)
+- WhatsApp activation status per driver
+- Tenant isolation ensuring fleet operators only access their drivers
+- Multi-fleet-system support (Samsara, Geotab, Transporeon, etc.)
+- Communication preferences and delivery confirmation tracking
+
+**Data Sources:**
+- Primary: Fleet system APIs (when phone numbers are available)
+- Secondary: Manual entry during driver onboarding process
+- Validation: WhatsApp Business API verification of phone number format
+- Updates: Driver acceptance/decline responses via WhatsApp template messages
+
+**Repository Boundaries:**
+- Phone numbers and communication preferences only
+- No driver profiles, performance data, or fleet management information
+- No personal information beyond what's necessary for message routing
+- No duplication of driver management functionality from fleet systems
 
 ### 7. Universal Integration Architecture
 
@@ -152,49 +147,41 @@ Clear separation between communication relay and fleet management for ALL system
 
 ### 10. Universal Implementation Guidelines
 
-**Code Structure for ALL Fleet Systems:**
-```typescript
-// Universal interface for ALL fleet systems
-interface IFleetProvider {
-  getDrivers(tenantId: string): Promise<Driver[]>;
-  processWebhookEvent(event: any): Promise<MessageTemplate>;
-  // NO fleet management methods allowed
-}
+**Architecture Principles for ALL Fleet Systems:**
+- Read-only access to fleet system APIs for event data and driver identification
+- Message template application without data modification or interpretation
+- Direct relay of driver responses to fleet systems without processing
+- Phone number repository management as the only stored driver data
+- Multi-tenant isolation ensuring complete data separation between fleet operators
 
-// Implementations for each fleet system
-class SamsaraFleetProvider implements IFleetProvider { ... }
-class GeotabFleetProvider implements IFleetProvider { ... }
-class TransporeonFleetProvider implements IFleetProvider { ... }
+**Service Layer Design:**
+- Universal fleet system abstraction supporting any fleet management platform
+- Standardized message relay service handling all fleet-to-driver communication
+- Template engine applying predefined messages based on fleet system event types
+- Phone number validation and WhatsApp activation management
+- Webhook processing for real-time event handling across all fleet systems
 
-// Universal message relay service
-class MessageRelayService {
-  async relayToWhatsApp(fleetEvent: any, provider: IFleetProvider) {
-    // Apply template and relay only
-  }
-  
-  async relayToFleetSystem(whatsappMessage: any, provider: IFleetProvider) {
-    // Forward without processing
-  }
-}
-```
+**Data Flow Restrictions:**
+- Fleet system events trigger template message application only
+- Driver responses forwarded directly without interpretation or storage
+- Phone number repository updated only for communication preferences
+- No business logic implementation beyond message routing
+- No data analysis, aggregation, or fleet management decision-making
 
 ### 11. Universal API Endpoints
 
 **Standard Endpoints for ALL Fleet Systems:**
-```
-✅ POST /webhook/{fleet-system}/{tenantId} - Universal webhook handler
-✅ GET /api/{fleet-system}/drivers/{tenantId} - Universal driver discovery
-✅ POST /api/fleet/setup - Universal fleet system onboarding
-✅ POST /api/whatsapp/webhook - Universal WhatsApp message handler
-```
+- Universal webhook handler for fleet system events
+- Universal driver discovery for phone number mapping
+- Universal fleet system onboarding and configuration
+- Universal WhatsApp message handler for driver responses
 
 **Prohibited Endpoints for ALL Fleet Systems:**
-```
-❌ /api/{fleet-system}/vehicles/* - No vehicle management
-❌ /api/{fleet-system}/routes/* - No route management
-❌ /api/{fleet-system}/compliance/* - No compliance management
-❌ /api/{fleet-system}/analytics/* - No analytics or reporting
-```
+- Vehicle management, tracking, or monitoring endpoints
+- Route management, optimization, or planning endpoints
+- Compliance monitoring or regulatory reporting endpoints
+- Analytics, dashboards, or business intelligence endpoints
+- Driver management beyond phone number mapping endpoints
 
 ### 12. Universal Monitoring and Enforcement
 
