@@ -180,6 +180,15 @@ export class WhatsAppResponseHandler {
       timestamp: message.timestamp
     });
 
+    // Write back to TMS system
+    if (transport.samsaraDriverId) {
+      await samsaraService.updateSamsaraDriverLocation(transport.samsaraDriverId, {
+        lat: location.lat,
+        lng: location.lng,
+        timestamp: message.timestamp
+      });
+    }
+
     // Update transport status if needed
     await this.updateTransportStatusFromLocation(transport, location);
 
@@ -207,6 +216,17 @@ export class WhatsAppResponseHandler {
       uploadedBy: driver.id,
       notes: `Uploaded via WhatsApp by ${driver.name || driver.pseudoId}`
     });
+
+    // Write back to TMS system
+    if (transport.samsaraRouteId) {
+      await samsaraService.submitDocumentToSamsara(transport.samsaraRouteId, {
+        filename: document.filename,
+        fileUrl: document.fileUrl,
+        mimeType: document.mimeType,
+        uploadedBy: driver.id,
+        type: this.determineDocumentType(document.filename)
+      });
+    }
 
     // Notify dispatcher about document upload
     await this.notifyDispatcherOfDocument(transport, uploadedDoc, driver);
@@ -236,9 +256,10 @@ export class WhatsAppResponseHandler {
       createdBy: driver.id
     });
 
-    // Sync with Samsara if configured
+    // Write back to TMS system if configured
     if (transport.samsaraRouteId) {
       await samsaraService.syncTransportWithSamsara(transport.id);
+      await samsaraService.updateSamsaraRouteStatus(transport.samsaraRouteId, newStatus);
     }
 
     const nextAction = isPickup ? 'loading' : 'unloading';
@@ -267,6 +288,11 @@ export class WhatsAppResponseHandler {
       createdBy: driver.id
     });
 
+    // Write back to TMS system if configured
+    if (transport.samsaraRouteId) {
+      await samsaraService.updateSamsaraRouteStatus(transport.samsaraRouteId, transport.status);
+    }
+
     // Notify dispatcher of ETA change
     await this.notifyDispatcherOfETAChange(transport, newETA, delayMinutes, driver);
 
@@ -274,6 +300,257 @@ export class WhatsAppResponseHandler {
       type: 'text',
       message: `⏰ ETA updated successfully\n\nNew estimated arrival: ${newETA.toLocaleTimeString()}\n\nDispatcher has been notified.`,
       quickReplies: ['✅ Continue', '📞 Call Dispatch']
+    };
+  }
+
+  // Process loading start
+  private async processLoadingStart(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    const newStatus = 'loading';
+    
+    // Update transport status
+    await storage.updateTransport(transport.id, { status: newStatus });
+    
+    // Create status update
+    await storage.createStatusUpdate({
+      transportId: transport.id,
+      status: newStatus,
+      notes: `Loading started via WhatsApp`,
+      createdBy: driver.id
+    });
+    
+    // Write back to TMS system
+    if (transport.samsaraRouteId) {
+      await samsaraService.updateSamsaraRouteStatus(transport.samsaraRouteId, newStatus);
+    }
+    
+    return {
+      type: 'text',
+      message: `🚛 Loading started for transport #${transport.id.slice(-6)}\n\nPlease notify when loading is complete.`,
+      buttons: ['✅ Loading Complete', '📞 Call Dispatch', '❓ Need Help']
+    };
+  }
+
+  // Process loading complete
+  private async processLoadingComplete(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    const newStatus = 'loaded';
+    
+    // Update transport status
+    await storage.updateTransport(transport.id, { status: newStatus });
+    
+    // Create status update
+    await storage.createStatusUpdate({
+      transportId: transport.id,
+      status: newStatus,
+      notes: `Loading completed via WhatsApp`,
+      createdBy: driver.id
+    });
+    
+    // Write back to TMS system
+    if (transport.samsaraRouteId) {
+      await samsaraService.updateSamsaraRouteStatus(transport.samsaraRouteId, newStatus);
+    }
+    
+    return {
+      type: 'text',
+      message: `✅ Loading completed for transport #${transport.id.slice(-6)}\n\nYou can now depart for delivery.`,
+      buttons: ['🚚 Depart for Delivery', '📞 Call Dispatch', '❓ Need Help']
+    };
+  }
+
+  // Process delivery confirmation
+  private async processDeliveryConfirmation(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    const newStatus = 'delivered';
+    
+    // Update transport status
+    await storage.updateTransport(transport.id, { 
+      status: newStatus,
+      isActive: false,
+      deliveryActual: new Date()
+    });
+    
+    // Create status update
+    await storage.createStatusUpdate({
+      transportId: transport.id,
+      status: newStatus,
+      notes: `Delivery confirmed via WhatsApp`,
+      createdBy: driver.id
+    });
+    
+    // Write back to TMS system
+    if (transport.samsaraRouteId) {
+      await samsaraService.updateSamsaraRouteStatus(transport.samsaraRouteId, newStatus);
+    }
+    
+    return {
+      type: 'text',
+      message: `✅ Delivery confirmed for transport #${transport.id.slice(-6)}\n\nThank you for completing this delivery!`,
+      buttons: ['📄 Upload POD', '📞 Call Dispatch', '🏠 Return to Base']
+    };
+  }
+
+  // Process unloading start
+  private async processUnloadingStart(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    const newStatus = 'unloading';
+    
+    // Update transport status
+    await storage.updateTransport(transport.id, { status: newStatus });
+    
+    // Create status update
+    await storage.createStatusUpdate({
+      transportId: transport.id,
+      status: newStatus,
+      notes: `Unloading started via WhatsApp`,
+      createdBy: driver.id
+    });
+    
+    // Write back to TMS system
+    if (transport.samsaraRouteId) {
+      await samsaraService.updateSamsaraRouteStatus(transport.samsaraRouteId, newStatus);
+    }
+    
+    return {
+      type: 'text',
+      message: `🚛 Unloading started for transport #${transport.id.slice(-6)}\n\nPlease notify when unloading is complete.`,
+      buttons: ['✅ Delivery Complete', '📞 Call Dispatch', '❓ Need Help']
+    };
+  }
+
+  // Process general confirmation
+  private async processGeneralConfirmation(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    // Create status update
+    await storage.createStatusUpdate({
+      transportId: transport.id,
+      status: transport.status,
+      notes: `Driver confirmed via WhatsApp`,
+      createdBy: driver.id
+    });
+    
+    return {
+      type: 'text',
+      message: `✅ Confirmation received for transport #${transport.id.slice(-6)}\n\nThank you for the update!`,
+      quickReplies: ['✅ Continue', '📞 Call Dispatch']
+    };
+  }
+
+  // Request document upload
+  private async requestDocumentUpload(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    return {
+      type: 'text',
+      message: `📄 Please upload the required documents for transport #${transport.id.slice(-6)}\n\nAccepted formats: PDF, JPG, PNG`,
+      quickReplies: ['📸 Take Photo', '📞 Call Dispatch', '❓ Need Help']
+    };
+  }
+
+  // Handle emergency request
+  private async handleEmergencyRequest(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    // Create emergency status update
+    await storage.createStatusUpdate({
+      transportId: transport.id,
+      status: 'emergency',
+      notes: `Emergency request via WhatsApp`,
+      createdBy: driver.id
+    });
+    
+    // Write back to TMS system
+    if (transport.samsaraRouteId) {
+      await samsaraService.updateSamsaraRouteStatus(transport.samsaraRouteId, 'emergency');
+    }
+    
+    return {
+      type: 'text',
+      message: `🚨 Emergency request received for transport #${transport.id.slice(-6)}\n\nDispatch has been notified immediately.`,
+      buttons: ['📞 Call Dispatch', '🚑 Call 911', '❓ Need Help']
+    };
+  }
+
+  // Handle unknown button
+  private async handleUnknownButton(message: WhatsAppIncomingMessage, driver: any, transport: any) {
+    return {
+      type: 'text',
+      message: `❓ Unknown button response received. How can I help you?`,
+      buttons: ['✅ All Good', '📞 Call Dispatch', '❓ Need Help']
+    };
+  }
+
+  // Handle unknown quick reply
+  private async handleUnknownQuickReply(message: WhatsAppIncomingMessage, driver: any, transport: any) {
+    return {
+      type: 'text',
+      message: `❓ Unknown quick reply received. How can I help you?`,
+      quickReplies: ['✅ All Good', '📞 Call Dispatch', '❓ Need Help']
+    };
+  }
+
+  // Handle ETA confirmation
+  private async processETAConfirmation(driver: any, transport: any, type: string) {
+    // Create status update
+    await storage.createStatusUpdate({
+      transportId: transport.id,
+      status: transport.status,
+      notes: `ETA confirmed as ${type} via WhatsApp`,
+      createdBy: driver.id
+    });
+    
+    return {
+      type: 'text',
+      message: `✅ ETA confirmed for transport #${transport.id.slice(-6)}\n\nThank you for the update!`,
+      quickReplies: ['✅ Continue', '📞 Call Dispatch']
+    };
+  }
+
+  // Handle help request
+  private async handleHelpRequest(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    return {
+      type: 'text',
+      message: `❓ How can I help you with transport #${transport.id.slice(-6)}?\n\nCommon actions:`,
+      buttons: ['📞 Call Dispatch', '📄 Upload Document', '📍 Share Location']
+    };
+  }
+
+  // Handle ETA query
+  private async handleETAQuery(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    const eta = transport.deliveryEta ? new Date(transport.deliveryEta).toLocaleTimeString() : 'Not set';
+    
+    return {
+      type: 'text',
+      message: `⏰ Current ETA for transport #${transport.id.slice(-6)}: ${eta}\n\nDo you need to update it?`,
+      quickReplies: ['⏰ On Time', '⏰ +15 min', '⏰ +30 min', '⏰ +1 hour']
+    };
+  }
+
+  // Handle no active transport
+  private async handleNoActiveTransport(message: WhatsAppIncomingMessage, driver: any) {
+    return {
+      type: 'text',
+      message: `You don't have any active transports right now. Please contact dispatch if you need assistance.`,
+      quickReplies: ['📞 Call Dispatch']
+    };
+  }
+
+  // Handle unsupported message
+  private async handleUnsupportedMessage(message: WhatsAppIncomingMessage, driver: any) {
+    return {
+      type: 'text',
+      message: `Sorry, I don't understand that type of message. Please use the buttons or text messages.`,
+      quickReplies: ['📞 Call Dispatch', '❓ Need Help']
+    };
+  }
+
+  // Request dispatch call
+  private async requestDispatchCall(driver: any, transport: any, message: WhatsAppIncomingMessage) {
+    return {
+      type: 'text',
+      message: `📞 Dispatch will call you shortly regarding transport #${transport.id.slice(-6)}.`,
+      quickReplies: ['✅ Thank you', '❓ Need Help']
+    };
+  }
+
+  // Send privacy information
+  private async sendPrivacyInformation(driver: any, transport: any) {
+    return {
+      type: 'text',
+      message: `🔒 Privacy Information:\n\nYour location and messages are only shared with dispatch for this transport. Data is not stored beyond completion of delivery.`,
+      quickReplies: ['✅ Understood', '❓ More Info']
     };
   }
 

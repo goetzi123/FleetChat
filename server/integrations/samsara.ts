@@ -461,6 +461,42 @@ export class SamsaraAPIClient {
       method: 'DELETE'
     });
   }
+
+  // Bidirectional Write-Back Methods for Driver Responses
+  async updateRouteStatus(routeId: string, status: string) {
+    return this.makeRequest(`/fleet/dispatch/routes/${routeId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+  }
+
+  async updateDriverLocation(driverId: string, location: { lat: number; lng: number; timestamp: Date }) {
+    return this.makeRequest(`/fleet/drivers/${driverId}/location`, {
+      method: 'POST',
+      body: JSON.stringify({
+        latitude: location.lat,
+        longitude: location.lng,
+        timestamp: location.timestamp.toISOString()
+      })
+    });
+  }
+
+  async uploadRouteDocument(routeId: string, documentData: any) {
+    return this.makeRequest(`/fleet/documents`, {
+      method: 'POST',
+      body: JSON.stringify({
+        ...documentData,
+        routeId: routeId
+      })
+    });
+  }
+
+  async updateRouteWaypoint(routeId: string, waypointId: string, status: string) {
+    return this.makeRequest(`/fleet/dispatch/routes/${routeId}/waypoints/${waypointId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+  }
 }
 
 // Event Processing Functions

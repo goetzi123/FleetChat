@@ -494,6 +494,76 @@ Current status: ${validation.driversWithPhone}/${validation.totalDrivers} driver
     }
   }
 
+  // Write driver responses back to Samsara
+  public async updateSamsaraRouteStatus(routeId: string, status: string) {
+    if (!this.apiClient) {
+      throw new Error("Samsara API client not configured");
+    }
+    
+    try {
+      const samsaraStatus = this.mapFleetChatStatusToSamsara(status);
+      const result = await this.apiClient.updateRouteStatus(routeId, samsaraStatus);
+      
+      console.log(`Updated Samsara route ${routeId} status to ${samsaraStatus}`);
+      return result;
+    } catch (error) {
+      console.error(`Failed to update Samsara route ${routeId}:`, error);
+      throw error;
+    }
+  }
+  
+  // Map FleetChat status to Samsara route status
+  private mapFleetChatStatusToSamsara(fleetChatStatus: string): string {
+    const statusMap: Record<string, string> = {
+      'pending': 'planned',
+      'dispatched': 'planned',
+      'en_route': 'in_progress',
+      'arrived_pickup': 'in_progress',
+      'loading': 'in_progress',
+      'loaded': 'in_progress',
+      'departed_pickup': 'in_progress',
+      'arrived_delivery': 'in_progress',
+      'unloading': 'in_progress',
+      'delivered': 'completed',
+      'completed': 'completed',
+      'cancelled': 'cancelled'
+    };
+    
+    return statusMap[fleetChatStatus] || 'in_progress';
+  }
+  
+  // Update Samsara with driver location data
+  public async updateSamsaraDriverLocation(driverId: string, location: { lat: number; lng: number; timestamp: Date }) {
+    if (!this.apiClient) {
+      throw new Error("Samsara API client not configured");
+    }
+    
+    try {
+      const result = await this.apiClient.updateDriverLocation(driverId, location);
+      console.log(`Updated Samsara driver ${driverId} location`);
+      return result;
+    } catch (error) {
+      console.error(`Failed to update Samsara driver location:`, error);
+      throw error;
+    }
+  }
+  
+  // Submit documents to Samsara
+  public async submitDocumentToSamsara(routeId: string, documentData: any) {
+    if (!this.apiClient) {
+      throw new Error("Samsara API client not configured");
+    }
+    
+    try {
+      const result = await this.apiClient.uploadDocument(routeId, documentData);
+      console.log(`Submitted document to Samsara route ${routeId}`);
+      return result;
+    } catch (error) {
+      console.error(`Failed to submit document to Samsara:`, error);
+      throw error;
+    }
+  }
+
   public async getVehicleLocation(vehicleId: string) {
     if (!this.apiClient) {
       throw new Error("Samsara API client not configured");
