@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FleetChat Demo</title>
+    <title>FleetChat Demo - Message Relay Protocol</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
@@ -102,7 +102,7 @@
         // Event data
         var eventData = {
             route: {
-                msg: "New delivery route assigned: ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt and estimated departure time.",
+                msg: "Message from TMS: New delivery route assigned - ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt and estimated departure time.",
                 options: ["Confirm Route", "Need Navigation", "Report Delay"]
             },
             pickup: {

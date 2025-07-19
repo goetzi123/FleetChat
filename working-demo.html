@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FleetChat Demo - Bidirectional Communication</title>
+    <title>FleetChat Demo - Message Relay Protocol</title>
     <style>
         * {
             margin: 0;
@@ -252,15 +252,15 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>FleetChat Demo - Bidirectional Communication</h1>
-            <p>Samsara Fleet Events ↔ WhatsApp Driver Messages</p>
+            <h1>FleetChat Demo - Message Relay Protocol</h1>
+            <p>TMS Events → FleetChat Relay → WhatsApp Messages (Communication Only)</p>
         </div>
         
         <div class="demo-grid">
             <!-- Samsara Panel -->
             <div class="panel">
                 <div class="panel-header samsara-header">
-                    🚛 Samsara Fleet Events
+                    🚛 TMS Events (Samsara)
                 </div>
                 <div class="panel-content">
                     <button class="event-button" onclick="triggerEvent('route')">
@@ -310,7 +310,7 @@
                 <div class="panel-content">
                     <div class="chat-area" id="chat-area">
                         <div class="placeholder">
-                            Messages will appear when you trigger Samsara events
+                            Messages will appear when you trigger TMS events via FleetChat relay
                         </div>
                     </div>
                     
@@ -331,27 +331,27 @@
         // Event definitions
         const events = {
             route: {
-                message: "New delivery route assigned: ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt and estimated departure time.",
+                message: "Message from TMS: New delivery route assigned - ACME Corp, 123 Industrial Blvd, Chicago IL. Please confirm receipt and estimated departure time.",
                 responses: ["Confirm Route", "Need Navigation", "Report Delay"]
             },
             pickup: {
-                message: "Pickup reminder: ACME Corp at 123 Industrial Blvd in 30 minutes. Need any navigation assistance?",
+                message: "Message from TMS: Pickup reminder - ACME Corp at 123 Industrial Blvd in 30 minutes. Need any navigation assistance?",
                 responses: ["On My Way", "Send Location", "Running Late"]
             },
             arrival: {
-                message: "Arrived at ACME Corp. Please share loading status and any delays.",
+                message: "Message from TMS: Arrived at ACME Corp. Please share loading status and any delays.",
                 responses: ["Loading Started", "Share Location", "Upload Photo"]
             },
             document: {
-                message: "Please upload signed delivery receipt and any customer notes for ACME Corp delivery.",
+                message: "Message from TMS: Please upload signed delivery receipt and any customer notes for ACME Corp delivery.",
                 responses: ["Upload POD", "Add Notes", "Customer Signature"]
             },
             hos: {
-                message: "HOS Alert: 1 hour remaining on duty. Plan for required rest period.",
+                message: "Message from TMS: HOS Alert - 1 hour remaining on duty. Plan for required rest period.",
                 responses: ["Find Rest Area", "Extension Request", "Off Duty Soon"]
             },
             geofence: {
-                message: "Entered Chicago Distribution Center. Please confirm your activity and estimated duration.",
+                message: "Message from TMS: Entered Chicago Distribution Center. Please confirm your activity and estimated duration.",
                 responses: ["Loading Activity", "Maintenance Stop", "Driver Break"]
             }
         };
@@ -370,8 +370,8 @@
             
             currentEvent = eventType;
             
-            // Update Samsara status
-            addSamsaraStatus('Processing ' + eventType + ' event...');
+            // Update FleetChat status
+            addSamsaraStatus('FleetChat relaying TMS ' + eventType + ' event...');
             
             // Show typing indicator
             setTimeout(() => {
@@ -383,7 +383,7 @@
                 hideTypingIndicator();
                 addFleetMessage(event.message);
                 showResponseOptions(event.responses);
-                addSamsaraStatus('Message sent to driver. Awaiting response...');
+                addSamsaraStatus('Message relayed to driver via WhatsApp. Awaiting response...');
             }, 2500);
         }
 
@@ -469,11 +469,11 @@
             clearResponseOptions();
             
             setTimeout(() => {
-                addSamsaraStatus('Driver responded: "' + response + '"');
+                addSamsaraStatus('Driver response received: "' + response + '"');
             }, 1000);
             
             setTimeout(() => {
-                addSamsaraStatus('Transport status updated. ' + getStatusUpdate(currentEvent));
+                addSamsaraStatus('Response forwarded to TMS. ' + getStatusUpdate(currentEvent));
             }, 2500);
         }
 
@@ -499,14 +499,14 @@
 
         function getStatusUpdate(eventType) {
             const updates = {
-                route: "Route confirmed. ETA logged.",
-                pickup: "Pickup status updated. On schedule.",
-                arrival: "Arrival confirmed. Loading in progress.",
-                document: "Document received. POD uploaded.",
-                hos: "HOS status updated. Compliance maintained.",
-                geofence: "Activity logged. Duration estimated."
+                route: "Message relay complete. TMS updated.",
+                pickup: "Message relay complete. TMS updated.",
+                arrival: "Message relay complete. TMS updated.",
+                document: "Message relay complete. TMS updated.",
+                hos: "Message relay complete. TMS updated.",
+                geofence: "Message relay complete. TMS updated."
             };
-            return updates[eventType] || "Status updated successfully.";
+            return updates[eventType] || "Message relay complete.";
         }
 
         function getCurrentTime() {
@@ -519,7 +519,7 @@
             // Reset chat
             document.getElementById('chat-area').innerHTML = `
                 <div class="placeholder">
-                    Messages will appear when you trigger Samsara events
+                    Messages will appear when you trigger TMS events via FleetChat relay
                 </div>
             `;
             

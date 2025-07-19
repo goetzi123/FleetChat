@@ -77,8 +77,8 @@ app.get('/demo', (req, res) => {
 <body>
     <div class="container">
         <div class="header">
-            <h1>FleetChat Demo - Event Propagation WORKING</h1>
-            <p>Click any Samsara event to test comprehensive fleet communication workflows</p>
+            <h1>FleetChat Demo - Message Relay Protocol WORKING</h1>
+            <p>Click any TMS event to test bidirectional communication relay workflows</p>
             <div style="background: #f0f9ff; border: 1px solid #0ea5e9; padding: 10px; border-radius: 6px; margin-top: 10px;">
                 <strong>✅ Comprehensive Samsara Use Cases Active</strong><br>
                 <small>Now supporting 10 core transport workflows: Route Assignment, Pickup Coordination, Delivery Management, Safety Monitoring, Vehicle Inspection, Maintenance Alerts, Geofence Notifications, Hours of Service, Emergency Response, and Load Status Tracking</small>
