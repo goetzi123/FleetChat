@@ -6,7 +6,7 @@
 
 **Total Cost Per Message: $0.0120 - $0.0280** (1.2¢ - 2.8¢ per complete bidirectional message)
 
-This includes all infrastructure, WhatsApp, and operational costs for a complete message cycle: TMS event → FleetChat processing → WhatsApp delivery → driver response → TMS write-back.
+This includes all infrastructure, WhatsApp, and operational costs for a complete bidirectional communication cycle: TMS event → FleetChat message relay → WhatsApp delivery → driver response → TMS status update. FleetChat operates as pure communication protocol service.
 
 ## Detailed Cost Breakdown
 
@@ -20,10 +20,10 @@ This includes all infrastructure, WhatsApp, and operational costs for a complete
 - **Authentication Templates**: $0.0250 per message (verification codes)
 - **Marketing Templates**: $0.0127 per message (promotional content)
 
-**Key FleetChat Message Types:**
-- Route assignments, pickup notifications: **Utility** = $0.0055
-- Delivery confirmations, status updates: **Utility** = $0.0055
-- Driver onboarding, verification: **Authentication** = $0.0250
+**Key FleetChat Communication Types:**
+- TMS event notifications (route assignments, pickup alerts): **Utility** = $0.0055
+- Driver status confirmations (delivery updates): **Utility** = $0.0055
+- Driver verification messages: **Authentication** = $0.0250
 
 **Typical FleetChat Message Cycle:**
 1. **TMS → Driver**: Utility template = $0.0055

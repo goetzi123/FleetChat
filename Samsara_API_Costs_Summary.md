@@ -3,7 +3,7 @@
 
 ## Executive Summary
 
-**No Additional Costs:** FleetChat clients will NOT incur additional charges from Samsara for API and webhook usage. All integration capabilities are included in existing Samsara fleet management subscriptions.
+**No Additional Costs:** FleetChat clients will NOT incur additional charges from Samsara for API and webhook usage. All communication protocol integration capabilities are included in existing Samsara fleet management subscriptions. FleetChat operates as pure bidirectional communication middleware.
 
 ## Cost Analysis
 
@@ -24,10 +24,10 @@
 - `GET /fleet/drivers/{id}` - Individual driver details  
 - `PATCH /fleet/drivers/{id}` - Phone number mapping updates
 
-### Vehicle & Route APIs (Free)
-- `GET /fleet/vehicles` - Vehicle inventory and status
-- `GET /fleet/routes` - Active route assignments
-- `GET /fleet/routes/{id}` - Route details and waypoints
+### Fleet Context APIs (Free - Message Context Only)
+- `GET /fleet/vehicles` - Vehicle identification for message context
+- `GET /fleet/routes` - Route information for communication templates
+- `GET /fleet/routes/{id}` - Route context for message relay purposes
 
 ### Document APIs (Free)
 - `POST /fleet/documents` - Document uploads from WhatsApp
@@ -94,6 +94,6 @@
 
 ## Conclusion
 
-FleetChat provides communication middleware that enhances existing Samsara investments without increasing Samsara costs. Clients pay only for FleetChat's WhatsApp communication service while leveraging their current Samsara platform capabilities through included API and webhook features.
+FleetChat provides pure bidirectional communication protocol service that enhances existing Samsara investments without increasing Samsara costs or duplicating fleet management functionality. Clients pay only for FleetChat's WhatsApp communication middleware while leveraging their current Samsara platform capabilities through included API and webhook features.
 
-This cost structure makes FleetChat integration highly attractive for existing Samsara customers, as it adds significant communication value without requiring additional fleet management platform expenses.
+This cost structure makes FleetChat integration highly attractive for existing Samsara customers, as it adds significant communication value through pure message relay service without requiring additional fleet management platform expenses or competing with Samsara's core functionality.

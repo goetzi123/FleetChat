@@ -2,7 +2,7 @@
 *Brief Technical Summary - July 19, 2025*
 
 ## Core Integration Purpose
-FleetChat integrates with Samsara as a **read-only communication middleware** that translates fleet events into WhatsApp messages and processes driver responses back to the TMS.
+FleetChat integrates with Samsara as a **bidirectional communication protocol service** that translates fleet events into WhatsApp messages and processes driver responses back to the TMS. FleetChat operates as pure communication middleware without replicating any fleet management functionality.
 
 ## Samsara APIs Used
 
@@ -11,10 +11,10 @@ FleetChat integrates with Samsara as a **read-only communication middleware** th
 - `GET /fleet/drivers/{driverId}` - Get individual driver details
 - `PATCH /fleet/drivers/{driverId}` - Update driver phone number mapping (write-back only)
 
-### Vehicle & Route Data (Read-Only)
-- `GET /fleet/vehicles` - Vehicle inventory and status
-- `GET /fleet/routes` - Active route assignments
-- `GET /fleet/routes/{routeId}` - Specific route details and waypoints
+### Fleet Context Data (Read-Only for Message Context)
+- `GET /fleet/vehicles` - Vehicle identification for message context only
+- `GET /fleet/routes` - Route information for message templates only
+- `GET /fleet/routes/{routeId}` - Route context for communication purposes only
 
 ### Real-Time Events (Webhook Sources)
 - `GET /fleet/hos/logs` - Hours of Service status changes
@@ -56,11 +56,13 @@ FleetChat integrates with Samsara as a **read-only communication middleware** th
 4. **Confirmation**: Send acknowledgment message to driver
 
 ## Integration Boundaries
-FleetChat maintains strict boundaries as communication middleware:
-- **No route creation or modification** in Samsara
-- **No fleet management functionality** replication
-- **Read-only access** to operational data for context
-- **Write-back limited** to driver responses and status updates only
+FleetChat maintains strict boundaries as pure communication protocol service:
+- **No route creation or modification** in Samsara (absolute prohibition)
+- **No fleet management functionality** replication (universal restriction)
+- **No vehicle tracking or monitoring** capabilities (system boundary)
+- **Read-only access** to data for message context only
+- **Write-back limited** to driver communication responses only
+- **Communication middleware** function exclusively
 
 ## Authentication & Security
 - **OAuth 2.0** tokens for API access per customer
