@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetChat Client Onboarding Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        .step-active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+        .step-completed {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .step-inactive {
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i data-lucide="message-square" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">FleetChat</h1>
+                        <p class="text-sm text-gray-600">Communication Protocol Service</p>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-500">
+                    Demo Environment
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex items-center justify-center mb-8">
+            <div class="flex items-center space-x-4">
+                <!-- Step 1 -->
+                <div class="flex items-center">
+                    <div id="step1" class="step-indicator step-active w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg">
+                        1
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-gray-700">Fleet System Setup</span>
+                </div>
+                
+                <!-- Arrow -->
+                <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400"></i>
+                
+                <!-- Step 2 -->
+                <div class="flex items-center">
+                    <div id="step2" class="step-indicator step-inactive w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg">
+                        2
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-gray-700">Driver Discovery</span>
+                </div>
+                
+                <!-- Arrow -->
+                <i data-lucide="arrow-right" class="w-5 h-5 text-gray-400"></i>
+                
+                <!-- Step 3 -->
+                <div class="flex items-center">
+                    <div id="step3" class="step-indicator step-inactive w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg">
+                        3
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-gray-700">Payment Setup</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Fleet System Setup -->
+        <div id="step1-content" class="fade-in">
+            <div class="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Connect Your Fleet Management System</h2>
+                
+                <div class="space-y-6">
+                    <!-- Company Information -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
+                            <input type="text" id="companyName" placeholder="Your Company Name"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fleet Size</label>
+                            <select id="fleetSize" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select Size</option>
+                                <option value="1-10">1-10 vehicles</option>
+                                <option value="11-50">11-50 vehicles</option>
+                                <option value="51-200">51-200 vehicles</option>
+                                <option value="201+">201+ vehicles</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Samsara Integration -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+                                <i data-lucide="truck" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900">Samsara API Configuration</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">API Token</label>
+                                <div class="relative">
+                                    <input type="password" id="samsaraToken" placeholder="samsara_api_xxxxxxxxxxxxxxxx"
+                                           class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                    <button type="button" onclick="toggleToken()" class="absolute right-3 top-3 text-gray-500 hover:text-gray-700">
+                                        <i id="eyeIcon" data-lucide="eye" class="w-5 h-5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Organization ID</label>
+                                <input type="text" id="organizationId" placeholder="123456"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Continue Button -->
+                    <div class="flex justify-end">
+                        <button onclick="validateAndProceed()" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                            Connect & Continue
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Driver Discovery -->
+        <div id="step2-content" class="fade-in" style="display: none;">
+            <div class="bg-white rounded-lg shadow-sm p-8 max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Discover Your Drivers</h2>
+                
+                <!-- Connected Organization -->
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-center">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-green-600 mr-3"></i>
+                        <span class="text-sm font-medium text-green-800">
+                            Connected to organization: <span id="connectedOrg" class="font-bold">Demo Company</span>
+                        </span>
+                    </div>
+                </div>
+
+                <p class="text-gray-600 mb-6">
+                    Select the drivers you want to enable for WhatsApp communication. FleetChat will create bidirectional messaging channels between your Samsara system and each driver's WhatsApp account.
+                </p>
+
+                <!-- Drivers List -->
+                <div id="driversList" class="border border-gray-200 rounded-lg divide-y divide-gray-200 mb-6">
+                    <!-- Drivers will be populated here -->
+                </div>
+
+                <!-- Pricing Summary -->
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Service Summary</h3>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="text-sm text-gray-600">Selected Drivers: <span id="selectedDriversCount">0</span></div>
+                            <div class="text-sm text-gray-600">Monthly Cost: <span id="monthlyCost">$0</span></div>
+                        </div>
+                        <button onclick="proceedToPayment()" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                            Continue to Payment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Payment Setup -->
+        <div id="step3-content" class="fade-in" style="display: none;">
+            <div class="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Complete Setup</h2>
+                
+                <!-- Service Summary -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">FleetChat Communication Service</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>Selected Drivers:</span>
+                            <span id="finalDriverCount">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Monthly Service Fee:</span>
+                            <span id="finalMonthlyCost">$0</span>
+                        </div>
+                        <div class="flex justify-between font-semibold border-t pt-2">
+                            <span>Total Monthly:</span>
+                            <span id="finalTotalCost">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Information -->
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Billing Email</label>
+                        <input type="email" id="billingEmail" placeholder="billing@yourcompany.com"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Billing Address</label>
+                        <textarea id="billingAddress" rows="3" placeholder="123 Main St, City, State, ZIP"
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h4 class="text-md font-semibold text-gray-900 mb-3">Payment Method</h4>
+                        <button onclick="setupStripePayment()" 
+                                class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-medium transition-colors">
+                            Configure Payment with Stripe
+                        </button>
+                    </div>
+
+                    <!-- Complete Setup -->
+                    <div class="flex justify-end">
+                        <button onclick="completeOnboarding()" 
+                                class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                            Complete Setup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Page -->
+        <div id="success-content" class="fade-in" style="display: none;">
+            <div class="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="check" class="w-10 h-10 text-green-600"></i>
+                </div>
+                
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Setup Complete!</h2>
+                <p class="text-lg text-gray-600 mb-8">
+                    FleetChat is now configured as your communication protocol service between Samsara and WhatsApp.
+                </p>
+                
+                <!-- Next Steps -->
+                <div class="text-left bg-blue-50 rounded-lg p-6 mb-8">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Next Steps:</h3>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start">
+                            <i data-lucide="check" class="w-4 h-4 text-green-600 mr-2 mt-0.5"></i>
+                            Driver WhatsApp invitations will be sent automatically
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check" class="w-4 h-4 text-green-600 mr-2 mt-0.5"></i>
+                            Samsara events will begin triggering WhatsApp messages
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check" class="w-4 h-4 text-green-600 mr-2 mt-0.5"></i>
+                            Driver responses will be relayed back to Samsara
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check" class="w-4 h-4 text-green-600 mr-2 mt-0.5"></i>
+                            Monthly billing will begin automatically
+                        </li>
+                    </ul>
+                </div>
+
+                <button onclick="goToDashboard()" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                    Go to Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let selectedDrivers = [];
+        
+        const mockDrivers = [
+            { id: '1', name: 'John Smith', samsaraId: 'driver_12345', phone: '+1-555-0123' },
+            { id: '2', name: 'Maria Rodriguez', samsaraId: 'driver_12346', phone: null },
+            { id: '3', name: 'David Johnson', samsaraId: 'driver_12347', phone: '+1-555-0125' },
+            { id: '4', name: 'Sarah Wilson', samsaraId: 'driver_12348', phone: null },
+            { id: '5', name: 'Michael Brown', samsaraId: 'driver_12349', phone: '+1-555-0127' }
+        ];
+
+        function toggleToken() {
+            const tokenInput = document.getElementById('samsaraToken');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (tokenInput.type === 'password') {
+                tokenInput.type = 'text';
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                tokenInput.type = 'password';
+                eyeIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        function validateAndProceed() {
+            const companyName = document.getElementById('companyName').value;
+            const fleetSize = document.getElementById('fleetSize').value;
+            const samsaraToken = document.getElementById('samsaraToken').value;
+            const organizationId = document.getElementById('organizationId').value;
+
+            if (!companyName || !fleetSize || !samsaraToken || !organizationId) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Simulate API validation
+            setTimeout(() => {
+                document.getElementById('connectedOrg').textContent = companyName;
+                goToStep(2);
+                populateDriversList();
+            }, 1000);
+        }
+
+        function populateDriversList() {
+            const driversList = document.getElementById('driversList');
+            
+            driversList.innerHTML = mockDrivers.map(driver => `
+                <div class="p-4 hover:bg-gray-50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <input type="checkbox" id="driver-${driver.id}" value="${driver.id}" 
+                                   onchange="toggleDriver('${driver.id}')"
+                                   class="w-5 h-5 text-blue-600 rounded focus:ring-blue-500">
+                            <div class="flex-1">
+                                <div class="font-medium text-gray-900">${driver.name}</div>
+                                <div class="text-sm text-gray-500">Samsara ID: ${driver.samsaraId}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm font-medium ${driver.phone ? 'text-green-600' : 'text-orange-600'}">
+                                ${driver.phone || 'Phone needed'}
+                            </div>
+                            ${!driver.phone ? `
+                                <input type="tel" placeholder="+1-555-XXXX" 
+                                       onchange="updateDriverPhone('${driver.id}', this.value)"
+                                       class="mt-1 px-3 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleDriver(driverId) {
+            const checkbox = document.getElementById(`driver-${driverId}`);
+            if (checkbox.checked) {
+                selectedDrivers.push(driverId);
+            } else {
+                selectedDrivers = selectedDrivers.filter(id => id !== driverId);
+            }
+            updatePricingSummary();
+        }
+
+        function updateDriverPhone(driverId, phone) {
+            const driver = mockDrivers.find(d => d.id === driverId);
+            if (driver) {
+                driver.phone = phone;
+            }
+        }
+
+        function updatePricingSummary() {
+            const count = selectedDrivers.length;
+            const cost = count * 25; // $25 per driver per month
+            
+            document.getElementById('selectedDriversCount').textContent = count;
+            document.getElementById('monthlyCost').textContent = `$${cost}`;
+            
+            // Update final step pricing too
+            document.getElementById('finalDriverCount').textContent = count;
+            document.getElementById('finalMonthlyCost').textContent = `$${cost}`;
+            document.getElementById('finalTotalCost').textContent = `$${cost}`;
+        }
+
+        function proceedToPayment() {
+            if (selectedDrivers.length === 0) {
+                alert('Please select at least one driver to enable WhatsApp communication');
+                return;
+            }
+            
+            // Check if all selected drivers have phone numbers
+            const missingPhones = selectedDrivers.some(driverId => {
+                const driver = mockDrivers.find(d => d.id === driverId);
+                return !driver.phone;
+            });
+            
+            if (missingPhones) {
+                alert('Please provide phone numbers for all selected drivers');
+                return;
+            }
+            
+            updatePricingSummary();
+            goToStep(3);
+        }
+
+        function setupStripePayment() {
+            // Simulate Stripe integration
+            alert('In production, this would redirect to Stripe payment setup');
+            setTimeout(() => {
+                alert('Payment method configured successfully!');
+            }, 1000);
+        }
+
+        function completeOnboarding() {
+            const billingEmail = document.getElementById('billingEmail').value;
+            const billingAddress = document.getElementById('billingAddress').value;
+
+            if (!billingEmail || !billingAddress) {
+                alert('Please complete billing information');
+                return;
+            }
+
+            // Simulate final setup
+            setTimeout(() => {
+                document.getElementById('step3-content').style.display = 'none';
+                document.getElementById('success-content').style.display = 'block';
+                document.getElementById('success-content').classList.add('fade-in');
+            }, 1000);
+        }
+
+        function goToDashboard() {
+            alert('In production, this would redirect to your FleetChat dashboard');
+        }
+
+        function goToStep(step) {
+            // Hide all content
+            document.querySelectorAll('[id$="-content"]').forEach(el => {
+                el.style.display = 'none';
+            });
+
+            // Update step indicators
+            for (let i = 1; i <= 3; i++) {
+                const stepEl = document.getElementById(`step${i}`);
+                if (i < step) {
+                    stepEl.className = 'step-indicator step-completed w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg';
+                } else if (i === step) {
+                    stepEl.className = 'step-indicator step-active w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg';
+                } else {
+                    stepEl.className = 'step-indicator step-inactive w-12 h-12 rounded-full flex items-center justify-center font-semibold text-lg';
+                }
+            }
+
+            // Show current step content
+            document.getElementById(`step${step}-content`).style.display = 'block';
+            document.getElementById(`step${step}-content`).classList.add('fade-in');
+            
+            currentStep = step;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
