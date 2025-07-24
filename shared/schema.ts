@@ -53,7 +53,8 @@ export const UserRole = {
   DISPATCHER: "dispatcher",
   YARD_OPERATOR: "yard_operator",
   MANAGER: "manager",
-  ADMIN: "admin"
+  ADMIN: "admin",
+  READ_ONLY: "read_only"
 } as const;
 
 // Language Codes
@@ -134,6 +135,13 @@ export const users = pgTable("users", {
   phoneSource: varchar("phone_source", { length: 50 }).default("samsara"), // 'samsara' | 'manual' | 'verified'
   isActive: boolean("is_active").default(true),
   activatedAt: timestamp("activated_at"), // WhatsApp activation timestamp
+  
+  // Read-only access configuration
+  accessScope: jsonb("access_scope").$type<string[]>().default('[]'), // ['transports', 'messages', 'analytics', etc.]
+  accessLevel: varchar("access_level", { length: 50 }).default("full"), // 'full', 'read_only', 'limited'
+  expiresAt: timestamp("expires_at"), // Temporary access expiration
+  invitedBy: uuid("invited_by").references(() => users.id), // Who granted access
+  
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
