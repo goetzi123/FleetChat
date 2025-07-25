@@ -21,3 +21,6 @@ externalPort = 8080
 [deployment]
 deploymentTarget = "static"
 publicDir = "fleet.chat"
+
+[agent]
+integrations = ["javascript_database==1.0.0", "javascript_stripe==1.0.0", "javascript_log_in_with_replit==1.0.0"]

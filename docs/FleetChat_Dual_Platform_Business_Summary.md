@@ -2,7 +2,7 @@
 
 ## Executive Overview
 
-FleetChat has evolved into a comprehensive fleet communication platform supporting both **Samsara** and **Geotab** fleet management systems through a unified abstraction layer. This dual-platform architecture significantly expands our addressable market while maintaining operational simplicity for enterprise customers.
+FleetChat operates as a **pure communication protocol service** supporting both **Samsara** and **Geotab** fleet management systems through a unified abstraction layer. This dual-platform architecture significantly expands our addressable market while maintaining strict system boundaries as communication middleware only, with absolute prohibition on replicating any fleet management functionality.
 
 ## Market Expansion Impact
 
@@ -45,16 +45,16 @@ FleetChat has evolved into a comprehensive fleet communication platform supporti
 - Reduced development and maintenance costs
 - Simplified testing and quality assurance
 
-**Platform-Agnostic Features:**
+**Platform-Agnostic Communication Protocol:**
 ```
-Fleet Event → Unified Processing → WhatsApp Message
-(Samsara/Geotab) → (Common Logic) → (Consistent Experience)
+Fleet Event → Template Message Application → WhatsApp Message Relay
+(Samsara/Geotab) → (Communication Processing Only) → (Driver Interface)
 ```
 
-**Intelligent Event Handling:**
-- Samsara: Real-time webhook processing
-- Geotab: Optimized polling with data feeds
-- Both: Same message templates and driver experience
+**Communication Event Processing:**
+- Samsara: Real-time webhook processing for message relay
+- Geotab: Optimized polling with data feeds for message relay
+- Both: Same message templates and bidirectional communication flow
 
 ### Enterprise Integration Patterns
 
@@ -73,22 +73,22 @@ Fleet Event → Unified Processing → WhatsApp Message
 ## Customer Value Proposition
 
 ### For Samsara Customers
-- **Immediate ROI**: Leverage existing Samsara investment
-- **Real-time Communication**: Instant driver notifications
-- **Modern Integration**: Simple API token setup
-- **Scalable Architecture**: Grows with fleet expansion
+- **Communication Enhancement**: Leverage existing Samsara investment with WhatsApp driver messaging
+- **Real-time Message Relay**: Instant driver notifications via WhatsApp from Samsara events
+- **Simple Integration**: API token setup for communication service only
+- **Communication Scaling**: Driver messaging grows with fleet expansion
 
 ### For Geotab Customers
-- **Enterprise Features**: Advanced diagnostic integration
-- **Comprehensive Data**: Rich vehicle health information
-- **Mature Platform**: Proven enterprise reliability
-- **Custom Workflows**: Extensive customization options
+- **Communication Integration**: WhatsApp message relay from Geotab events
+- **Message Processing**: Rich event-to-message translation from Geotab data
+- **Enterprise Communication**: Proven enterprise reliability for driver messaging
+- **Bidirectional Flow**: Complete driver response processing back to Geotab
 
 ### Universal Benefits
-- **WhatsApp Integration**: 99%+ driver smartphone penetration
-- **No App Required**: Uses existing messaging platform
-- **GDPR Compliance**: Complete privacy protection
-- **Scalable Pricing**: Pay per active driver model
+- **WhatsApp Communication**: 99%+ driver smartphone penetration for message delivery
+- **No App Required**: Uses existing messaging platform for communication relay
+- **Privacy Compliant**: Driver phone number mapping with minimal data storage
+- **Communication Pricing**: Pay per active driver communication service
 
 ## Implementation Strategy
 
@@ -99,16 +99,16 @@ Fleet Event → Unified Processing → WhatsApp Message
 - ✅ Customer onboarding system
 
 ### Phase 2: Geotab Integration (Completed)
-- ✅ MyGeotab SDK integration
-- ✅ Data feed optimization
-- ✅ Session management system
-- ✅ Diagnostic data processing
+- ✅ MyGeotab SDK integration for communication events
+- ✅ Event polling optimization for message relay
+- ✅ Session management system for API access
+- ✅ Event-to-message processing for driver communication
 
-### Phase 3: Unified Platform (Completed)
-- ✅ Abstraction layer implementation
-- ✅ Factory pattern for provider management
-- ✅ Platform-agnostic message templates
-- ✅ Comprehensive documentation
+### Phase 3: Unified Communication Platform (Completed)
+- ✅ Communication abstraction layer implementation
+- ✅ Factory pattern for fleet system message providers
+- ✅ Platform-agnostic message templates for driver communication
+- ✅ System boundaries compliance documentation
 
 ### Phase 4: Market Expansion (Current)
 - 🎯 Updated marketing materials
@@ -208,14 +208,30 @@ Year 5: $25.0M ARR (market leadership position)
 3. **AI Enhancement**: Advanced natural language processing for driver responses
 4. **IoT Integration**: Expand beyond traditional fleet management data
 
+## System Boundaries Compliance
+
+**FleetChat operates exclusively as a communication protocol service with strict limitations:**
+
+### Prohibited Operations (For ALL Fleet Systems):
+- ❌ **No Fleet Management**: No vehicle tracking, route creation, or operational management
+- ❌ **No Telematics**: No collection or processing of fleet system operational data
+- ❌ **No Analytics**: No dashboards, reports, or business intelligence beyond communication logs
+- ❌ **No Driver Management**: No profiles beyond phone number mapping for message routing
+
+### Permitted Operations (Communication Only):
+- ✅ **Message Relay**: Bidirectional communication between fleet systems and drivers via WhatsApp
+- ✅ **Event Processing**: Fleet system events trigger template message application for driver notifications
+- ✅ **Response Processing**: Driver WhatsApp responses parsed and written back to fleet system APIs
+- ✅ **Phone Number Mapping**: Driver identification for message routing purposes only
+
 ## Conclusion
 
-The dual-platform architecture positions FleetChat as the definitive solution for enterprise fleet communication, regardless of underlying fleet management technology. This strategic enhancement dramatically expands our addressable market while maintaining technical excellence and operational simplicity.
+The dual-platform architecture positions FleetChat as the definitive **communication protocol service** for enterprise fleet-driver messaging, regardless of underlying fleet management technology. This strategic enhancement dramatically expands our addressable market while maintaining strict system boundaries and technical excellence.
 
-**Key Success Factors:**
-- ✅ Technical architecture proven and production-ready
-- ✅ Market opportunity validated and quantified
-- ✅ Competitive advantages clearly established
-- ✅ Risk mitigation strategies implemented
+**Key Compliance Factors:**
+- ✅ Communication protocol service boundaries strictly enforced
+- ✅ No duplication of fleet management functionality across any platform
+- ✅ Bidirectional message relay architecture proven and production-ready
+- ✅ System boundaries documentation updated and validated
 
-FleetChat is now positioned to capture significant market share across the entire fleet management ecosystem, establishing long-term market leadership in fleet-driver communication solutions.
+FleetChat is positioned to capture significant market share as the universal **communication middleware** across the entire fleet management ecosystem, establishing market leadership in fleet-driver communication solutions while respecting the competitive boundaries of all fleet management platforms.
