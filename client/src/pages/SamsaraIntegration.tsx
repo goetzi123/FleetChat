@@ -1,6 +1,42 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Truck, Settings, Wifi, WifiOff, Users, MapPin, Clock, CheckCircle, AlertCircle } from "lucide-react";
+// DEPRECATED: This file violates FleetChat Universal Fleet System Boundaries
+// FleetChat SHALL NOT replicate ANY fleet management functionality
+// Use TenantOnboarding.tsx for compliant Samsara configuration instead
+
+export default function SamsaraIntegration() {
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+        <h2 className="text-lg font-semibold text-yellow-800 mb-2">
+          Feature Deprecated - Compliance Required
+        </h2>
+        <p className="text-yellow-700">
+          This page has been deprecated to ensure compliance with FleetChat Universal Fleet System Boundaries. 
+          FleetChat operates as a pure communication protocol service only.
+        </p>
+        <div className="mt-4">
+          <a 
+            href="/tenant-onboarding" 
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Go to Compliant Setup →
+          </a>
+        </div>
+      </div>
+      
+      <div className="bg-gray-50 border rounded-lg p-6">
+        <h3 className="font-semibold text-gray-800 mb-4">FleetChat System Boundaries</h3>
+        <div className="space-y-2 text-sm text-gray-600">
+          <p>✅ <strong>Permitted:</strong> Bidirectional message relay between Samsara and WhatsApp</p>
+          <p>✅ <strong>Permitted:</strong> Driver phone number mapping for communication routing</p>
+          <p>✅ <strong>Permitted:</strong> API token configuration for message processing</p>
+          <p className="text-red-600">❌ <strong>Prohibited:</strong> Route creation or fleet management functionality</p>
+          <p className="text-red-600">❌ <strong>Prohibited:</strong> Vehicle tracking or operational control</p>
+          <p className="text-red-600">❌ <strong>Prohibited:</strong> Analytics or dashboards competing with Samsara</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface SamsaraVehicle {
   id: string;
