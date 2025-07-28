@@ -95,12 +95,15 @@ export const tenants = pgTable("tenants", {
   isActive: boolean("is_active").notNull().default(true),
   
   // Samsara Configuration
-  samsaraApiToken: text("samsara_api_token"), // encrypted
-  samsaraGroupId: varchar("samsara_group_id", { length: 255 }),
+  samsaraApiToken: jsonb("samsara_api_token"), // encrypted object with {encrypted, iv, tag}
+  samsaraOrgId: varchar("samsara_org_id", { length: 255 }),
   samsaraWebhookId: varchar("samsara_webhook_id", { length: 255 }),
-  samsaraWebhookSecret: text("samsara_webhook_secret"), // encrypted
+  samsaraWebhookSecret: jsonb("samsara_webhook_secret"), // encrypted object
   samsaraWebhookUrl: varchar("samsara_webhook_url", { length: 500 }),
-  webhookEventTypes: jsonb("webhook_event_types").$type<string[]>().default('["DriverCreated","DriverUpdated","LocationUpdate","RouteStarted","RouteCompleted"]'),
+  samsaraScopes: jsonb("samsara_scopes").$type<string[]>().default('[]'),
+  samsaraValidated: boolean("samsara_validated").default(false),
+  samsaraValidatedAt: timestamp("samsara_validated_at"),
+  webhookEventTypes: jsonb("webhook_event_types").$type<string[]>().default('["vehicle.location","route.started","route.completed","driver.dutyStatus","geofence.enter","geofence.exit"]'),
   
   // WhatsApp Configuration (managed by FleetChat)
   whatsappPhoneNumber: varchar("whatsapp_phone_number", { length: 20 }),

@@ -54,6 +54,10 @@ export interface IStorage {
   createTmsIntegration(integration: InsertTmsIntegration): Promise<TmsIntegration>;
   getTmsIntegrationsByTransportId(transportId: string): Promise<TmsIntegration[]>;
   getTmsIntegrationsByPlatform(platform: string): Promise<TmsIntegration[]>;
+
+  // Tenant Management
+  getTenantById(id: string): Promise<any | null>;
+  updateTenant(id: string, updates: any): Promise<any>;
 }
 
 class MemStorage implements IStorage {
@@ -303,6 +307,20 @@ class MemStorage implements IStorage {
 
   async getTmsIntegrationsByPlatform(platform: string): Promise<TmsIntegration[]> {
     return Array.from(this.tmsIntegrations.values()).filter(ti => ti.platform === platform);
+  }
+
+  // Tenant Management (Mock implementation for development)
+  private tenants: Map<string, any> = new Map();
+
+  async getTenantById(id: string): Promise<any | null> {
+    return this.tenants.get(id) || null;
+  }
+
+  async updateTenant(id: string, updates: any): Promise<any> {
+    const existing = this.tenants.get(id) || { id };
+    const updated = { ...existing, ...updates, updatedAt: new Date() };
+    this.tenants.set(id, updated);
+    return updated;
   }
 }
 

@@ -146,6 +146,10 @@ FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking
 6. **Message Translation Engine**: Event-to-WhatsApp message conversion with template system
 7. **Automated Billing System**: Driver-based pricing with Stripe integration and usage tracking
 8. **Admin Management System**: Admin dashboard with usage monitoring and pricing configuration
+9. **Customer Token Input System**: React UI for Samsara API token configuration and validation
+10. **Token Validation Endpoints**: Production API endpoints for token testing and scope verification
+11. **Encrypted Token Storage**: AES-256-GCM encryption for secure API token storage
+12. **Per-Customer Webhook Setup**: Individual webhook creation and signature verification per tenant
 
 ### Production API Endpoints
 - `POST /api/fleet/setup` - Complete fleet onboarding with fleet system and WhatsApp configuration
@@ -156,6 +160,12 @@ FleetChat is built as a multi-tenant SaaS platform supporting unlimited trucking
 - `POST /api/whatsapp/webhook` - Handle incoming WhatsApp messages from drivers
 - `GET /api/dashboard/:tenantId` - Communication dashboard data and statistics
 - `GET /api/health` - Service health with WhatsApp pool statistics
+- `POST /api/tenant/samsara/validate` - Validate Samsara API tokens without saving
+- `POST /api/tenant/:tenantId/samsara/configure` - Configure and encrypt Samsara integration
+- `GET /api/tenant/:tenantId/samsara/status` - Check tenant Samsara configuration status
+- `DELETE /api/tenant/:tenantId/samsara` - Remove Samsara configuration and webhooks
+- `GET /api/tenant/:tenantId/samsara/drivers` - Fetch drivers using tenant's encrypted API token
+- `POST /api/webhooks/samsara/:tenantId` - Per-tenant webhook endpoint with signature verification
 
 ### User Interface Components
 - **Public Fleet.Chat Website**: Professional marketing site describing service capabilities and value proposition
@@ -289,6 +299,7 @@ Changelog:
 - July 22, 2025. Completed comprehensive documentation compliance review and corrections - systematically updated all FleetChat documentation to ensure complete adherence to FleetChat_Universal_Fleet_System_Boundaries.md, strengthened system boundaries language, emphasized pure communication protocol service positioning, corrected API usage descriptions to message context only, and achieved 100% compliance across all technical and business documentation
 - July 22, 2025. Created comprehensive FleetChat client onboarding demonstration system - developed interactive 3-step onboarding process showcasing Samsara credential registration, driver discovery with phone number mapping, payment setup, and billing configuration while maintaining strict system boundaries compliance as pure bidirectional communication protocol service
 - July 24, 2025. Created comprehensive third-party access management system - developed complete guide for sharing FleetChat codebase and documentation with external parties including GitHub repository sharing, Replit access controls, security preparation script, and documentation package creation while protecting sensitive credentials and business information
+- July 28, 2025. Implemented four critical production features - customer-facing token input system (React UI), token validation and testing endpoints, encrypted token storage (AES-256-GCM), and per-customer webhook setup with signature verification, advancing production readiness to 75% complete with direct Samsara API integration eliminating partnership dependency
 ```
 
 ## User Preferences
