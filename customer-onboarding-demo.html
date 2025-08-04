@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetChat Customer Onboarding Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#f59e0b',
+                        accent: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-card { transition: all 0.3s ease; }
+        .step-card.active { box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2); border-color: #2563eb; }
+        .step-indicator { background: #e5e7eb; }
+        .step-indicator.active { background: #2563eb; }
+        .step-indicator.completed { background: #10b981; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-primary">FleetChat</div>
+                    <div class="ml-3 text-sm text-gray-500">Customer Onboarding Demo</div>
+                </div>
+                <div class="text-sm text-gray-600">
+                    Demo Mode - Step-by-step onboarding process
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Indicator -->
+    <div class="bg-white border-b">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center">
+                        <div class="step-indicator active w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-medium">1</div>
+                        <span class="ml-2 text-sm font-medium text-gray-900">Registration</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="step-indicator w-8 h-8 rounded-full flex items-center justify-center text-gray-500 text-sm font-medium">2</div>
+                        <span class="ml-2 text-sm text-gray-500">Samsara Setup</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="step-indicator w-8 h-8 rounded-full flex items-center justify-center text-gray-500 text-sm font-medium">3</div>
+                        <span class="ml-2 text-sm text-gray-500">Driver Mapping</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="step-indicator w-8 h-8 rounded-full flex items-center justify-center text-gray-500 text-sm font-medium">4</div>
+                        <span class="ml-2 text-sm text-gray-500">Billing</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="step-indicator w-8 h-8 rounded-full flex items-center justify-center text-gray-500 text-sm font-medium">5</div>
+                        <span class="ml-2 text-sm text-gray-500">Testing</span>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-500">
+                    Estimated time: 10-15 minutes
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Step 1: Registration -->
+        <div id="step-1" class="step-card active bg-white rounded-lg shadow-md border-2 border-gray-200 p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">1</div>
+                <h2 class="text-2xl font-bold text-gray-900 ml-4">Company Registration</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <form class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
+                            <input type="text" value="ABC Trucking Company" readonly 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
+                            <input type="email" value="admin@abctrucking.com" readonly 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fleet Size</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                                <option selected>25 drivers</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Operation Type</label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                                <option selected>Regional</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Admin Contact</label>
+                            <input type="text" value="John Smith" readonly 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                            <input type="tel" value="+1-555-123-4567" readonly 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-blue-900 mb-3">What We Need</h3>
+                    <ul class="space-y-2 text-sm text-blue-800">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Basic company information
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Fleet size for pricing calculation
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Technical contact for setup
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-4 p-4 bg-white rounded border">
+                        <div class="text-sm font-medium text-gray-700">Estimated Monthly Cost:</div>
+                        <div class="text-2xl font-bold text-primary">$375/month</div>
+                        <div class="text-xs text-gray-500">25 drivers × $15/driver/month</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <button onclick="nextStep(2)" class="bg-primary text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium">
+                    Continue to Samsara Setup →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Samsara Setup -->
+        <div id="step-2" class="step-card bg-white rounded-lg shadow-md border-2 border-gray-200 p-8 mb-8" style="display: none;">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">2</div>
+                <h2 class="text-2xl font-bold text-gray-900 ml-4">Samsara API Configuration</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Samsara API Token</label>
+                        <div class="relative">
+                            <input type="password" id="apiToken" value="samsara_api_1234567890abcdef_demo_token" readonly
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 pr-10">
+                            <button type="button" onclick="togglePassword('apiToken')" 
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Your Samsara API token from dashboard.samsara.com</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Organization ID (Optional)</label>
+                        <input type="text" value="abc-trucking-org-12345" readonly 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                    </div>
+                    
+                    <div class="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
+                        <div class="flex">
+                            <svg class="w-5 h-5 text-green-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-green-800">Token Validated Successfully</h3>
+                                <div class="mt-2 text-sm text-green-700">
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>25 drivers found in your Samsara account</li>
+                                        <li>15 vehicles available for integration</li>
+                                        <li>All required API permissions verified</li>
+                                        <li>Webhook endpoint created automatically</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="bg-blue-50 p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold text-blue-900 mb-3">How to Get Your API Token</h3>
+                        <ol class="space-y-2 text-sm text-blue-800">
+                            <li class="flex items-start">
+                                <span class="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">1</span>
+                                Log in to dashboard.samsara.com
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">2</span>
+                                Go to Settings → API Tokens
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">3</span>
+                                Click "Create New Token"
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">4</span>
+                                Enable required permissions and save
+                            </li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium text-gray-900 mb-2">Required API Permissions:</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>✓ fleet:drivers:read</li>
+                            <li>✓ fleet:drivers:appSettings:read</li>
+                            <li>✓ fleet:webhooks:write</li>
+                            <li>✓ fleet:documents:write</li>
+                            <li>✓ fleet:routes:read</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex space-x-4">
+                <button onclick="prevStep(1)" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition-colors">
+                    ← Back
+                </button>
+                <button onclick="nextStep(3)" class="bg-primary text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium">
+                    Continue to Driver Mapping →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Driver Phone Mapping -->
+        <div id="step-3" class="step-card bg-white rounded-lg shadow-md border-2 border-gray-200 p-8 mb-8" style="display: none;">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">3</div>
+                <h2 class="text-2xl font-bold text-gray-900 ml-4">Driver Phone Number Mapping</h2>
+            </div>
+            
+            <div class="mb-6">
+                <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+                    <div class="flex">
+                        <svg class="w-5 h-5 text-yellow-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">Driver Phone Numbers Required</h3>
+                            <p class="mt-1 text-sm text-yellow-700">
+                                We found 25 drivers in your Samsara account, but only 18 have phone numbers. 
+                                Please provide WhatsApp-enabled phone numbers for the remaining 7 drivers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Driver Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Samsara ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">WhatsApp Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Mike Johnson</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">driver_001</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">+1-555-0101</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Verified
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Sarah Davis</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">driver_002</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">+1-555-0102</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Verified
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Robert Wilson</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">driver_003</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input type="tel" placeholder="Enter phone number" 
+                                       class="w-full px-2 py-1 border border-gray-300 rounded text-sm">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Pending
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Lisa Anderson</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">driver_004</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">+1-555-0104</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Verified
+                                </span>
+                            </td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td colspan="4" class="px-6 py-3 text-center text-sm text-gray-500">
+                                ... and 21 more drivers (showing sample for demo)
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-6 grid md:grid-cols-2 gap-6">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-medium text-blue-900 mb-2">Phone Number Requirements:</h4>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• Must be WhatsApp-enabled</li>
+                        <li>• Include country code (e.g., +1)</li>
+                        <li>• Active mobile phone numbers only</li>
+                        <li>• One number per driver</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-medium text-green-900 mb-2">Mapping Progress:</h4>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span>Drivers with phone numbers:</span>
+                            <span class="font-medium">18/25</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span>WhatsApp verified:</span>
+                            <span class="font-medium">18/18</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-600 h-2 rounded-full" style="width: 72%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex space-x-4">
+                <button onclick="prevStep(2)" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition-colors">
+                    ← Back
+                </button>
+                <button onclick="nextStep(4)" class="bg-primary text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium">
+                    Continue to Billing Setup →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 4: Billing Setup -->
+        <div id="step-4" class="step-card bg-white rounded-lg shadow-md border-2 border-gray-200 p-8 mb-8" style="display: none;">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">4</div>
+                <h2 class="text-2xl font-bold text-gray-900 ml-4">Billing Configuration</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="bg-primary text-white p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold mb-4">Your FleetChat Plan</h3>
+                        <div class="flex justify-between items-center mb-2">
+                            <span>Active Drivers:</span>
+                            <span class="font-bold">25</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span>Rate per Driver:</span>
+                            <span class="font-bold">$15/month</span>
+                        </div>
+                        <hr class="border-blue-400 my-3">
+                        <div class="flex justify-between items-center text-xl font-bold">
+                            <span>Monthly Total:</span>
+                            <span>$375</span>
+                        </div>
+                        <p class="text-blue-100 text-sm mt-2">
+                            Only pay for drivers who send/receive messages each month
+                        </p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium text-gray-900 mb-3">What's Included:</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Unlimited WhatsApp messages
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Real-time Samsara integration
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Document collection & sharing
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                24/7 customer support
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                Multi-language support
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Payment Information</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Billing Email</label>
+                            <input type="email" value="billing@abctrucking.com" readonly 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
+                            <input type="text" value="•••• •••• •••• 4242" readonly 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Expiry</label>
+                                <input type="text" value="12/28" readonly 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">CVC</label>
+                                <input type="text" value="•••" readonly 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Billing Address</label>
+                            <input type="text" value="123 Main Street, Trucking City, TX 12345" readonly 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+                        </div>
+                    </form>
+                    
+                    <div class="mt-6 bg-green-50 border border-green-200 rounded-md p-4">
+                        <div class="flex">
+                            <svg class="w-5 h-5 text-green-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-medium text-green-800">Payment Method Verified</h4>
+                                <p class="mt-1 text-sm text-green-700">
+                                    Your first invoice will be generated on the 1st of next month. 
+                                    No charges until your service goes live.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-xs text-gray-500">
+                        <p>• Usage-based billing - only pay for active drivers</p>
+                        <p>• Cancel anytime with 30 days notice</p>
+                        <p>• All payments processed securely by Stripe</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex space-x-4">
+                <button onclick="prevStep(3)" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition-colors">
+                    ← Back
+                </button>
+                <button onclick="nextStep(5)" class="bg-primary text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium">
+                    Continue to Testing →
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 5: Testing & Go Live -->
+        <div id="step-5" class="step-card bg-white rounded-lg shadow-md border-2 border-gray-200 p-8 mb-8" style="display: none;">
+            <div class="flex items-center mb-6">
+                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">5</div>
+                <h2 class="text-2xl font-bold text-gray-900 ml-4">Testing & Go Live</h2>
+            </div>
+            
+            <div class="space-y-8">
+                <!-- WhatsApp Assignment -->
+                <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <svg class="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="text-lg font-semibold text-green-900">WhatsApp Business Number Assigned</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded border">
+                        <div class="text-sm text-gray-600">Your dedicated FleetChat number:</div>
+                        <div class="text-2xl font-bold text-green-600">+1-555-FLEET-01</div>
+                        <div class="text-sm text-gray-500 mt-1">Drivers will receive messages from this number</div>
+                    </div>
+                </div>
+                
+                <!-- Test Message Demo -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">End-to-End Communication Test</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-medium text-blue-900 mb-3">Simulated Samsara Event:</h4>
+                            <div class="bg-white p-3 rounded border text-sm font-mono">
+                                <div class="text-gray-600">Event Type:</div>
+                                <div class="text-blue-800 mb-2">route.started</div>
+                                <div class="text-gray-600">Driver:</div>
+                                <div class="text-blue-800 mb-2">Mike Johnson (driver_001)</div>
+                                <div class="text-gray-600">Route:</div>
+                                <div class="text-blue-800">Austin, TX → Dallas, TX</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-medium text-green-900 mb-3">WhatsApp Message Sent:</h4>
+                            <div class="bg-white p-3 rounded border">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold">FC</div>
+                                    <div class="flex-1">
+                                        <div class="bg-green-100 p-3 rounded-lg">
+                                            <div class="text-sm font-medium">🚛 New Route Assignment</div>
+                                            <div class="text-sm mt-1">
+                                                Hi Mike! You have a new route:<br>
+                                                <strong>From:</strong> Austin, TX<br>
+                                                <strong>To:</strong> Dallas, TX<br>
+                                                <strong>Pickup:</strong> Today 2:00 PM<br><br>
+                                                Please confirm:
+                                            </div>
+                                            <div class="mt-2 space-x-2">
+                                                <button class="bg-green-600 text-white px-3 py-1 rounded text-xs">✓ Accept</button>
+                                                <button class="bg-yellow-600 text-white px-3 py-1 rounded text-xs">? Details</button>
+                                                <button class="bg-red-600 text-white px-3 py-1 rounded text-xs">✗ Cannot Accept</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Test Results -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Integration Test Results</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">Samsara Webhook</div>
+                            <div class="text-xs text-green-600">Active & Receiving</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">WhatsApp Delivery</div>
+                            <div class="text-xs text-green-600">Messages Sent</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div class="text-sm font-medium text-gray-900">Response Relay</div>
+                            <div class="text-xs text-green-600">Back to Samsara</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Go Live -->
+                <div class="bg-gradient-to-r from-green-500 to-blue-600 text-white p-8 rounded-lg text-center">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">🎉 FleetChat is Ready!</h3>
+                    <p class="text-lg mb-6">Your bidirectional communication system is now live and connecting your Samsara fleet management with your drivers via WhatsApp.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 text-left bg-white bg-opacity-10 p-4 rounded-lg mb-6">
+                        <div>
+                            <h4 class="font-semibold mb-2">What happens next:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Real-time event notifications to drivers</li>
+                                <li>• Driver responses automatically update Samsara</li>
+                                <li>• Document collection via WhatsApp</li>
+                                <li>• 24/7 communication monitoring</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Support & Resources:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Dashboard access: app.fleet.chat</li>
+                                <li>• Support: support@fleet.chat</li>
+                                <li>• Documentation: docs.fleet.chat</li>
+                                <li>• Status page: status.fleet.chat</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button onclick="completeOnboarding()" class="bg-white text-blue-600 px-8 py-3 rounded-md hover:bg-gray-100 transition-colors font-bold text-lg">
+                        Access Dashboard →
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mt-8 flex space-x-4">
+                <button onclick="prevStep(4)" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-400 transition-colors">
+                    ← Back
+                </button>
+            </div>
+        </div>
+
+        <!-- Completion Message -->
+        <div id="completion-message" class="bg-white rounded-lg shadow-md border-2 border-green-200 p-8 text-center" style="display: none;">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Welcome to FleetChat!</h2>
+            <p class="text-lg text-gray-600 mb-8">
+                Your onboarding is complete. ABC Trucking Company is now connected to our 
+                bidirectional communication platform, enabling seamless WhatsApp communication 
+                between your Samsara fleet management system and your 25 drivers.
+            </p>
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h3 class="font-semibold text-gray-900 mb-2">This demo showed you:</h3>
+                <div class="grid md:grid-cols-2 gap-4 text-left">
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>✓ Simple company registration process</li>
+                        <li>✓ One-click Samsara API integration</li>
+                        <li>✓ Automated driver phone number mapping</li>
+                    </ul>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>✓ Transparent usage-based billing</li>
+                        <li>✓ End-to-end communication testing</li>
+                        <li>✓ Immediate go-live capability</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div class="text-xl font-bold mb-2">Ready to Connect Your Fleet?</div>
+            <p class="text-gray-300 mb-6">
+                This demo showed you exactly what's needed to onboard your fleet to FleetChat. 
+                The actual process takes 10-15 minutes and your communication system goes live immediately.
+            </p>
+            <div class="space-x-4">
+                <a href="https://fleet-chat.replit.app" target="_blank" 
+                   class="bg-primary text-white px-8 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium inline-block">
+                    Start Your Real Onboarding
+                </a>
+                <button onclick="resetDemo()" class="bg-gray-600 text-white px-6 py-3 rounded-md hover:bg-gray-500 transition-colors">
+                    Restart Demo
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        
+        function nextStep(step) {
+            // Hide current step
+            document.getElementById(`step-${currentStep}`).style.display = 'none';
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            
+            // Update progress indicators
+            document.querySelectorAll('.step-indicator')[currentStep - 1].classList.add('completed');
+            document.querySelectorAll('.step-indicator')[currentStep - 1].classList.remove('active');
+            
+            // Show next step
+            currentStep = step;
+            document.getElementById(`step-${currentStep}`).style.display = 'block';
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+            
+            // Update progress indicator
+            if (currentStep <= 5) {
+                document.querySelectorAll('.step-indicator')[currentStep - 1].classList.add('active');
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function prevStep(step) {
+            // Hide current step
+            document.getElementById(`step-${currentStep}`).style.display = 'none';
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            
+            // Update progress indicators
+            document.querySelectorAll('.step-indicator')[currentStep - 1].classList.remove('active', 'completed');
+            
+            // Show previous step
+            currentStep = step;
+            document.getElementById(`step-${currentStep}`).style.display = 'block';
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+            
+            // Update progress indicator
+            document.querySelectorAll('.step-indicator')[currentStep - 1].classList.add('active');
+            document.querySelectorAll('.step-indicator')[currentStep - 1].classList.remove('completed');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function completeOnboarding() {
+            // Hide step 5
+            document.getElementById('step-5').style.display = 'none';
+            
+            // Mark all steps as completed
+            document.querySelectorAll('.step-indicator').forEach(indicator => {
+                indicator.classList.add('completed');
+                indicator.classList.remove('active');
+            });
+            
+            // Show completion message
+            document.getElementById('completion-message').style.display = 'block';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function resetDemo() {
+            // Hide all steps and completion message
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`step-${i}`).style.display = 'none';
+                document.getElementById(`step-${i}`).classList.remove('active');
+            }
+            document.getElementById('completion-message').style.display = 'none';
+            
+            // Reset progress indicators
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                indicator.classList.remove('active', 'completed');
+                if (index === 0) {
+                    indicator.classList.add('active');
+                }
+            });
+            
+            // Show step 1
+            currentStep = 1;
+            document.getElementById('step-1').style.display = 'block';
+            document.getElementById('step-1').classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        }
+    </script>
+</body>
+</html>
