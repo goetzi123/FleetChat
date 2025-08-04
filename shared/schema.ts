@@ -50,9 +50,12 @@ export const WorkflowType = {
 // User Roles
 export const UserRole = {
   DRIVER: "driver",
-  DISPATCHER: "dispatcher",
+  DISPATCHER: "dispatcher", 
+  DISPATCH_SUPERVISOR: "dispatch_supervisor",
+  OPERATIONS_MANAGER: "operations_manager",
+  FLEET_MANAGER: "fleet_manager",
+  IT_ADMINISTRATOR: "it_administrator",
   YARD_OPERATOR: "yard_operator",
-  MANAGER: "manager",
   ADMIN: "admin",
   READ_ONLY: "read_only"
 } as const;
@@ -124,29 +127,85 @@ export const tenants = pgTable("tenants", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Users table (fleet administrators and drivers)
-export const users = pgTable("users", {
+// Tenant users table (fleet administrators, managers, dispatchers)
+export const tenantUsers = pgTable("tenant_users", {
   id: uuid("id").primaryKey().defaultRandom(),
   tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
-  email: varchar("email", { length: 255 }),
-  name: varchar("name", { length: 255 }).notNull(),
-  phone: varchar("phone", { length: 20 }),
+  userId: varchar("user_id", { length: 255 }).notNull(), // From Replit Auth
+  email: varchar("email", { length: 255 }).notNull(),
+  firstName: varchar("first_name", { length: 100 }),
+  lastName: varchar("last_name", { length: 100 }),
   role: varchar("role", { length: 50 }).notNull(),
-  whatsappNumber: varchar("whatsapp_number", { length: 20 }), // WhatsApp Business API phone number
-  whatsappActive: boolean("whatsapp_active").default(false), // WhatsApp communication enabled
-  samsaraDriverId: varchar("samsara_driver_id", { length: 255 }), // Link to Samsara driver
-  phoneSource: varchar("phone_source", { length: 50 }).default("samsara"), // 'samsara' | 'manual' | 'verified'
-  isActive: boolean("is_active").default(true),
-  activatedAt: timestamp("activated_at"), // WhatsApp activation timestamp
   
-  // Read-only access configuration
-  accessScope: jsonb("access_scope").$type<string[]>().default('[]'), // ['transports', 'messages', 'analytics', etc.]
-  accessLevel: varchar("access_level", { length: 50 }).default("full"), // 'full', 'read_only', 'limited'
-  expiresAt: timestamp("expires_at"), // Temporary access expiration
-  invitedBy: uuid("invited_by").references(() => users.id), // Who granted access
+  // Permission Configuration
+  permissions: jsonb("permissions").default('{}'),
+  department: varchar("department", { length: 100 }),
+  assignedDrivers: jsonb("assigned_drivers").$type<string[]>().default('[]'), // Array of driver IDs for limited access
+  
+  // Access Control
+  isActive: boolean("is_active").default(true),
+  lastLoginAt: timestamp("last_login_at"),
+  createdBy: uuid("created_by"), // Self-referencing for audit trail
   
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Drivers table (separate from tenant users)
+export const drivers = pgTable("drivers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  samsaraDriverId: varchar("samsara_driver_id", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  phone: varchar("phone", { length: 20 }),
+  whatsappNumber: varchar("whatsapp_number", { length: 20 }),
+  whatsappActive: boolean("whatsapp_active").default(false),
+  phoneSource: varchar("phone_source", { length: 50 }).default("samsara"), // 'samsara' | 'manual' | 'verified'
+  isActive: boolean("is_active").default(true),
+  activatedAt: timestamp("activated_at"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Permission scopes for granular access control
+export const permissionScopes = pgTable("permission_scopes", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  userId: uuid("user_id").references(() => tenantUsers.id).notNull(),
+  
+  // Resource-based permissions
+  resourceType: varchar("resource_type", { length: 50 }).notNull(), // 'drivers', 'messages', 'billing', etc.
+  resourceId: varchar("resource_id", { length: 255 }), // Specific resource ID or NULL for all
+  accessLevel: varchar("access_level", { length: 20 }).notNull(), // 'none', 'read', 'write', 'admin'
+  
+  // Conditional access
+  conditions: jsonb("conditions").default('{}'), // Time-based, IP-based, etc.
+  
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// User activity logging
+export const userActivityLogs = pgTable("user_activity_logs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: uuid("tenant_id").references(() => tenants.id).notNull(),
+  userId: uuid("user_id").references(() => tenantUsers.id),
+  
+  // Activity Details
+  action: varchar("action", { length: 100 }).notNull(), // 'login', 'send_message', 'view_logs', etc.
+  resourceType: varchar("resource_type", { length: 50 }), // What they accessed
+  resourceId: varchar("resource_id", { length: 255 }), // Specific resource
+  
+  // Context Information
+  ipAddress: varchar("ip_address", { length: 45 }),
+  userAgent: text("user_agent"),
+  sessionId: varchar("session_id", { length: 255 }),
+  
+  // Audit Information
+  success: boolean("success").default(true),
+  errorMessage: text("error_message"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Transports table
