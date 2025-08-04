@@ -100,10 +100,10 @@ export const tenants = pgTable("tenants", {
   samsaraWebhookId: varchar("samsara_webhook_id", { length: 255 }),
   samsaraWebhookSecret: jsonb("samsara_webhook_secret"), // encrypted object
   samsaraWebhookUrl: varchar("samsara_webhook_url", { length: 500 }),
-  samsaraScopes: jsonb("samsara_scopes").$type<string[]>().default('[]'),
+  samsaraScopes: jsonb("samsara_scopes").$type<string[]>().default([]),
   samsaraValidated: boolean("samsara_validated").default(false),
   samsaraValidatedAt: timestamp("samsara_validated_at"),
-  webhookEventTypes: jsonb("webhook_event_types").$type<string[]>().default('["vehicle.location","route.started","route.completed","driver.dutyStatus","geofence.enter","geofence.exit"]'),
+  webhookEventTypes: jsonb("webhook_event_types").$type<string[]>().default(["vehicle.location","route.started","route.completed","driver.dutyStatus","geofence.enter","geofence.exit"]),
   
   // WhatsApp Configuration (managed by FleetChat)
   whatsappPhoneNumber: varchar("whatsapp_phone_number", { length: 20 }),
