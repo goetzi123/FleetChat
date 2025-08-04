@@ -901,6 +901,7 @@
                 <button class="tab-button" data-tab="how">How</button>
                 <button class="tab-button" data-tab="pricing">Pricing</button>
                 <button class="tab-button" data-tab="demo">Demo</button>
+                <button class="tab-button" data-tab="onboarding">Onboarding</button>
             </div>
             
             <!-- Tab Content -->
@@ -1179,6 +1180,326 @@
                             <button onclick="clearDemo()" style="width: 100%; padding: 10px; background: #6b7280; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px;">
                                 Clear Chat
                             </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Onboarding Tab -->
+                <div id="onboarding-tab" class="tab-panel">
+                    <h2 class="section-title">Customer Onboarding Process</h2>
+                    <p class="section-subtitle">Simple 5-step process to connect your fleet to WhatsApp - takes just 10 minutes</p>
+                    
+                    <div style="text-align: center; margin-bottom: 3rem;">
+                        <div style="background: #dbeafe; border: 1px solid #3b82f6; padding: 1.5rem; border-radius: 12px; display: inline-block;">
+                            <div style="color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">Example Fleet: ABC Trucking Company</div>
+                            <div style="font-size: 1.25rem; font-weight: bold; color: #1e3a8a;">25 drivers × $15/month = $375/month</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                        <!-- Step 1: Registration -->
+                        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; padding: 2rem;">
+                            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                                <div style="width: 2.5rem; height: 2.5rem; background: #2563eb; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 1rem;">1</div>
+                                <h3 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin: 0;">Company Registration</h3>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                    <div>
+                                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Company Name</label>
+                                        <div style="background: #f9fafb; border: 1px solid #d1d5db; border-radius: 6px; padding: 0.75rem; color: #1f2937;">ABC Trucking Company</div>
+                                    </div>
+                                    <div>
+                                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Contact Email</label>
+                                        <div style="background: #f9fafb; border: 1px solid #d1d5db; border-radius: 6px; padding: 0.75rem; color: #1f2937;">admin@abctrucking.com</div>
+                                    </div>
+                                    <div>
+                                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Fleet Size</label>
+                                        <div style="background: #f9fafb; border: 1px solid #d1d5db; border-radius: 6px; padding: 0.75rem; color: #1f2937;">25 drivers</div>
+                                    </div>
+                                </div>
+                                <div style="background: #dbeafe; padding: 1.5rem; border-radius: 8px;">
+                                    <h4 style="font-weight: 600; color: #1e3a8a; margin-bottom: 0.75rem; margin-top: 0;">What We Need</h4>
+                                    <ul style="color: #1e40af; font-size: 0.875rem; line-height: 1.5; margin: 0; padding-left: 1.25rem;">
+                                        <li>Basic company information</li>
+                                        <li>Fleet size for pricing</li>
+                                        <li>Technical contact details</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Samsara Setup -->
+                        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; padding: 2rem;">
+                            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                                <div style="width: 2.5rem; height: 2.5rem; background: #2563eb; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 1rem;">2</div>
+                                <h3 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin: 0;">Samsara API Connection</h3>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                                <div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <label style="display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">API Token</label>
+                                        <div style="background: #f9fafb; border: 1px solid #d1d5db; border-radius: 6px; padding: 0.75rem; font-family: monospace; font-size: 0.875rem; color: #1f2937;">
+                                            samsara_api_1234...••••••••
+                                        </div>
+                                    </div>
+                                    <div style="background: #dcfce7; border: 1px solid #16a34a; border-radius: 6px; padding: 1rem;">
+                                        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                                            <svg style="width: 1.25rem; height: 1.25rem; color: #16a34a; margin-right: 0.5rem;" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span style="color: #166534; font-weight: 500;">Token Validated</span>
+                                        </div>
+                                        <div style="color: #15803d; font-size: 0.875rem;">
+                                            ✓ 25 drivers found<br>
+                                            ✓ Webhook created<br>
+                                            ✓ Permissions verified
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="background: #f9fafb; padding: 1.5rem; border-radius: 8px;">
+                                    <h4 style="font-weight: 600; color: #1f2937; margin-bottom: 0.75rem; margin-top: 0;">How to Get Your Token</h4>
+                                    <ol style="color: #6b7280; font-size: 0.875rem; line-height: 1.5; margin: 0; padding-left: 1.25rem;">
+                                        <li>Log in to dashboard.samsara.com</li>
+                                        <li>Go to Settings → API Tokens</li>
+                                        <li>Click "Create New Token"</li>
+                                        <li>Enable required permissions</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Driver Mapping -->
+                        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; padding: 2rem;">
+                            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                                <div style="width: 2.5rem; height: 2.5rem; background: #2563eb; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 1rem;">3</div>
+                                <h3 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin: 0;">Driver Phone Numbers</h3>
+                            </div>
+                            
+                            <div style="margin-bottom: 1.5rem;">
+                                <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 6px; padding: 1rem;">
+                                    <div style="color: #92400e;">
+                                        <strong>Found 25 drivers:</strong> 22 have phone numbers, 3 need WhatsApp numbers added
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="overflow-x: auto;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <thead>
+                                        <tr style="background: #f9fafb;">
+                                            <th style="padding: 0.75rem 1rem; text-align: left; font-size: 0.875rem; font-weight: 500; color: #6b7280; border-bottom: 1px solid #e5e7eb;">Driver</th>
+                                            <th style="padding: 0.75rem 1rem; text-align: left; font-size: 0.875rem; font-weight: 500; color: #6b7280; border-bottom: 1px solid #e5e7eb;">Phone Number</th>
+                                            <th style="padding: 0.75rem 1rem; text-align: left; font-size: 0.875rem; font-weight: 500; color: #6b7280; border-bottom: 1px solid #e5e7eb;">WhatsApp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 0.75rem 1rem; font-size: 0.875rem; color: #1f2937; border-bottom: 1px solid #e5e7eb;">Mike Johnson</td>
+                                            <td style="padding: 0.75rem 1rem; font-size: 0.875rem; color: #1f2937; border-bottom: 1px solid #e5e7eb;">+1-555-0101</td>
+                                            <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e5e7eb;">
+                                                <span style="display: inline-flex; align-items: center; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; background: #dcfce7; color: #166534;">
+                                                    Verified
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0.75rem 1rem; font-size: 0.875rem; color: #1f2937; border-bottom: 1px solid #e5e7eb;">Sarah Davis</td>
+                                            <td style="padding: 0.75rem 1rem; font-size: 0.875rem; color: #1f2937; border-bottom: 1px solid #e5e7eb;">+1-555-0102</td>
+                                            <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #e5e7eb;">
+                                                <span style="display: inline-flex; align-items: center; padding: 0.25rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; background: #dcfce7; color: #166534;">
+                                                    Verified
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr style="background: #f9fafb;">
+                                            <td colspan="3" style="padding: 0.75rem 1rem; text-align: center; font-size: 0.875rem; color: #6b7280;">
+                                                ... and 23 more drivers
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Billing -->
+                        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; padding: 2rem;">
+                            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                                <div style="width: 2.5rem; height: 2.5rem; background: #2563eb; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 1rem;">4</div>
+                                <h3 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin: 0;">Billing Setup</h3>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                                <div style="background: #2563eb; color: white; padding: 1.5rem; border-radius: 8px;">
+                                    <h4 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; margin-top: 0;">Your Plan</h4>
+                                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span>Active Drivers:</span>
+                                            <span style="font-weight: bold;">25</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span>Rate per Driver:</span>
+                                            <span style="font-weight: bold;">$15/month</span>
+                                        </div>
+                                        <hr style="border: 1px solid #60a5fa; margin: 0.75rem 0;">
+                                        <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: bold;">
+                                            <span>Monthly Total:</span>
+                                            <span>$375</span>
+                                        </div>
+                                        <p style="color: #bfdbfe; font-size: 0.875rem; margin-top: 0.5rem; margin-bottom: 0;">
+                                            Only pay for drivers who send/receive messages
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 style="font-weight: 600; color: #1f2937; margin-bottom: 1rem; margin-top: 0;">Payment Details</h4>
+                                    <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.875rem;">
+                                        <div>
+                                            <label style="color: #6b7280;">Billing Email</label>
+                                            <div style="background: #f9fafb; border: 1px solid #d1d5db; border-radius: 6px; padding: 0.75rem; margin-top: 0.25rem;">billing@abctrucking.com</div>
+                                        </div>
+                                        <div>
+                                            <label style="color: #6b7280;">Payment Method</label>
+                                            <div style="background: #f9fafb; border: 1px solid #d1d5db; border-radius: 6px; padding: 0.75rem; margin-top: 0.25rem;">•••• •••• •••• 4242</div>
+                                        </div>
+                                    </div>
+                                    <div style="background: #dcfce7; border: 1px solid #16a34a; border-radius: 6px; padding: 0.75rem; margin-top: 1rem;">
+                                        <div style="color: #166534; font-size: 0.875rem;">
+                                            ✓ Payment method verified<br>
+                                            First invoice generated on go-live
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Testing & Go Live -->
+                        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; padding: 2rem;">
+                            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                                <div style="width: 2.5rem; height: 2.5rem; background: #2563eb; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 1rem;">5</div>
+                                <h3 style="font-size: 1.5rem; font-weight: 600; color: #1f2937; margin: 0;">Testing & Go Live</h3>
+                            </div>
+                            
+                            <!-- WhatsApp Number Assignment -->
+                            <div style="background: #dcfce7; border: 1px solid #16a34a; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <h4 style="font-weight: 600; color: #166534; margin-bottom: 0.5rem; margin-top: 0;">WhatsApp Business Number Assigned</h4>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: #15803d;">+1-555-FLEET-01</div>
+                                <div style="font-size: 0.875rem; color: #15803d;">Drivers will receive messages from this number</div>
+                            </div>
+
+                            <!-- Test Message Demo -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                                <div style="background: #dbeafe; padding: 1rem; border-radius: 8px;">
+                                    <h5 style="font-weight: 500; color: #1e3a8a; margin-bottom: 0.5rem; margin-top: 0;">Samsara Event</h5>
+                                    <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #3b82f6; font-size: 0.875rem;">
+                                        <div style="font-family: monospace; color: #1e40af;">
+                                            Event: route.started<br>
+                                            Driver: Mike Johnson<br>
+                                            Route: Austin → Dallas
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="background: #dcfce7; padding: 1rem; border-radius: 8px;">
+                                    <h5 style="font-weight: 500; color: #166534; margin-bottom: 0.5rem; margin-top: 0;">WhatsApp Message</h5>
+                                    <div style="background: white; padding: 0.75rem; border-radius: 6px; border: 1px solid #16a34a;">
+                                        <div style="font-size: 0.875rem;">
+                                            <strong>🚛 New Route Assignment</strong><br>
+                                            Hi Mike! New route:<br>
+                                            <strong>From:</strong> Austin, TX<br>
+                                            <strong>To:</strong> Dallas, TX<br>
+                                            Please confirm receipt.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Test Results -->
+                            <div style="background: #f9fafb; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                                <h5 style="font-weight: 600; color: #1f2937; margin-bottom: 1rem; margin-top: 0;">Integration Test Results</h5>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+                                    <div>
+                                        <div style="width: 3rem; height: 3rem; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem;">
+                                            <svg style="width: 1.5rem; height: 1.5rem; color: #16a34a;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        <div style="font-size: 0.875rem; font-weight: 500;">Samsara Webhook</div>
+                                        <div style="font-size: 0.75rem; color: #16a34a;">Active</div>
+                                    </div>
+                                    <div>
+                                        <div style="width: 3rem; height: 3rem; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem;">
+                                            <svg style="width: 1.5rem; height: 1.5rem; color: #16a34a;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        <div style="font-size: 0.875rem; font-weight: 500;">WhatsApp Delivery</div>
+                                        <div style="font-size: 0.75rem; color: #16a34a;">Messages Sent</div>
+                                    </div>
+                                    <div>
+                                        <div style="width: 3rem; height: 3rem; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem;">
+                                            <svg style="width: 1.5rem; height: 1.5rem; color: #16a34a;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        <div style="font-size: 0.875rem; font-weight: 500;">Response Relay</div>
+                                        <div style="font-size: 0.75rem; color: #16a34a;">Back to Samsara</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Go Live -->
+                            <div style="background: linear-gradient(135deg, #16a34a 0%, #2563eb 100%); color: white; padding: 2rem; border-radius: 8px; text-align: center;">
+                                <h5 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; margin-top: 0;">🎉 FleetChat is Live!</h5>
+                                <p style="font-size: 1.125rem; margin-bottom: 1rem;">
+                                    Your communication system is now connecting Samsara with your drivers via WhatsApp
+                                </p>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left; background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                                    <div>
+                                        <h6 style="font-weight: 600; margin-bottom: 0.5rem; margin-top: 0;">What happens next:</h6>
+                                        <ul style="font-size: 0.875rem; line-height: 1.4; margin: 0; padding-left: 1.25rem;">
+                                            <li>Real-time event notifications</li>
+                                            <li>Driver responses update Samsara</li>
+                                            <li>Document collection via WhatsApp</li>
+                                            <li>24/7 monitoring</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h6 style="font-weight: 600; margin-bottom: 0.5rem; margin-top: 0;">Support:</h6>
+                                        <ul style="font-size: 0.875rem; line-height: 1.4; margin: 0; padding-left: 1.25rem;">
+                                            <li>Dashboard: app.fleet.chat</li>
+                                            <li>Email: support@fleet.chat</li>
+                                            <li>Docs: docs.fleet.chat</li>
+                                            <li>Status: status.fleet.chat</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Summary -->
+                        <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; padding: 2rem; text-align: center;">
+                            <h3 style="font-size: 1.5rem; font-weight: bold; color: #1f2937; margin-bottom: 1rem; margin-top: 0;">Onboarding Complete!</h3>
+                            <p style="font-size: 1.125rem; color: #6b7280; margin-bottom: 1.5rem;">
+                                ABC Trucking Company is now connected to FleetChat's bidirectional communication platform.
+                                25 drivers can now receive WhatsApp messages from Samsara events and respond directly.
+                            </p>
+                            <div style="background: #f9fafb; padding: 1.5rem; border-radius: 8px;">
+                                <h4 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem; margin-top: 0;">This onboarding process shows:</h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left;">
+                                    <ul style="color: #6b7280; font-size: 0.875rem; line-height: 1.4; margin: 0; padding-left: 1.25rem;">
+                                        <li>Simple company registration</li>
+                                        <li>One-click Samsara integration</li>
+                                        <li>Automated driver mapping</li>
+                                    </ul>
+                                    <ul style="color: #6b7280; font-size: 0.875rem; line-height: 1.4; margin: 0; padding-left: 1.25rem;">
+                                        <li>Transparent pricing</li>
+                                        <li>End-to-end testing</li>
+                                        <li>Immediate go-live</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
