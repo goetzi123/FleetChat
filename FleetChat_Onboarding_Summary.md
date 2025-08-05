@@ -32,7 +32,7 @@ FleetChat provides the simplest possible onboarding for trucking companies using
 
 ### Step 2: Payment Configuration
 **Fleet Administrator Provides:**
-- Service tier selection (Basic $15, Professional $25, Enterprise $35 per active driver)
+- Service tier selection (Basic $8, Professional $15, Enterprise $20 per active driver)
 - Company billing information (name, address, billing email)
 - Credit card details for automated monthly charging
 - Billing contact designation
@@ -131,7 +131,7 @@ FleetChat provides the simplest possible onboarding for trucking companies using
 - **No Hidden Fees**: Single monthly charge covers all infrastructure and support
 
 ### Example Monthly Costs
-- **Small Fleet (25 active drivers)**: $375-875/month depending on service tier
+- **Small Fleet (25 active drivers)**: $200-500/month depending on service tier
 - **Medium Fleet (100 active drivers)**: $1,275-2,975/month with 15% volume discount
 - **Large Fleet (300 active drivers)**: $3,375-7,875/month with 25% volume discount
 

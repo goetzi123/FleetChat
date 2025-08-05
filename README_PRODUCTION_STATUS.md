@@ -35,7 +35,7 @@ Driver WhatsApp Responses → FleetChat → Samsara API Updates
 - **Auto-Scaling Infrastructure**: Ready for cloud deployment with automatic scaling
 - **Database Design**: PostgreSQL with multi-tenant schema and proper indexing  
 - **Monitoring & Health Checks**: Comprehensive operational monitoring capabilities
-- **Billing Integration**: Automated Stripe billing at $15/driver/month
+- **Billing Integration**: Automated Stripe billing at $8/driver/month
 
 ## Customer Onboarding Process
 
@@ -72,7 +72,7 @@ Driver WhatsApp Responses → FleetChat → Samsara API Updates
 ### Per Customer Economics
 ```
 25-driver fleet example:
-- Monthly Revenue: $375 (25 drivers × $15/month)
+- Monthly Revenue: $200 (25 drivers × $8/month)
 - Operating Costs: ~$130/month
 - Net Profit: ~$245/month (65% margin)
 - Setup Time: 1-2 days

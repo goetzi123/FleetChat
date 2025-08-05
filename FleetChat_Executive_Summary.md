@@ -33,8 +33,8 @@ FleetChat is a headless middleware platform that transforms fleet management com
 ## Business Model
 
 ### SaaS Subscription Pricing
-**Driver-Based Monthly Billing**: $15-35 per active driver per month based on service tier
-- **Basic ($15/driver)**: Standard templates, basic reporting, managed WhatsApp
+**Driver-Based Monthly Billing**: $8-20 per active driver per month based on service tier
+- **Basic ($8/driver)**: Standard templates, basic reporting, managed WhatsApp
 - **Professional ($25/driver)**: Custom templates, advanced analytics, 24/7 support  
 - **Enterprise ($35/driver)**: Multi-fleet management, dedicated account manager, custom integrations
 
@@ -46,7 +46,7 @@ FleetChat is a headless middleware platform that transforms fleet management com
 **All-Inclusive Service**: Single monthly fee covers Samsara integration, WhatsApp Business API management, message infrastructure, and technical support.
 
 ### Revenue Streams
-1. **Core Subscription**: Monthly per-driver fees ($15-35/month)
+1. **Core Subscription**: Monthly per-driver fees ($8-20/month)
 2. **Custom Integration**: One-time setup fees for specialized workflow requirements ($1,500-5,000)
 3. **Enterprise Services**: White-label solutions and multi-tenant management for large logistics companies
 4. **Professional Services**: Implementation consulting and custom message template development

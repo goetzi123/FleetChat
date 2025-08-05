@@ -8,7 +8,7 @@ FleetChat uses a driver-based subscription model with automated billing through 
 ### Driver-Based Pricing
 **Primary Metric**: Active drivers per month
 - Driver is considered "active" if they receive at least one message or send one response during the billing period
-- Pricing tiers: Basic ($15), Professional ($25), Enterprise ($35) per active driver per month
+- Pricing tiers: Basic ($8), Professional ($15), Enterprise ($20) per active driver per month
 - Inactive drivers (no communication activity) are not billed
 
 ### Automated Driver Counting

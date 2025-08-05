@@ -210,12 +210,12 @@ const whatsappConfig = {
 **Billing Configuration:**
 ```typescript
 const stripeBillingConfig = {
-  priceId: "price_per_active_driver_monthly", // $15/month per driver
+  priceId: "price_per_active_driver_monthly", // $8/month per driver
   products: [
     {
       name: "FleetChat Communication Service",
       description: "Per-driver monthly communication service",
-      unitAmount: 1500, // $15.00 in cents
+      unitAmount: 800, // $8.00 in cents
       currency: "usd",
       recurring: { interval: "month" }
     }
@@ -348,7 +348,7 @@ async function setupCustomerBilling(tenantId: string, customerInfo: CustomerOnbo
   return {
     stripeCustomerId: customer.id,
     stripeSubscriptionId: subscription.id,
-    monthlyRate: customerInfo.fleetSize * 15, // $15 per driver
+    monthlyRate: customerInfo.fleetSize * 8, // $8 per driver
     billingCycle: "monthly",
     nextBillingDate: subscription.current_period_end
   };
@@ -523,7 +523,7 @@ Infrastructure (per customer):
 - Stripe fees: 2.9% + $0.30 per transaction
 
 Customer: 25-driver fleet example:
-- Revenue: 25 drivers × $15/month = $375/month
+- Revenue: 25 drivers × $8/month = $200/month
 - WhatsApp costs: ~$50-75/month (estimated message volume)
 - Infrastructure: ~$50/month (allocated portion)
 - Stripe fees: ~$11/month

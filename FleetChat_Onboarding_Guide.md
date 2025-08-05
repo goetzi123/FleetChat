@@ -210,7 +210,7 @@ FleetChat provides real-time monitoring for:
 **All-Inclusive Managed Service - No Additional WhatsApp Costs**
 
 #### Service Tiers
-- **Basic**: $15/driver/month
+- **Basic**: $8/driver/month
   - Standard transport message templates
   - Basic delivery reporting
   - Dedicated WhatsApp business number
@@ -259,7 +259,7 @@ FleetChat requires only **two main configurations** from trucking companies:
 ### 2. Payment Configuration  
 - **Credit Card Details**: Enter payment method for automated monthly billing
 - **Billing Contact**: Designated person to receive invoices and billing communications
-- **Service Tier Selection**: Choose Basic ($15), Professional ($25), or Enterprise ($35) per driver
+- **Service Tier Selection**: Choose Basic ($8), Professional ($15), or Enterprise ($20) per driver
 
 ### Automated Monthly Billing Process
 - **Active Driver Counting**: FleetChat automatically tracks drivers who send/receive messages each month

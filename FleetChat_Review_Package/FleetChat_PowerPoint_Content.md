@@ -77,7 +77,7 @@ Samsara TMS → FleetChat → WhatsApp Business
 
 ### Pricing Tiers:
 
-**Basic - $15/driver/month**
+**Basic - $8/driver/month**
 • Standard templates
 • Basic reporting
 • Managed WhatsApp

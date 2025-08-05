@@ -210,7 +210,7 @@ FleetChat provides real-time monitoring for:
 **All-Inclusive Managed Service - No Additional WhatsApp Costs**
 
 #### Service Tiers
-- **Basic**: $15/driver/month
+- **Basic**: $8/driver/month
   - Standard transport message templates
   - Basic delivery reporting
   - Dedicated WhatsApp business number

@@ -170,7 +170,7 @@ export async function processSamsaraWebhook(
 - **Database**: PostgreSQL with multi-tenant row-level security
 - **Security**: AES-256-GCM encryption for all sensitive data
 - **Monitoring**: Health checks and performance metrics
-- **Billing**: Automated Stripe integration ($15/driver/month)
+- **Billing**: Automated Stripe integration ($8/driver/month)
 
 ## Compliance Certification Matrix
 
