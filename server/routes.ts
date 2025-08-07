@@ -25,6 +25,7 @@ import { samsaraService } from "./integrations/samsara-service";
 import { whatsappResponseHandler } from "./integrations/whatsapp-response-handler";
 import { setupAdminRoutes } from "./admin-routes";
 import tenantSamsaraRoutes from "./tenant-samsara-routes";
+import motiveRoutes from "./integrations/motive-routes";
 import { verifyWebhookSignature } from "./webhook-manager";
 import { decrypt, type EncryptedData } from "./encryption";
 
@@ -922,6 +923,9 @@ function extractMessageContent(message: any) {
 
 // Mount tenant Samsara configuration routes
 router.use(tenantSamsaraRoutes);
+
+// Mount Motive integration routes
+router.use(motiveRoutes);
 
 // Initialize admin routes
 export function initializeAdminRoutes(app: express.Application) {

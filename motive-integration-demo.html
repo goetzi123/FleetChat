@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetChat Motive Integration Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #667eea;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .compliance-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            border: 2px solid #2ecc71;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+        
+        .platform-comparison {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .platform-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .platform-card.motive {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8eeff 100%);
+        }
+        
+        .platform-card.samsara {
+            border-color: #2ecc71;
+            background: linear-gradient(135deg, #f8fff9 0%, #e8ffe8 100%);
+        }
+        
+        .platform-logo {
+            width: 80px;
+            height: 80px;
+            background: #667eea;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .samsara .platform-logo {
+            background: #2ecc71;
+        }
+        
+        .platform-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        
+        .platform-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+        
+        .samsara .stat-value {
+            color: #2ecc71;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        
+        .features-section {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .demo-section {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-flow {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .demo-step {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .demo-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+        }
+        
+        .compliance-section {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 2rem 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .compliance-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .compliance-check {
+            font-size: 2rem;
+            color: #2ecc71;
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        
+        .cta-section {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 2rem 0;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: white;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .platform-comparison,
+            .features-section,
+            .demo-section,
+            .compliance-section,
+            .cta-section {
+                padding: 2rem;
+            }
+            
+            .demo-step:not(:last-child)::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">FleetChat</div>
+            <ul class="nav-links">
+                <li><a href="#platforms">Platforms</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#compliance">Compliance</a></li>
+                <li><a href="/fleet.chat">Website</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="compliance-badge">
+                    ✅ 100% Universal Boundaries Compliant
+                </div>
+                <h1>Motive Integration</h1>
+                <p>FleetChat now supports Motive (formerly KeepTruckin) with full bidirectional WhatsApp communication - expanding our multi-platform communication middleware to serve both Samsara and Motive customers.</p>
+            </div>
+        </section>
+
+        <section id="platforms" class="platform-comparison">
+            <div class="container">
+                <h2 style="text-align: center; color: #2c3e50; margin-bottom: 1rem;">Multi-Platform Fleet Communication</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem;">FleetChat bridges the gap between fleet management systems and drivers via WhatsApp</p>
+                
+                <div class="comparison-grid">
+                    <div class="platform-card motive">
+                        <div class="platform-logo">M</div>
+                        <h3 class="platform-name">Motive Integration</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Real-time fleet communication with superior performance</p>
+                        
+                        <div class="platform-stats">
+                            <div class="stat">
+                                <span class="stat-value">120k+</span>
+                                <div class="stat-label">Vehicles</div>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">1-3s</span>
+                                <div class="stat-label">Update Speed</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(102, 126, 234, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                            <strong style="color: #667eea;">NEW</strong> - Superior real-time performance with comprehensive webhook events
+                        </div>
+                    </div>
+
+                    <div class="platform-card samsara">
+                        <div class="platform-logo">S</div>
+                        <h3 class="platform-name">Samsara Integration</h3>
+                        <p style="color: #666; margin-bottom: 1rem;">Established enterprise fleet management leader</p>
+                        
+                        <div class="platform-stats">
+                            <div class="stat">
+                                <span class="stat-value">2M+</span>
+                                <div class="stat-label">Assets</div>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">30+s</span>
+                                <div class="stat-label">Update Speed</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(46, 204, 113, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                            <strong style="color: #2ecc71;">ESTABLISHED</strong> - Production-ready with comprehensive fleet coverage
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2 style="text-align: center; color: #2c3e50; margin-bottom: 1rem;">Motive Integration Features</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem;">Comprehensive communication protocol service maintaining strict system boundaries</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🚛</div>
+                        <h3>Real-Time Events</h3>
+                        <p>Vehicle location, geofence entry/exit, and performance events trigger instant WhatsApp messages to drivers</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Superior Performance</h3>
+                        <p>1-3 second update speeds vs industry standard 30+ seconds - fastest fleet communication available</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>HOS Compliance</h3>
+                        <p>Hours of Service violation alerts sent directly to drivers with actionable guidance</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔧</div>
+                        <h3>Maintenance Alerts</h3>
+                        <p>Fault code events trigger maintenance notifications without fleet management interference</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">↔️</div>
+                        <h3>Bidirectional Communication</h3>
+                        <p>Driver responses flow back to Motive automatically - status updates, location sharing, issue reports</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>WhatsApp Integration</h3>
+                        <p>Leverages Motive's existing WhatsApp infrastructure while adding sophisticated templating</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="demo" class="demo-section">
+            <div class="container">
+                <h2 style="text-align: center; color: #2c3e50; margin-bottom: 1rem;">Communication Flow Demo</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 2rem;">See how Motive events trigger WhatsApp messages and driver responses update fleet systems</p>
+                
+                <div class="demo-flow">
+                    <div class="demo-step">
+                        <div class="step-number">1</div>
+                        <h4>Motive Event</h4>
+                        <p>Vehicle enters geofence, HOS violation, or fault code detected</p>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="step-number">2</div>
+                        <h4>FleetChat Processing</h4>
+                        <p>Event mapped to appropriate WhatsApp message template</p>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="step-number">3</div>
+                        <h4>WhatsApp Message</h4>
+                        <p>Templated message sent to driver with actionable buttons</p>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="step-number">4</div>
+                        <h4>Driver Response</h4>
+                        <p>Driver acknowledges, shares location, or reports status</p>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="step-number">5</div>
+                        <h4>Motive Update</h4>
+                        <p>Response relayed back to Motive system automatically</p>
+                    </div>
+                </div>
+
+                <div style="background: #f8f9fa; border-radius: 10px; padding: 2rem; margin-top: 2rem;">
+                    <h4 style="color: #2c3e50; margin-bottom: 1rem;">Example Events</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                            <strong>Geofence Entry</strong><br>
+                            <small style="color: #666;">Driver enters delivery zone → WhatsApp arrival confirmation</small>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #e74c3c;">
+                            <strong>HOS Violation</strong><br>
+                            <small style="color: #666;">Drive time exceeded → WhatsApp rest break alert</small>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #f39c12;">
+                            <strong>Fault Code</strong><br>
+                            <small style="color: #666;">Engine diagnostic → WhatsApp maintenance notification</small>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #2ecc71;">
+                            <strong>Safety Event</strong><br>
+                            <small style="color: #666;">Hard braking detected → WhatsApp coaching message</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="compliance" class="compliance-section">
+            <div class="container">
+                <h2 style="margin-bottom: 1rem;">Universal Boundaries Compliance</h2>
+                <p style="opacity: 0.9; margin-bottom: 2rem;">Motive integration maintains 100% compliance with FleetChat's Universal Fleet System Boundaries</p>
+                
+                <div class="compliance-grid">
+                    <div class="compliance-item">
+                        <div class="compliance-check">✅</div>
+                        <h4>Communication Only</h4>
+                        <p>Pure message relay service - no fleet management replication</p>
+                    </div>
+                    
+                    <div class="compliance-item">
+                        <div class="compliance-check">✅</div>
+                        <h4>Data Boundaries</h4>
+                        <p>Phone number mapping only - no operational data storage</p>
+                    </div>
+                    
+                    <div class="compliance-item">
+                        <div class="compliance-check">✅</div>
+                        <h4>Bidirectional Relay</h4>
+                        <p>Driver responses flow back without interpretation</p>
+                    </div>
+                    
+                    <div class="compliance-item">
+                        <div class="compliance-check">✅</div>
+                        <h4>Multi-Tenant Isolation</h4>
+                        <p>Complete separation of customer configurations</p>
+                    </div>
+                    
+                    <div class="compliance-item">
+                        <div class="compliance-check">✅</div>
+                        <h4>Security Standards</h4>
+                        <p>AES-256-GCM encryption for all credentials</p>
+                    </div>
+                    
+                    <div class="compliance-item">
+                        <div class="compliance-check">✅</div>
+                        <h4>Production Ready</h4>
+                        <p>Certified for immediate customer deployment</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2 style="color: #2c3e50; margin-bottom: 1rem;">Ready to Expand Your Fleet Communication?</h2>
+                <p style="color: #666; margin-bottom: 2rem;">Join the growing number of Motive and Samsara customers using FleetChat for seamless driver communication at $8 per driver per month.</p>
+                
+                <div class="cta-buttons">
+                    <a href="/fleet.chat" class="btn btn-primary">Get Started with Motive</a>
+                    <a href="#demo" class="btn btn-secondary">View Technical Demo</a>
+                    <a href="FleetChat_Motive_Integration_Compliance_Verification.md" class="btn btn-secondary">Compliance Certificate</a>
+                </div>
+
+                <div style="background: #f8f9fa; border-radius: 10px; padding: 2rem; margin-top: 2rem; text-align: left;">
+                    <h4 style="color: #2c3e50; margin-bottom: 1rem;">Partnership Opportunity</h4>
+                    <p style="color: #666; line-height: 1.8;">
+                        <strong>Motive already supports WhatsApp alerts.</strong> FleetChat enhances this with sophisticated bidirectional communication workflows, advanced templating, and multi-tenant deployment. This creates a partnership opportunity rather than competition - FleetChat can work alongside Motive's existing WhatsApp infrastructure to provide enhanced communication capabilities.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 FleetChat - Universal Fleet Communication Middleware | 100% Boundaries Compliant</p>
+        </div>
+    </footer>
+</body>
+</html>

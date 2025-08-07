@@ -94,6 +94,9 @@ export const tenants = pgTable("tenants", {
   serviceTier: varchar("service_tier", { length: 50 }).notNull().default("professional"), // basic, professional, enterprise
   isActive: boolean("is_active").notNull().default(true),
   
+  // Fleet Management System Integrations
+  platform: varchar("platform", { length: 50 }).default("samsara"), // 'samsara' | 'motive' | 'geotab'
+  
   // Samsara Configuration
   samsaraApiToken: jsonb("samsara_api_token"), // encrypted object with {encrypted, iv, tag}
   samsaraOrgId: varchar("samsara_org_id", { length: 255 }),
@@ -104,6 +107,15 @@ export const tenants = pgTable("tenants", {
   samsaraValidated: boolean("samsara_validated").default(false),
   samsaraValidatedAt: timestamp("samsara_validated_at"),
   webhookEventTypes: jsonb("webhook_event_types").$type<string[]>().default(["vehicle.location","route.started","route.completed","driver.dutyStatus","geofence.enter","geofence.exit"]),
+  
+  // Motive Configuration
+  motiveApiToken: jsonb("motive_api_token"), // encrypted object with {encrypted, iv, tag}
+  motiveCompanyId: varchar("motive_company_id", { length: 255 }),
+  motiveWebhookId: varchar("motive_webhook_id", { length: 255 }),
+  motiveWebhookSecret: jsonb("motive_webhook_secret"), // encrypted object
+  motiveWebhookUrl: varchar("motive_webhook_url", { length: 500 }),
+  motiveValidated: boolean("motive_validated").default(false),
+  motiveValidatedAt: timestamp("motive_validated_at"),
   
   // WhatsApp Configuration (managed by FleetChat)
   whatsappPhoneNumber: varchar("whatsapp_phone_number", { length: 20 }),
@@ -135,7 +147,8 @@ export const users = pgTable("users", {
   whatsappNumber: varchar("whatsapp_number", { length: 20 }), // WhatsApp Business API phone number
   whatsappActive: boolean("whatsapp_active").default(false), // WhatsApp communication enabled
   samsaraDriverId: varchar("samsara_driver_id", { length: 255 }), // Link to Samsara driver
-  phoneSource: varchar("phone_source", { length: 50 }).default("samsara"), // 'samsara' | 'manual' | 'verified'
+  motiveDriverId: varchar("motive_driver_id", { length: 255 }), // Link to Motive driver
+  phoneSource: varchar("phone_source", { length: 50 }).default("fleet_system"), // 'samsara' | 'motive' | 'manual' | 'verified'
   isActive: boolean("is_active").default(true),
   activatedAt: timestamp("activated_at"), // WhatsApp activation timestamp
   
