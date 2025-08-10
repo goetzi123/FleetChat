@@ -153,7 +153,7 @@ export const users = pgTable("users", {
   activatedAt: timestamp("activated_at"), // WhatsApp activation timestamp
   
   // Read-only access configuration
-  accessScope: jsonb("access_scope").$type<string[]>().default('[]'), // ['transports', 'messages', 'analytics', etc.]
+  accessScope: jsonb("access_scope").$type<string[]>().default([]), // ['transports', 'messages', 'analytics', etc.]
   accessLevel: varchar("access_level", { length: 50 }).default("full"), // 'full', 'read_only', 'limited'
   expiresAt: timestamp("expires_at"), // Temporary access expiration
   invitedBy: uuid("invited_by").references(() => users.id), // Who granted access
@@ -717,69 +717,7 @@ export type InsertUsageAnalytics = Omit<UsageAnalytics, 'id' | 'createdAt'>;
 export type InsertSystemConfig = Omit<SystemConfig, 'id' | 'updatedAt'>;
 export type InsertBillingRecord = Omit<BillingRecord, 'id' | 'createdAt'>;
 
-// Admin database tables
-export const admins = pgTable("admins", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  email: varchar("email", { length: 255 }).notNull().unique(),
-  name: varchar("name", { length: 255 }).notNull(),
-  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
-  isActive: boolean("is_active").notNull().default(true),
-  permissions: jsonb("permissions").notNull().default({
-    canManagePricing: true,
-    canViewReports: true,
-    canManageSystem: true,
-  }),
-  lastLoginAt: timestamp("last_login_at"),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-export const pricingTiers = pgTable("pricing_tiers", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: varchar("name", { length: 255 }).notNull(),
-  description: text("description"),
-  pricePerDriver: decimal("price_per_driver", { precision: 10, scale: 2 }).notNull(),
-  minDrivers: integer("min_drivers").notNull().default(1),
-  maxDrivers: integer("max_drivers"),
-  features: jsonb("features").notNull().default([]),
-  isActive: boolean("is_active").notNull().default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-export const usageAnalytics = pgTable("usage_analytics", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  tenantId: varchar("tenant_id").notNull().references(() => tenants.id),
-  date: varchar("date", { length: 10 }).notNull(), // YYYY-MM-DD format
-  activeDrivers: integer("active_drivers").notNull().default(0),
-  totalMessages: integer("total_messages").notNull().default(0),
-  totalTransports: integer("total_transports").notNull().default(0),
-  totalDocuments: integer("total_documents").notNull().default(0),
-  apiCalls: integer("api_calls").notNull().default(0),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-export const systemConfig = pgTable("system_config", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  key: varchar("key", { length: 255 }).notNull().unique(),
-  value: text("value").notNull(),
-  description: text("description"),
-  updatedBy: varchar("updated_by").references(() => admins.id),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-export const billingRecords = pgTable("billing_records", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  tenantId: varchar("tenant_id").notNull().references(() => tenants.id),
-  billingPeriod: varchar("billing_period", { length: 7 }).notNull(), // YYYY-MM format
-  activeDrivers: integer("active_drivers").notNull(),
-  pricePerDriver: decimal("price_per_driver", { precision: 10, scale: 2 }).notNull(),
-  totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
-  stripeInvoiceId: varchar("stripe_invoice_id"),
-  status: varchar("status").notNull().default("pending"), // pending, paid, failed
-  paidAt: timestamp("paid_at"),
-  createdAt: timestamp("created_at").defaultNow(),
-});
+// Note: Admin tables are already defined above - removed duplicate declarations
 
 // Admin sessions table for session storage
 export const adminSessions = pgTable("admin_sessions", {

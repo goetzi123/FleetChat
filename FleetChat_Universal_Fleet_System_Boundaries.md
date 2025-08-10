@@ -6,8 +6,9 @@
 
 This document establishes that FleetChat's strict communication protocol boundaries apply **universally** to ALL fleet management systems, including but not limited to:
 
-- **Samsara** (Primary integration)
-- **Geotab** (Secondary integration)
+- **Samsara** (Production integration - July 2025)
+- **Motive** (Production integration - August 2025) 
+- **Geotab** (Planned integration - Q2 2025)
 - **Transporeon**, **Agheera**, **project44**, **Wanko**, **D-Soft (bluecargo)**
 - **Any future fleet management integrations**
 
@@ -19,8 +20,9 @@ This document establishes that FleetChat's strict communication protocol boundar
 FleetChat serves **ONLY** as a bidirectional message relay between ANY fleet management system and drivers via WhatsApp
 
 **Bidirectional Communication Applies to ALL Fleet Systems:**
-- ✅ Samsara ↔ FleetChat ↔ WhatsApp (Full bidirectional communication)
-- ✅ Geotab ↔ FleetChat ↔ WhatsApp (Full bidirectional communication)
+- ✅ Samsara ↔ FleetChat ↔ WhatsApp (Full bidirectional communication - Production)
+- ✅ Motive ↔ FleetChat ↔ WhatsApp (Full bidirectional communication - Production)
+- ✅ Geotab ↔ FleetChat ↔ WhatsApp (Full bidirectional communication - Planned)
 - ✅ Transporeon ↔ FleetChat ↔ WhatsApp (Full bidirectional communication)
 - ✅ Any Fleet System ↔ FleetChat ↔ WhatsApp (Full bidirectional communication)
 
@@ -114,23 +116,26 @@ FleetChat maintains a centralized repository of driver phone numbers that serves
 
 **Phone Number Repository Purpose:**
 - Maps fleet system driver identifiers to WhatsApp-capable phone numbers
-- Enables message routing from any fleet system to specific drivers
+- Enables message routing from any fleet system (Samsara, Motive, Geotab, etc.) to specific drivers
 - Supports multi-tenant isolation with per-fleet-operator driver mapping
 - Maintains WhatsApp activation status for each driver
 - Provides fallback phone number storage when fleet systems don't expose driver contact information
+- Handles multiple platform driver IDs per driver (samsara_driver_id, motive_driver_id, geotab_driver_id)
 
 **Repository Structure:**
 - Driver identification mapping (fleet system ID to phone number)
 - WhatsApp activation status per driver
 - Tenant isolation ensuring fleet operators only access their drivers
-- Multi-fleet-system support (Samsara, Geotab, Transporeon, etc.)
+- Multi-fleet-system support (Samsara, Motive, Geotab, Transporeon, etc.)
 - Communication preferences and delivery confirmation tracking
+- Platform-specific driver ID storage for unified phone number mapping
 
 **Data Sources:**
-- Primary: Fleet system APIs (when phone numbers are available)
+- Primary: Fleet system APIs (Samsara, Motive, Geotab when phone numbers are available)
 - Secondary: Manual entry during driver onboarding process
 - Validation: WhatsApp Business API verification of phone number format
 - Updates: Driver acceptance/decline responses via WhatsApp template messages
+- Platform Discovery: Automated driver discovery from multiple fleet management systems
 
 **Repository Boundaries:**
 - Phone numbers and communication preferences only

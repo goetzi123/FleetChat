@@ -4,9 +4,7 @@ import {
   MotiveDriverResponse,
   MotiveEventTypes 
 } from "./motive-integration";
-import type { MessageTemplateService } from "../message-template-service";
-// Import messageTemplateService - will be injected in constructor
-import type { Express } from "express";
+// MessageTemplateService interface for dependency injection
 
 /**
  * Motive Webhook Handler - Compliant Communication Protocol Service
