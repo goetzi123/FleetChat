@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Fleet.Chat</title>
+    <meta name="description" content="Meet the team behind Fleet.Chat - Bidirectional communication protocol for fleet systems. Learn about our mission to revolutionize fleet communication.">
+    
+    <!-- Open Graph tags for social media -->
+    <meta property="og:title" content="About Us - Fleet.Chat">
+    <meta property="og:description" content="Meet the team behind Fleet.Chat and learn about our mission to revolutionize fleet communication through bidirectional WhatsApp integration.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fleet.chat/about.html">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background-color: #ffffff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        /* Header */
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-icon {
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .logo-text p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+        
+        /* About Section */
+        .about-section {
+            padding: 6rem 0;
+            background: #f9fafb;
+        }
+        
+        .about-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .about-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .about-header p {
+            font-size: 1.25rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Team Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        .team-member {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .team-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            overflow: hidden;
+            border: 4px solid #e5e7eb;
+            transition: border-color 0.2s;
+        }
+        
+        .team-photo:hover {
+            border-color: #2563eb;
+        }
+        
+        .team-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .team-photo img:hover {
+            transform: scale(1.05);
+        }
+        
+        .team-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .team-title {
+            font-size: 1rem;
+            color: #2563eb;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .team-bio {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        /* Mission Section */
+        .mission-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 0;
+        }
+        
+        .mission-content {
+            text-align: center;
+        }
+        
+        .mission-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .mission-content p {
+            font-size: 1.25rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        .mission-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: #1f2937;
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .btn-cta {
+            background: #2563eb;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+        
+        .btn-cta:hover {
+            background: #1d4ed8;
+        }
+        
+        @media (max-width: 768px) {
+            .about-header h1 {
+                font-size: 2rem;
+            }
+            
+            .about-header p {
+                font-size: 1rem;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .mission-content h2 {
+                font-size: 2rem;
+            }
+            
+            .mission-content p {
+                font-size: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .logo {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="fleetchat-logo.png" alt="FleetChat Logo">
+                    </div>
+                    <div class="logo-text">
+                        <h1>Fleet.Chat</h1>
+                        <p>Communication Protocol</p>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <a href="index.html" class="btn btn-primary">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-header">
+                <h1>Meet our team</h1>
+                <p>Get to know the talented individual behind Fleet.Chat and our mission to revolutionize fleet communication</p>
+            </div>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-photo">
+                        <a href="https://www.linkedin.com/in/goetzweber/" target="_blank">
+                            <img src="goetz-founder.png" alt="Goetz Weber - Founder">
+                        </a>
+                    </div>
+                    <h3 class="team-name">Goetz Weber</h3>
+                    <p class="team-title">Founder & CEO</p>
+                    <p class="team-bio">
+                        Goetz Weber is the founder and CEO of Fleet.Chat. With a deep passion for logistics and transportation technology, 
+                        Goetz recognized the critical communication gap between fleet management systems and drivers. His vision for 
+                        Fleet.Chat emerged from understanding that efficient communication is the backbone of successful fleet operations. 
+                        Goetz brings years of experience in enterprise software and a commitment to solving real-world problems that impact 
+                        thousands of drivers and fleet operators daily.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission-section">
+        <div class="container">
+            <div class="mission-content">
+                <h2>Our Mission</h2>
+                <p>
+                    Fleet.Chat exists to bridge the communication gap between fleet management systems and drivers. 
+                    We believe that seamless, real-time communication is essential for efficient fleet operations. 
+                    Our bidirectional communication protocol connects Samsara, Motive, and other fleet management platforms 
+                    directly to WhatsApp, enabling instant messaging without requiring drivers to learn new apps or systems.
+                </p>
+                
+                <div class="mission-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">3+</div>
+                        <div class="stat-label">Fleet Management Integrations</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1-3s</div>
+                        <div class="stat-label">Message Delivery Time</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Compliance Verified</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">$8</div>
+                        <div class="stat-label">Per Driver Per Month</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="about-section">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h2 style="font-size: 2.5rem; font-weight: 700; color: #1f2937; margin-bottom: 2rem;">Our Vision</h2>
+                <p style="font-size: 1.25rem; color: #6b7280; margin-bottom: 3rem;">
+                    We envision a future where fleet communication is instant, intuitive, and integrated. Where drivers can 
+                    focus on the road while staying seamlessly connected to their fleet operations through the messaging 
+                    platform they already know and trust - WhatsApp.
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                    <div style="background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">🔗</div>
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Universal Integration</h3>
+                        <p style="color: #6b7280;">Connect any fleet management system to WhatsApp with our universal communication protocol.</p>
+                    </div>
+                    
+                    <div style="background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Real-time Communication</h3>
+                        <p style="color: #6b7280;">Instant message delivery and response processing for time-critical fleet operations.</p>
+                    </div>
+                    
+                    <div style="background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;">🔒</div>
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem;">Enterprise Security</h3>
+                        <p style="color: #6b7280;">Bank-level encryption and compliance with fleet industry security standards.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to join our mission?</h2>
+            <p>Help us revolutionize fleet communication and make every driver's job easier</p>
+            <a href="email.html" class="btn btn-cta">Get in Touch</a>
+        </div>
+    </section>
+</body>
+</html>
