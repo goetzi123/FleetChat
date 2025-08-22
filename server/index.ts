@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
-import routes, { initializeAdminRoutes } from "./routes";
+import routes, { initializeAdminRoutes } from "./compliant-routes";
 
 const app = express();
 const port = parseInt(process.env.PORT || "3000", 10);

@@ -1,7 +1,7 @@
-import express from "express";
-import { z } from "zod";
-import path from "path";
-import { storage } from "./storage";
+// REDIRECTED TO COMPLIANT ROUTES
+// This file now redirects to the compliant routes that adhere to System Boundaries
+export { default } from './compliant-routes';
+export * from './compliant-routes';
 import {
   createUserSchema,
   createTransportSchema,

@@ -1,18 +1,6 @@
-import { z } from "zod";
-import {
-  pgTable,
-  text,
-  varchar,
-  timestamp,
-  boolean,
-  integer,
-  decimal,
-  jsonb,
-  uuid,
-  index
-} from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
-import { createInsertSchema } from "drizzle-zod";
+// REDIRECTED TO COMPLIANT SCHEMA
+// This file now redirects to the compliant schema that adheres to System Boundaries
+export * from './compliant-schema';
 
 // Transport Status Enum
 export const TransportStatus = {

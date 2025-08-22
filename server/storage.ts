@@ -1,12 +1,6 @@
-import type {
-  User, InsertUser,
-  Transport, InsertTransport,
-  StatusUpdate, InsertStatusUpdate,
-  Document, InsertDocument,
-  LocationTracking, InsertLocationTracking,
-  YardOperation, InsertYardOperation,
-  TmsIntegration, InsertTmsIntegration
-} from "../shared/schema";
+// REDIRECTED TO COMPLIANT STORAGE
+// This file now redirects to the compliant storage that adheres to System Boundaries
+export * from './compliant-storage';
 
 export interface IStorage {
   // Users
