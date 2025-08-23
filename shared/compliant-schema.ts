@@ -251,5 +251,5 @@ export const createMessageTemplateSchema = createInsertSchema(messageTemplates).
 });
 
 export type CreateDriverPhoneMapping = z.infer<typeof createDriverPhoneMappingSchema>;
-export type CreateCommunicationLog = z.infer<typeof createCommunicationLogSchema>;
+export type CreateCommunicationLog = z.infer<typeof createCommunicationLogSchema>; 
 export type CreateMessageTemplate = z.infer<typeof createMessageTemplateSchema>;
