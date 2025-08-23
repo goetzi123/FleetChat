@@ -48,11 +48,11 @@ Fleet.Chat operates as a Software-as-a-Service (SaaS) communication protocol ser
 - **Universal Compliance**: GDPR compliance with Universal Fleet System Boundaries adherence across all integrations
 
 #### 3. Multi-Platform Integration Layer
-- **Samsara API Client**: Production-ready fleet management integration
-  - Driver and vehicle management
-  - Webhooks 2.0 event processing (30+ second response time)
-  - Document upload and management
-  - Enterprise-grade reliability with 2M+ assets support
+- **Samsara API Client**: Production-ready communication protocol integration
+  - Driver phone number mapping ONLY (for message routing)
+  - Webhook event processing (30+ second response time)  
+  - Message relay to WhatsApp Business API
+  - Enterprise-grade communication reliability with Universal Fleet System Boundaries compliance
 - **Motive API Client**: Superior performance fleet management integration
   - Real-time webhook processing (1-3 second response time)
   - Enhanced WhatsApp infrastructure integration

@@ -52,13 +52,19 @@ export class SamsaraAPIClient {
 }
 ```
 
-**Supported Operations:**
-- **Driver Management**: Get drivers, driver by ID, driver by phone number
-- **Vehicle Operations**: List vehicles, get vehicle details, track locations
-- **Route Management**: Create routes, update status, complete deliveries
-- **Document Handling**: Upload PODs, delivery confirmations, signatures
-- **Webhook Management**: Complete CRUD operations with signature verification
-- **Lifecycle Management**: Automatic webhook creation/deletion per customer
+**Compliant Communication Operations ONLY:**
+- **Driver Phone Mapping**: Get driver phone numbers for WhatsApp message routing ONLY
+- **Webhook Event Processing**: Receive fleet system events for message relay ONLY
+- **Message Relay**: Convert fleet events to WhatsApp templates and relay driver responses
+- **Communication Logs**: Track message delivery status for communication service
+- **Webhook Management**: Event notification setup for bidirectional message relay ONLY
+- **Lifecycle Management**: Communication service setup/teardown per customer ONLY
+
+**❌ PROHIBITED OPERATIONS (NOT IMPLEMENTED):**
+- ❌ Vehicle tracking, monitoring, or location management
+- ❌ Route creation, modification, or management  
+- ❌ Document management beyond message relay
+- ❌ Fleet operations or business logic beyond communication
 
 ### 2. Webhook Event Processing
 

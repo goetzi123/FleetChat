@@ -19,11 +19,12 @@ This document provides comprehensive documentation for all FleetChat API endpoin
 - `PATCH /api/drivers/:driverId` - Update driver information
 - `DELETE /api/drivers/:driverId` - Remove driver from system
 
-### Transport Operations
-- `GET /api/transports/:tenantId` - List active transports for tenant
-- `POST /api/transports` - Create new transport assignment
-- `PATCH /api/transports/:transportId` - Update transport status
-- `DELETE /api/transports/:transportId` - Cancel transport
+### Communication Protocol Operations (COMPLIANT)
+**❌ PROHIBITED:** FleetChat does NOT implement transport management operations
+**✅ COMPLIANT ALTERNATIVE:** Webhook relay endpoints only
+- `POST /api/webhook/{platform}/{tenantId}` - Fleet system event relay
+- `POST /api/webhook/whatsapp/{tenantId}` - Driver response relay
+- `GET /api/communication-logs/{tenantId}` - Message delivery tracking
 
 ## Samsara Integration Endpoints
 

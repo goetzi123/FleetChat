@@ -2,7 +2,7 @@
 
 ## Demo Purpose & Objectives
 
-The FleetChat demonstration is designed to showcase the **bidirectional communication flow** between Samsara fleet management system and WhatsApp Business API, proving the platform's ability to act as intelligent middleware for fleet operations. **Status: Fully Operational** - Event propagation successfully resolved July 6, 2025.
+The FleetChat demonstration is designed to showcase the **bidirectional communication protocol** between Samsara fleet management system and WhatsApp Business API, proving the platform's ability to act as intelligent middleware for message relay ONLY (NO fleet operations). **Status: Fully Operational** - Communication protocol event propagation successfully resolved July 6, 2025 with full Universal Fleet System Boundaries compliance.
 
 ## Core Demonstration Flow
 

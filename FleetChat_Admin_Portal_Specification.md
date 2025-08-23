@@ -18,7 +18,7 @@ The admin portal operates on dedicated admin tables:
 - `admin_sessions` - Secure session management
 - `pricing_tiers` - Service pricing configuration 
 - `system_config` - Global system configuration values
-- `usage_analytics` - Platform usage metrics and reporting
+- `usage_analytics` - Communication service usage metrics (message delivery tracking only, NO fleet analytics)
 - `billing_records` - Cross-tenant billing and revenue tracking
 
 ## Core Functionality

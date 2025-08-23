@@ -57,11 +57,17 @@ Implements GDPR-compliant driver identification:
 - Hours of Service (HOS) compliance warnings and duty status changes
 - Document upload confirmations and approval status updates
 
-**API Operations**: Bidirectional data synchronization including:
-- Route creation and modification based on transport assignments
-- Status updates from driver responses to transport records
-- Location tracking integration with fleet visibility systems
-- Document management for POD and compliance documentation
+**API Operations**: Compliant bidirectional communication protocol ONLY:
+- Driver phone number discovery for WhatsApp message routing
+- Fleet system event processing for message relay to drivers
+- Driver WhatsApp response processing and relay back to fleet systems
+- Communication delivery tracking and status logging
+
+**❌ PROHIBITED OPERATIONS (NOT IMPLEMENTED):**
+- ❌ Route creation or modification (fleet management function)
+- ❌ Fleet system data updates beyond driver responses
+- ❌ Location tracking integration (fleet visibility system)
+- ❌ Document management beyond message relay service
 
 ### WhatsApp Business API Integration
 **Message Delivery**: Contextual driver communications featuring:
